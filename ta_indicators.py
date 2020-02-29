@@ -8,6 +8,10 @@ def get_ta(df, volume, pattern):
         open, high, low, close = df['Open'], df['High'], df['Low'], df['Close']
     else:
         open, high, low, close, volume = df['Open'], df['High'], df['Low'], df['Close'], df['Volume']
+
+    #df['intraday_change'] = df['Close'] / df['Open'] - 1
+    #for i in range(1,hold_length):
+        #df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
     df['BBANDS_upper'],df['BBANDS_middle'],df['BBANDS_lower'] = BBANDS(close)
     df['DEMA'] = DEMA(close)
     df['EMA'] = EMA(close)
@@ -144,5 +148,22 @@ def get_ta(df, volume, pattern):
     df['STDDEV'] = STDDEV(close)
     df['TSF'] = TSF(close)
     df['VAR'] = VAR(close)
+    
+    """
+    for col in df.columns.drop(['Adj Close', 'Volume', 'Close', 'Open', 'High', 'Low']):
 
+        #percent_difference = ( df['Close']/df[col] ).tail(100).mean()
+        correl = df[[col,'Close']].corr()
+        
+        this_correl = correl[col]['Close']
+        
+        if abs(this_correl)>.90:
+        
+
+            df['diff_'+col] = df['Close'] - df[col]
+            
+            df['diff_p_'+col] = df['Close'] / df[col] - 1
+    """
+    #print('after')
+    #print(df)
     return df

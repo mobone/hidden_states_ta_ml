@@ -20,10 +20,68 @@ import sqlite3
 from time import sleep
 import psutil
 from itertools import product
+from random import shuffle
+import requests
+import re
+from requests_toolbelt.threaded import pool
+from mlxtend.feature_selection import ExhaustiveFeatureSelector as EFS
+from mlxtend.feature_selection import SequentialFeatureSelector as SFS
+from datetime import datetime
+from sklearn.linear_model import LinearRegression
+
 warnings.simplefilter("ignore")
 
-# TODO: make plots; fix bug with dates?
 
+
+def get_market_cap(market_cap):
+    
+    if 'K' in market_cap:
+        market_cap = float(market_cap[:-1])*1000
+    elif 'M' in market_cap:
+        market_cap = float(market_cap[:-1])*1000000
+    elif 'B' in market_cap:
+        market_cap = float(market_cap[:-1])*1000000000
+    return market_cap
+
+def get_industry_tickers(sector):
+    
+    finviz_url = 'https://finviz.com/screener.ashx?v=111&f=exch_nasd,ipodate_more5,sec_technology,sh_avgvol_o1000,sh_opt_optionshort&o=-marketcap'
+    finviz_url = finviz_url + '&r=%s'
+        
+    
+    finviz_page = requests.get(finviz_url % 1)
+    ticker_count = int(re.findall('Total: </b>[0-9]*', finviz_page.text)[0].split('>')[1])
+    urls = []
+
+    for ticker_i in range(1, ticker_count, 20):
+        urls.append(finviz_url % ticker_i)
+        #break
+
+    p = pool.Pool.from_urls(urls)
+    p.join_all()
+
+    total_etf_df = []
+    for response in p.responses():
+        start = response.text.find('<table width="100%" cellpadding="3" cellspacing="1" border="0" bgcolor="#d3d3d3">')
+        end = response.text.find('</table>',start)+10
+
+        #tickers = re.findall(r'primary">[A-Z]*', response.text)
+        df = pd.read_html(response.text[start:end])[0]
+        df.columns = df.loc[0]
+        df = df.drop([0])
+
+        for key, this_row in df.iterrows():
+            cap = get_market_cap(this_row['Market Cap'])
+            df.loc[key, 'Numerical Market Cap'] = cap
+        
+        total_etf_df.append(df)
+    total_etf_df = pd.concat(total_etf_df)
+    total_etf_df = total_etf_df.sort_values(by=['Numerical Market Cap'], ascending=False)
+    print(total_etf_df)
+    del total_etf_df['No.']
+
+    return list(total_etf_df['Ticker'])
+    
 class stock_predictor():
     def __init__(self, params): 
     
@@ -38,32 +96,49 @@ class stock_predictor():
         
         self.hold_length = params.get('hold_length', 1)
         self.period = params.get('period', '3y')
-        self.k_features = params.get('k_features', 4)
-        self.max_depth = params.get('max_depth', 5)
+        self.k_features = params.get('k_features', None)
+        self.max_depth = params.get('max_depth', None)
         self.scoring = params.get('scoring', 'neg_mean_squared_error')
         self.pattern = params.get('pattern', True)
         self.trade_other_states = params.get('trade_other_states', True)
+        self.trade_time = params.get('trade_time', 'open')
+        self.marketcap = params.get('marketcap', None)
+
         
+        total_num_tickers = len(self.tickers)
+        
+        if self.marketcap == 'large':
+            self.tickers = self.tickers[:int(total_num_tickers/2)]
+        elif self.marketcap == 'small':
+            self.tickers = self.tickers[int(total_num_tickers/2):]
+        
+
+        self.sector = params.get('sector', None)
 
         self.algo = params.get('algo', True)
         
         self.features = params.get('features', None)
 
         self.conn = sqlite3.connect('hidden_states.db')
-        
+
         self.get_data()
         self.get_train_test()
         if self.features is None:
-            
+            #self.run_decision_tree()
+            self.run_grid_search()
+            if 'original' in self.algo:
+                self.features = list(set( self.features + ['return', 'range', 'close'] ))
+            """
             if 'tree' in self.algo and 'original' not in self.algo:
-                self.run_decision_tree()
+                self.run_grid_search()
             elif 'tree' in self.algo and 'original' in self.algo:
-                self.run_decision_tree()
+                self.run_grid_search()
                 self.features = list(set( self.features + ['return', 'range', 'close'] ))
                 
             elif 'original' == self.algo:
                 self.features = ['return', 'range', 'close']
-                
+            """
+
             self.num_features = len(self.features)
             self.predict()
             self.get_trades()
@@ -94,11 +169,11 @@ class stock_predictor():
         all_historic_data = []
         
         for ticker in self.tickers:
-            
+            #print('getting data for', ticker)
             ticker_data = yfinance.Ticker(ticker)
             ticker_data = ticker_data.history(period=self.period, auto_adjust=False)
             
-            ticker_data = get_ta(ticker_data, True, self.pattern)
+            ticker_data = get_ta(ticker_data, True, self.pattern, self.hold_length)
             ticker_data = ticker_data.reset_index()
             ticker_data.columns = map(str.lower, ticker_data.columns)
 
@@ -114,43 +189,128 @@ class stock_predictor():
             all_historic_data.append(ticker_data)
         
         self.history_df = pd.concat(all_historic_data)
+        self.history_df = self.history_df.dropna(thresh=100,axis=1)
         
         self.history_df = self.history_df.sort_values(by=['date'])
         self.history_df = self.history_df.reset_index(drop=True)
+        self.history_df.replace([np.inf, -np.inf], np.nan)
+
+        self.history_df = self.history_df.dropna()
         
-        
+        self.history_df = self.history_df.replace([np.inf, -np.inf], np.nan)
+        self.history_df = self.history_df.dropna()
         
 
     def get_train_test(self):
+        
         self.train = self.history_df[self.history_df['date']<'2018-12-31']
         self.test = self.history_df[ (self.history_df['date']>'2018-12-31') & (self.history_df['date']<'2019-12-31') ]
         self.test = self.test.loc[self.hold_length:]
-        #print(self.train)
         
-        #input()
 
     def run_decision_tree(self):
+        while psutil.cpu_percent()>85:
+            sleep(.5)
+        
         clf = DecisionTreeRegressor(random_state=7, max_depth=self.max_depth)
+        
+
         sfs = SFS(clf, 
                 k_features=self.k_features, 
                 forward=True, 
                 floating=True, 
                 scoring=self.scoring,
                 n_jobs=-1,
-                cv=5)
+                cv=4)
+
+        
+        self.train['target'] = self.train['close'].shift(-self.hold_length) / self.train['close'] - 1
+        
+        self.train = self.train.dropna()
+        #self.train.to_csv('data.csv')
+        test_features = list(self.train.columns.drop(['date', 'ticker', 'target']))
+        #sfs = sfs.fit(self.train[test_features], self.train['target'])
+        
+
+        sfs = sfs.fit(self.train[test_features], self.train['target'])
+        
+        
+
+        #self.features = list(sfs.k_feature_names_)
+        self.score = sfs.k_score_
+        
+        self.features = list(sfs.k_feature_names_)
+        print('features', self.features)
+        del self.train['target']
+
+
+    def run_grid_search(self):
         while psutil.cpu_percent()>85:
             sleep(.5)
 
-        self.train['target'] = self.train['close'].shift(-self.hold_length) / self.train['close'] - 1
-        self.train = self.train.dropna()
-        test_features = list(self.train.columns.drop(['date', 'ticker', 'return']))
-        sfs = sfs.fit(self.train[test_features], self.train['return'])
-        self.features = list(sfs.k_feature_names_)
+        #clf = DecisionTreeRegressor(random_state=7, max_depth=4)
+        clf = DecisionTreeRegressor(random_state=7)
+        #clf = LinearRegression(normalize=True)
+        sfs = SFS(clf, 
+                k_features=4, 
+                forward=True, 
+                floating=True, 
+                scoring=self.scoring,
+                n_jobs=-1,
+                cv=4)
 
+
+        pipe = Pipeline([('sfs', sfs), 
+                        ('clf', clf)])
+        
+        param_grid = [{
+           'sfs__k_features': list(self.k_features),
+           'sfs__estimator__max_depth': list(self.max_depth)
+        }]
+        print(param_grid)
+        
+
+        gs = GridSearchCV(estimator=pipe, 
+                        param_grid=param_grid, 
+                        scoring=self.scoring, 
+                        n_jobs=-1, 
+                        cv=4,
+                        verbose=2,
+                        iid=True,
+                        refit=True)
+
+        
+
+        
+        self.train['target'] = self.train['close'].shift(-self.hold_length) / self.train['close'] - 1
+        
+        self.train = self.train.dropna()
+        #self.train.to_csv('data.csv')
+        test_features = list(self.train.columns.drop(['date', 'ticker', 'target']))
+        #sfs = sfs.fit(self.train[test_features], self.train['target'])
+        
+        print(self.train)
+        gs = gs.fit(self.train[test_features], self.train['target'])
+        
+        
+
+        #self.features = list(sfs.k_feature_names_)
+        self.score = gs.best_score_
+        
+        self.features = list(gs.best_estimator_.steps[0][1].k_feature_names_)
+
+        print('params', gs.best_params_)
+        print('features', self.features)
+        print(self.score)
+
+        self.k_features = gs.best_params_['sfs__k_features']
+        #self.max_depth = gs.best_params_['sfs__estimator__max_depth']
+        
         del self.train['target']
 
 
     def predict(self):
+        # TODO: generate model every day
         model = mix.GaussianMixture(n_components=3, 
                                     covariance_type="full", 
                                     random_state=7,
@@ -164,7 +324,7 @@ class stock_predictor():
         
     def get_spy(self):
         spy = yfinance.Ticker('SPY')
-        spy = spy.history(period='10y')
+        spy = spy.history(period='Max')
         spy = spy.reset_index()
         spy.columns = map(str.lower, spy.columns)
         self.spy = spy
@@ -195,13 +355,26 @@ class stock_predictor():
                 if today['state'] != yesterday['state'] and today['state']==2 and buy_price is None:
                     
                     #print('bought\n', today)
-                    buy_price = float(tomorrow['open'])
-                    buy_date = tomorrow['date']
-                    spy_buy_price = self.spy[self.spy['date']==tomorrow['date']]['open'].values[0]
-                elif today['state'] != yesterday['state'] and buy_price is not None:
-                    sell_price = float(tomorrow['close'])
-                    sell_date = tomorrow['date']
-                    spy_sell_price = self.spy[self.spy['date']==tomorrow['date']]['close'].values[0]
+                    if self.trade_time == 'today':
+                        buy_price = float(today['close'])
+                        buy_date = today['date']
+                    
+                        spy_buy_price = self.spy[self.spy['date']==today['date']]['close'].values[0]
+                    elif self.trade_time == 'tomorrow':
+                        buy_price = float(tomorrow['open'])
+                        buy_date = tomorrow['date']
+                    
+                        spy_buy_price = self.spy[self.spy['date']==tomorrow['date']]['open'].values[0]
+                elif today['state'] != 2 and buy_price is not None:
+                    if self.trade_time == 'today':
+                        sell_price = float(today['close'])
+                        sell_date = today['date']
+                        spy_sell_price = self.spy[self.spy['date']==today['date']]['close'].values[0]
+
+                    elif self.trade_time == 'tomorrow':
+                        sell_price = float(tomorrow['close'])
+                        sell_date = tomorrow['date']
+                        spy_sell_price = self.spy[self.spy['date']==tomorrow['date']]['close'].values[0]
                     #print('sold\n', today)
                     spy_change = spy_sell_price / spy_buy_price - 1
                     trade_percent_change = sell_price / buy_price - 1
@@ -214,7 +387,7 @@ class stock_predictor():
             # sell if currently held
             if buy_price is not None:
                 sell_price = float(tomorrow['close'])
-                sell_date = None
+                sell_date = datetime.now()
                 spy_sell_price = self.spy[self.spy['date']==tomorrow['date']]['close'].values[0]
 
                 spy_change = spy_sell_price / spy_buy_price - 1
@@ -227,7 +400,10 @@ class stock_predictor():
 
     def aggregate_results(self):
         self.all_trades = pd.DataFrame(self.all_trades, columns = ['ticker',  'buy_date', 'sell_date', 'buy_price', 'sell_price', 'trade_return', 'spy_return', 'abnormal_return'])
-        print(self.all_trades)
+        
+        self.avg_hold_length =  str( (self.all_trades['sell_date'] - self.all_trades['buy_date']).mean() )
+        self.num_symbols = len(self.all_trades['ticker'].unique())
+        
         self.total_return = self.all_trades['trade_return'].sum()
         self.total_abnormal_return = self.all_trades['abnormal_return'].sum()
         self.num_trades = len(self.all_trades)
@@ -236,7 +412,9 @@ class stock_predictor():
         self.total_result = [self.param_group_name, 
                              self.total_return,
                              self.total_abnormal_return,
-                             self.num_trades, 
+                             self.num_symbols,
+                             self.num_trades,
+                             self.avg_hold_length,
                              self.accuracy, 
                              self.all_trades['trade_return'].mean(), 
                              self.all_trades['trade_return'].median(), 
@@ -245,11 +423,12 @@ class stock_predictor():
                              self.all_trades['abnormal_return'].median(),
                              self.all_trades['abnormal_return'].std(),
                              ]
-        self.total_result = pd.DataFrame([self.total_result], columns = ['name', 'total_return', 'total_abnormal_return', 'num_trades', 'accuracy', 'mean', 'median', 'stddev','abnormal_mean', 'abnormal_median', 'abnormal_stddev' ])
+        self.total_result = pd.DataFrame([self.total_result], columns = ['name', 'total_return', 'total_abnormal_return', 'num_symbols', 'num_trades', 'avg_hold_length', 'accuracy', 'mean', 'median', 'stddev','abnormal_mean', 'abnormal_median', 'abnormal_stddev' ])
 
         
         print(self.total_result)
-
+        
+        #input()
         self.individual_results = []
         for key, this_df in self.all_trades.groupby(by=['ticker']):
             num_trades = len(this_df)
@@ -261,18 +440,21 @@ class stock_predictor():
 
     def store_results(self):
         
-        results = [self.param_group_name, str(self.features), self.hold_length, 
+
+        model_params = [str(self.features), self.hold_length, 
                         self.period, self.pattern, self.trade_other_states, 
-                        self.algo, self.num_features, self.max_depth, 
-                        self.num_trades, self.total_return, self.accuracy]
-        self.df = pd.DataFrame([results], columns = ['name', 'features', 'hold_length', 'period', 'pattern', 'trade_other_states', 'algo', 'num_features', 'max_depth', 'num_trades', 'total_return', 'accuracy'])
+                        self.algo, self.num_features, self.max_depth, self.scoring, self.score]
+        self.df = pd.DataFrame([model_params], columns = ['features', 'hold_length', 'period', 'pattern', 'trade_other_states', 'algo', 'num_features', 'max_depth', 'scoring',  'score'])
 
         self.all_trades['name'] = self.param_group_name
+        self.df['trade_time'] = self.trade_time
+        self.df['marketcap'] = self.marketcap
+        self.df = pd.concat( [self.total_result, self.df,], axis=1)
 
-        self.all_trades.to_sql('hidden_states_models_trades', self.conn, if_exists='append')
-        self.df.to_sql('hidden_states_models', self.conn, if_exists='append')
-        self.total_result.to_sql('hidden_states_total_results', self.conn, if_exists='append')
-        self.individual_results.to_sql('hidden_states_individual_results', self.conn, if_exists='append')
+        self.all_trades.to_sql('trades_%s' % self.sector, self.conn, if_exists='append', index=False)
+        self.df.to_sql('models_%s' % self.sector, self.conn, if_exists='append', index=False)
+        #self.total_result.to_sql('hidden_states_total_results', self.conn, if_exists='append', index=False)
+        self.individual_results.to_sql('trade_summaries_%s' % self.sector, self.conn, if_exists='append', index=False)
         
 
 def run_model(params):
@@ -282,50 +464,75 @@ if __name__ == '__main__':
 
     param_list = []
     #results = []
-    
-    periods = ['2y','3y', '4y','5y','6y']
+    """
+    periods = ['4y','5y','6y','7y','8y','9y','10y']
     trade_other_states_list = [True,False]
+    trade_time = ['open', 'close']
     
-    algos = ['tree', 'tree+original']
-    hold_length = [1,2,3,4,5]
+    algos = ['tree', 'tree+original', 'original']
+    hold_length = [1,2,3,4,5,6]
     pattern = [True,False]
     max_depth = list(range(2,8))
     k_features = list(range(3,11))
+    """
 
-    inputs = product( periods, trade_other_states_list, algos, hold_length, pattern, max_depth, k_features )
-    for period, trade_other_states, algo, hold_length, pattern, max_depth, k_features in list(inputs):
-        param_list.append( {'tickers': ['QLD', 'SPY', 'QQQ', 'TQQQ', 'DJI'], 
+    periods = ['2y','3y','4y','5y','10y']
+    trade_other_states_list = [True, False]
+    trade_time = ['today', 'tomorrow']
+    marketcaps = ['large', 'small']
+
+    algos = ['tree','tree+original']
+    hold_length = [1,2,3,4,5,6]
+    pattern = [True,False]
+    max_depth = list(range(2,7))+[10,15,20,25]
+    #max_depth = None
+    scoring = ['r2', 'neg_mean_squared_error']
+    k_features = range(3,15)
+
+    
+    
+    sector = 'technology'
+    
+    tickers = get_industry_tickers(sector)
+    #tickers = ['QQQ', 'QLD', 'TQQQ', 'SSO', 'UPRO']
+    sector = sector + '_lr'
+    print(tickers)
+    benchmark = ['QQQ']
+    """
+    tree_inputs = list( product (max_depth, k_features, scoring, hold_length) )
+    all_inputs = list( product ( periods, trade_other_states_list, algos, pattern, trade_time, marketcaps ) )
+    for i in all_inputs:
+        
+        print(i)
+        input()
+    """
+    inputs = list( product ( periods, trade_other_states_list, trade_time, marketcaps, algos, hold_length, pattern, scoring ) )
+    shuffle(inputs)
+    for period, trade_other_states, trade_time, marketcap, algo, hold_length, pattern, scoring in list(inputs):
+        param_list.append( {'tickers': tickers, 
                     'hold_length': hold_length, 
                     'period': period, 
                     'max_depth': max_depth, 
                     'pattern': pattern, 
                     'trade_other_states': trade_other_states, 
-                    'k_features': k_features,
-                    'algo': algo} )
+                    'algo': algo,
+                    'sector': sector, 
+                    'trade_time': trade_time,
+                    'marketcap': marketcap,
+                    'scoring': scoring,
+                    'k_features': k_features} )
     
-    inputs = product( periods, trade_other_states_list )
-    for period, trade_other_states in list(inputs):
-
-        algo = 'original'
-        hold_length = 1
-        pattern = None
-        max_depth = None
-        k_features = None
-
-        param_list.append( {'tickers': ['QLD', 'SPY', 'QQQ', 'TQQQ', 'DJI'], 
-                            'hold_length': hold_length, 
-                            'period': period, 
-                            'max_depth': max_depth, 
-                            'pattern': pattern, 
-                            'trade_other_states': trade_other_states, 
-                            'k_features': k_features,
-                            'algo': algo} )
-
     
 
-    
+    shuffle(param_list)
     print(len(param_list))                            
-    p = Pool(16)
-    p.map(run_model, param_list)
-    #run_model(param_list[150])
+    #p = Pool(15)
+    #p.map(run_model, param_list)
+    for params in param_list:
+        run_model(params)
+    #    input()
     
+
+# select trade_time, period, avg(num_trades), avg(mean), avg(accuracy), avg(abnormal_mean) from hidden_states_models_technology group by trade_time, period order by avg(abnormal_mean) desc
+
+#wmic process where name="python.exe" call setpriority 16384
