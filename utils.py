@@ -11,6 +11,12 @@ from ta_indicators import get_ta
 import requests
 import yfinance
 import numpy as np
+import seaborn as sns
+from matplotlib import cm
+import matplotlib.pyplot as plt
+from matplotlib.dates import YearLocator, MonthLocator
+from math import floor, ceil
+
 def get_market_cap(market_cap):
     
     if 'K' in market_cap:
@@ -212,7 +218,175 @@ def get_data(tickers, period='5y', pattern=True):
     history_df = history_df.reset_index(drop=True)
 
     return history_df
+
+
+def plot_results(model, test_data, model_name):
+    sns.set(font_scale=1.25)
+    style_kwds = {'xtick.major.size': 3, 'ytick.major.size': 3,'legend.frameon': True}
+    sns.set_style('white', style_kwds)
+
+    colors = cm.rainbow(np.linspace(0, 1, model.n_components))
     
+    #print(test_data['state'].values)
+    #test_data.loc[test_data['state']==2, 'state'] = 1
+    sns.set(font_scale=1.5)
+    states = (pd.DataFrame(test_data['state'].values, columns=['states'], index=test_data.index)
+            .join(test_data, how='inner')
+            .reset_index(drop=False)
+            .rename(columns={'index':'Date'}))
+    #print(states.tail(100))
+
+    #suppressing warnings because of some issues with the font package
+    #in general, would not rec turning off warnings.
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    sns.set_style('white', style_kwds)
+    order = [0, 1, 2]
+    fg = sns.FacetGrid(data=states, hue='states', hue_order=order,
+                    palette=colors, aspect=1.31, height=12)
+    fg.map(plt.scatter, 'date', "close", alpha=0.8).add_legend()
+    sns.despine(offset=10)
+    fg.fig.suptitle('Historical SPY Regimes', fontsize=24, fontweight='demi')
+    #plt.show()
+    plt.savefig('./plots/%s.png' % model_name)
+
+def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_state_num):
+    # todo: use middle state for regular index and best state for bonus index
+    tqqq_history = yfinance.Ticker('TQQQ').history(period='5y', auto_adjust=False)
+    tqqq_history = tqqq_history.reset_index()
+    #print(self.test.head(1).index.values[0])
+    tqqq_history = tqqq_history[tqqq_history['Date']>=test_data.head(1).index.values[0]]
+    tqqq_history = tqqq_history.iloc[:-1]
+    
+    total_results = []
+
+    share_accumulation_rate = 3
+    share_decay_rate = 1
+    """
+    for share_accumulation_rate in range(1,10):
+        share_accumulation_rate = share_accumulation_rate * 5
+        for share_decay_rate in range(1,10):
+    """
+    #share_decay_rate = share_decay_rate * 5
+    #share_accumulation_rate = 3
+    num_shares = 0
+    #max_shares = 50
+    
+    keep_for_bonus = 2000
+    balance = 8000
+
+    full_count = share_accumulation_rate
+
+    starting_balance = 8000 + keep_for_bonus
+
+    balances = []
+
+    held_shares = {}
+    held_shares['QQQ'] = {'num_shares': 0}
+    held_shares['TQQQ'] = {'num_shares': 0}
+    """
+    print(test_data.head(1))
+    print(test_data.tail(1))
+    print(tqqq_history.head(1))
+    print(tqqq_history.tail(1))
+    input()
+    """
+    
+    if buy_state == 'good':
+        buy_state = good_state_num
+        bonus_buy_state = good_state_num
+    elif buy_state == 'middle':
+        
+        buy_state = middle_state_num
+        bonus_buy_state = good_state_num
+
+    bad_state = bad_state_num
+    buy_and_hold_start = balance + keep_for_bonus
+    benchmark_return = balance * float(test_data['close'].tail(1)) / float(test_data['close'].head(1))
+    tqqq_return = keep_for_bonus * float(tqqq_history['Close'].tail(1)) / float(tqqq_history['Close'].head(1))
+    
+    #test_data = test_data[   list(set(['close']+self.features+['state']))  ]
+    for i in test_data.index:
+        today = test_data.loc[i]
+        today_bonus = tqqq_history.loc[tqqq_history['Date'] == i]
+        bonus_share_price = float(today_bonus['Close'])
+        share_price = float(today['close'])
+        #print(pd.DataFrame(today).T)
+
+        num_shares_all_funds = floor(balance / share_price)
+        num_shares_some_funds = floor(balance / share_accumulation_rate / share_price)
+        num_bonus_shares_to_buy = floor(keep_for_bonus / bonus_share_price)
+        #print('possible num shares', num_shares_some_funds, num_shares_all_funds, full_count)
+        if full_count:
+            num_shares_to_buy = num_shares_some_funds
+        else:
+            num_shares_to_buy = num_shares_all_funds
+        
+        if (today['state']==buy_state) and num_shares_to_buy > 0 and (balance - (num_shares_to_buy*share_price) > 0): # and held_shares['QQQ']['num_shares']<max_shares:
+            # buy more shares if we can
+            #print('buying %s shares at %s for a cost of %s' % ( num_shares_to_buy, share_price, round(num_shares_to_buy * share_price, 2)))
+            held_shares['QQQ']['num_shares'] = held_shares['QQQ']['num_shares'] + num_shares_to_buy
+            balance = balance - round( (num_shares_to_buy*share_price), 2)
+        
+        if (today['state']==bonus_buy_state) and full_count == 0 and held_shares['TQQQ']['num_shares']==0:
+            # use bonus if we can't buy more regular shares
+            #print('buying %s bonus shares at %s for a cost of %s' % ( num_bonus_shares_to_buy, bonus_share_price, round(num_bonus_shares_to_buy * bonus_share_price, 2)))
+            #print(keep_for_bonus)
+            #print(bonus_share_price)
+            bonus_shares = floor(keep_for_bonus / bonus_share_price)
+            held_shares['TQQQ']['num_shares'] = bonus_shares
+            keep_for_bonus = keep_for_bonus - (bonus_shares * bonus_share_price)
+
+        if today['state']==bad_state:
+            full_count = share_accumulation_rate + 1
+            #num_shares_after_selling = ceil(held_shares['QQQ']['num_shares']/share_decay_rate)
+            #num_shares_sold = held_shares['QQQ']['num_shares'] - num_shares_after_selling
+            #held_shares['QQQ']['num_shares'] = num_shares_after_selling
+            num_shares_sold = (held_shares['QQQ']['num_shares'] / share_decay_rate)
+            num_shares_after_selling = held_shares['QQQ']['num_shares'] - num_shares_sold
+            #print('selling %s shares for a value of %s. now down to %s shares' % ( num_shares_sold, round(num_shares_sold*share_price,2), num_shares_after_selling ))
+            balance = balance + round( (num_shares_sold * share_price), 2)
+            held_shares['QQQ']['num_shares'] = num_shares_after_selling
+            
+            
+
+            if held_shares['TQQQ']['num_shares']!=0:
+                keep_for_bonus = keep_for_bonus + (held_shares['TQQQ']['num_shares'] * bonus_share_price)
+                
+                #print('selling %s bonus shares for a value of %s. now down to %s shares' % ( held_shares['TQQQ']['num_shares'], round((held_shares['TQQQ']['num_shares'] * bonus_share_price),2), 0 ))
+                held_shares['TQQQ']['num_shares'] = 0
+        full_count = full_count - 1
+        if full_count < 0:
+
+            full_count = 0
+            
+
+        
+
+        held_balance = 0
+        #for key in held_shares.keys():
+        held_balance = held_balance + round( (held_shares['QQQ']['num_shares'] * float(share_price)), 2 )
+        held_balance = held_balance + round(  held_shares['TQQQ']['num_shares'] * float(bonus_share_price), 2)
+        balances.append( [today['state'], balance, keep_for_bonus, held_balance, balance + keep_for_bonus + held_balance, held_shares['QQQ']['num_shares'], held_shares['TQQQ']['num_shares']] )
+        #print(pd.DataFrame(balances, columns = ['state', 'bank', 'bonus', 'held_balance', 'total', 'held_shares', 'held_bonus_shares']))
+        #input()
+        
+        
+    
+    ending_balance = balance + keep_for_bonus + round( (held_shares['QQQ']['num_shares'] * share_price), 2) + round( (held_shares['TQQQ']['num_shares'] * bonus_share_price), 2)
+    #print(ending_balance)
+    buy_and_hold_percent = (benchmark_return + tqqq_return) / buy_and_hold_start - 1
+    
+    total_results.append([share_accumulation_rate, share_decay_rate, round(ending_balance, 2), round((ending_balance / starting_balance - 1),4), round(buy_and_hold_percent, 4)])
+    result_df = pd.DataFrame(total_results, columns = ['accum','decay', 'ending balance', 'percent', 'benchmark'])
+    #print(result_df)
+    #print(result_df['percent'].max())
+    percent_return = result_df['percent'].max()
+    benchmark_return = round(buy_and_hold_percent,4)
+    #result_df.to_csv('test.csv')
+            
+    return percent_return, benchmark_return
 
 """
 if __name__ == '__main__':
