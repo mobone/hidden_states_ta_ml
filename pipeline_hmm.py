@@ -68,7 +68,7 @@ class pipeline():
 
 
     def run_pipeline(self):
-        
+        self.failed_real_test = True
         self.max_score = -np.inf
         self.max_correl = -np.inf
         
@@ -126,7 +126,7 @@ class pipeline():
             
             score = np.mean(scores)
             correl = np.mean(correls)            
-            if score > self.max_score and correl > self.max_correl and correl>0:
+            if score > self.max_score and correl > self.max_correl and correl>.5:
                 
                 
 
@@ -144,6 +144,7 @@ class pipeline():
                 real_test_correl = test.dropna().groupby(by='state')[['return', 'next_day']].mean().corr()
                 real_test_correl = real_test_correl['return']['next_day']
                 if real_test_correl<0:
+                    self.failed_real_test = True
                     #print('failed real world test')
                     continue
                 self.real_test_correl = real_test_correl
