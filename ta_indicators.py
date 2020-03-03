@@ -9,9 +9,12 @@ def get_ta(df, volume, pattern):
     else:
         open, high, low, close, volume = df['Open'], df['High'], df['Low'], df['Close'], df['Volume']
 
-    #df['intraday_change'] = df['Close'] / df['Open'] - 1
-    #for i in range(1,hold_length):
-        #df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
+    
+    df['intraday_change'] = df['Close'] / df['Open'] - 1
+    
+    for i in range(1,2):
+        df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
+    
     df['BBANDS_upper'],df['BBANDS_middle'],df['BBANDS_lower'] = BBANDS(close)
     df['DEMA'] = DEMA(close)
     df['EMA'] = EMA(close)

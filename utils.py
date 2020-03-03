@@ -1,4 +1,4 @@
-from hidden_states_multiprocess import stock_predictor
+#from hidden_states_multiprocess import stock_predictor
 import sqlite3
 import pandas as pd
 import requests as r
@@ -140,7 +140,7 @@ def get_stock_tickers(asset_type='etf'):
             tickers.append(ticker)
 
     return tickers
-
+"""
 def test_stock(ticker_with_name):
     ticker, name = ticker_with_name
     conn = sqlite3.connect('hidden_states.db')
@@ -155,7 +155,7 @@ def test_stock(ticker_with_name):
     x = stock_predictor(params)
     
     return ([ticker, name, x.num_trades, x.num_trades_profitable, x.total_return, x.accuracy], x.trades)
-
+"""
 def run_test(ticker, name):
     tickers_with_symbols = []
     for ticker in tickers:
@@ -182,8 +182,9 @@ def run_test(ticker, name):
     print(df.describe())
 
 
-def get_data(tickers, period='5y', pattern=True):
+def get_data(tickers, period='5y', pattern=False):
     all_historic_data = []
+    
     
     for ticker in tickers:
         #print('getting data for', ticker)
@@ -195,6 +196,7 @@ def get_data(tickers, period='5y', pattern=True):
         ticker_data.columns = map(str.lower, ticker_data.columns)
 
         ticker_data["return"] = ticker_data["close"].pct_change()
+        ticker_data["next_day_return"] = ticker_data['close'].shift(-5) / ticker_data["close"] - 1
         ticker_data["range"] = (ticker_data["high"]/ticker_data["low"])-1
         ticker_data = ticker_data.drop(columns=['dividends','stock splits'])
 
@@ -220,49 +222,71 @@ def get_data(tickers, period='5y', pattern=True):
     return history_df
 
 
-def plot_results(model, test_data, model_name):
+def plot_results(test_data, model_name, year=None):
+    
+    if 'date' not in test_data.columns:
+        test_data = test_data.reset_index()
+    test_data['date'] = pd.to_datetime(test_data['date'])
     sns.set(font_scale=1.25)
     style_kwds = {'xtick.major.size': 3, 'ytick.major.size': 3,'legend.frameon': True}
     sns.set_style('white', style_kwds)
 
-    colors = cm.rainbow(np.linspace(0, 1, model.n_components))
+    #colors = cm.rainbow(np.linspace(0, 1, model.n_components))
+    colors = cm.rainbow(np.linspace(0, 1, 3))
     
     #print(test_data['state'].values)
     #test_data.loc[test_data['state']==2, 'state'] = 1
     sns.set(font_scale=1.5)
+    
     states = (pd.DataFrame(test_data['state'].values, columns=['states'], index=test_data.index)
             .join(test_data, how='inner')
             .reset_index(drop=False)
             .rename(columns={'index':'Date'}))
-    #print(states.tail(100))
+    
+    states = test_data[['date','state','close']]
+    states = states.sort_values(by=['state'])
+    #states.to_csv('test.csv')
 
     #suppressing warnings because of some issues with the font package
     #in general, would not rec turning off warnings.
-    import warnings
-    warnings.filterwarnings("ignore")
+    
 
     sns.set_style('white', style_kwds)
-    order = [0, 1, 2]
-    fg = sns.FacetGrid(data=states, hue='states', hue_order=order,
+    #order = ['strong buy', 'buy', 'sell']
+    order = ['sell','buy', 'strong_buy']
+    print(test_data.groupby(by='state').mean())
+
+    
+    fg = sns.FacetGrid(data=states, hue='state',
                     palette=colors, aspect=1.31, height=12)
     fg.map(plt.scatter, 'date', "close", alpha=0.8).add_legend()
     sns.despine(offset=10)
-    fg.fig.suptitle('Historical SPY Regimes', fontsize=24, fontweight='demi')
+    fg.fig.suptitle('Historical QQQ Regimes', fontsize=24, fontweight='demi')
     #plt.show()
-    plt.savefig('./plots/%s.png' % model_name)
+    plt.savefig('./plots/%s.png' % (model_name))    
+    plt.close()
+    #input()
+    """
+    if year is None:
+        plt.savefig('./plots/%s.png' % (model_name))
+    else:
+        plt.savefig('./plots/%s_year_%s.png' % (model_name, year))
+    plt.close()
+    """
 
-def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_state_num):
+def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_state_num, share_accumulation_rate, share_decay_rate):
     # todo: use middle state for regular index and best state for bonus index
-    tqqq_history = yfinance.Ticker('TQQQ').history(period='5y', auto_adjust=False)
+    tqqq_history = yfinance.Ticker('TQQQ').history(period='max', auto_adjust=False)
     tqqq_history = tqqq_history.reset_index()
-    #print(self.test.head(1).index.values[0])
-    tqqq_history = tqqq_history[tqqq_history['Date']>=test_data.head(1).index.values[0]]
-    tqqq_history = tqqq_history.iloc[:-1]
+    
+    start_history_date = test_data.head(1).index.values[0]
+    end_history_date = test_data.tail(1).index.values[0]
+    tqqq_history = tqqq_history[ (tqqq_history['Date']>=start_history_date) & (tqqq_history['Date']<=end_history_date)]
     
     total_results = []
 
-    share_accumulation_rate = 3
-    share_decay_rate = 1
+    #share_accumulation_rate = 3
+    #share_decay_rate = 1
     """
     for share_accumulation_rate in range(1,10):
         share_accumulation_rate = share_accumulation_rate * 5
@@ -301,6 +325,7 @@ def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_st
         buy_state = middle_state_num
         bonus_buy_state = good_state_num
 
+    
     bad_state = bad_state_num
     buy_and_hold_start = balance + keep_for_bonus
     benchmark_return = balance * float(test_data['close'].tail(1)) / float(test_data['close'].head(1))
@@ -310,6 +335,7 @@ def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_st
     for i in test_data.index:
         today = test_data.loc[i]
         today_bonus = tqqq_history.loc[tqqq_history['Date'] == i]
+        
         bonus_share_price = float(today_bonus['Close'])
         share_price = float(today['close'])
         #print(pd.DataFrame(today).T)
@@ -343,7 +369,7 @@ def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_st
             #num_shares_after_selling = ceil(held_shares['QQQ']['num_shares']/share_decay_rate)
             #num_shares_sold = held_shares['QQQ']['num_shares'] - num_shares_after_selling
             #held_shares['QQQ']['num_shares'] = num_shares_after_selling
-            num_shares_sold = (held_shares['QQQ']['num_shares'] / share_decay_rate)
+            num_shares_sold = ceil( (held_shares['QQQ']['num_shares'] / share_decay_rate) )
             num_shares_after_selling = held_shares['QQQ']['num_shares'] - num_shares_sold
             #print('selling %s shares for a value of %s. now down to %s shares' % ( num_shares_sold, round(num_shares_sold*share_price,2), num_shares_after_selling ))
             balance = balance + round( (num_shares_sold * share_price), 2)
@@ -385,6 +411,7 @@ def walk_timeline(test_data, buy_state, good_state_num, middle_state_num, bad_st
     percent_return = result_df['percent'].max()
     benchmark_return = round(buy_and_hold_percent,4)
     #result_df.to_csv('test.csv')
+    
             
     return percent_return, benchmark_return
 

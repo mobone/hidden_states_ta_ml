@@ -127,3 +127,5 @@ hidden_states.db
 *.png
 demo_cache.sqlite
 demo_cache.sqlite-journal
+demo_cache.sqlite
+hmm.db
