@@ -4,6 +4,7 @@ import alpaca_trade_api as tradeapi
 from math import floor
 import logging
 from time import sleep
+import pandas as pd
 logging.basicConfig(filename='/tmp/trader.log', level=logging.INFO)
 logging.basicConfig(format='%(asctime)s %(message)s')
 
@@ -69,10 +70,10 @@ class automated_trader():
 
         for position in self.positions:
             self.held_shares[position.symbol]['num_currently_held'] = position.qty
-            print('got %s shares currently held for %s' % (position.qty, position.symbol) )
-            logging.info('got %s shares currently held for %s' % (position.qty, position.symbol) )
+            #print('got %s shares currently held for %s' % (position.qty, position.symbol) )
+            #logging.info('got %s shares currently held for %s' % (position.qty, position.symbol) )
 
-        print('currently held', self.held_shares)
+        #print('currently held', self.held_shares)
 
         
         
@@ -81,15 +82,66 @@ class automated_trader():
 
     def make_trades(self):
         logging.info('starting to make trades')
-        days = self.todays_prediction.tail(10)
-        today = self.todays_prediction.tail(1)
+        self.days = self.todays_prediction.tail(10)
+        self.today = self.todays_prediction.tail(1)
 
         # test states
-        days['state']=1
-        today['state']=2
+        self.days['state']=1
+        self.today['state']=2
 
         self.get_current_prices()
+        self.get_current_positions()
+        self.get_equity_percents()
 
+        self.get_target_num_shares(self.short_symbol, self.short_percent)
+        self.get_target_num_shares(self.regular_symbol, self.regular_percent)
+        self.get_target_num_shares(self.strong_symbol, self.strong_percent)
+
+        print(pd.DataFrame.from_dict(self.held_shares))
+
+        # place sell orders first
+        for symbol, counts in self.held_shares.items():
+            difference = int(counts['target_num_of_shares']) - int(counts['num_currently_held'])
+            if difference<0:
+                self.submit_order_wrapper(symbol, difference, 'sell')
+
+        # then place buy orders
+        for symbol, counts in self.held_shares.items():
+            difference = int(counts['target_num_of_shares']) - int(counts['num_currently_held'])
+            if difference>0:
+                self.submit_order_wrapper(symbol, difference, 'buy')
+
+
+
+
+    def get_equity_percents(self):
+        if float(self.today['state'])==0.0:
+            self.sell_everything = True
+        else:
+            self.sell_everything = False
+        # find out the counts to determine the percent of account to use for each ETF
+        num_regular = self.days[self.days['state']==1.0]['state'].count()
+        num_strong = self.days[self.days['state']==2.0]['state'].count()
+        logging.info('got %s state counts for regular and %s state counts for strong' % ( num_regular, num_strong ) )
+
+        # always hold one of the 2x or 3x ETF
+        if num_strong == 0:
+            num_strong = 1
+            logging.info('bumping the strong count to always have a position')
+
+        # convert counts to percents to be used against total account balance
+        self.regular_percent = num_regular / sum([num_regular, num_strong])
+        self.strong_percent = num_strong / sum([num_regular, num_strong])
+
+        if self.sell_everything:
+            self.regular_percent = 0
+            self.strong_percent = 0
+            self.short_percent = 0.25
+        else:
+            self.short_percent = 0
+        
+
+        """
         # check if we have a short position
         try:
             position = self.api.get_position(self.short_symbol)
@@ -174,7 +226,7 @@ class automated_trader():
             logging.info('determined we need to buy %s shares of %s for a target of %s shares' % ( abs(difference), symbol, held_shares['target_num_of_shares'] ) )
             if difference>0:
                 self.submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'buy')
-
+        """
         
     def get_current_prices(self):
         symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
@@ -184,7 +236,20 @@ class automated_trader():
             current_price = symbol_bars[symbol]['close']
             self.current_prices[symbol] = current_price
         
-        
+    def get_current_positions(self):
+        symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
+        for symbol in symbols:
+            self.held_shares[symbol] = {'num_currently_held': 0, 'target_num_of_shares': 0}
+            try:
+                position = self.api.get_position(symbol)
+                self.held_shares[symbol]['num_currently_held'] = position.qty
+                #print('found position of %s shares for %s' % ( position.qty, symbol ) )
+            except Exception as e:
+                print("no position exists for", symbol)
+                print(e)
+                pass
+
+
 
     def get_target_num_shares(self, symbol, percent):
         # get amount of cash to use
@@ -207,11 +272,11 @@ class automated_trader():
 
 
 
-    def submit_order_wrapper(self, symbol, num_shares, target_num_of_shares, side):
+    def submit_order_wrapper(self, symbol, num_shares, side):
         current_price = self.current_prices[symbol]
         num_shares = abs(int(num_shares))
-        print('submitting %s order for %s shares for %s. target number of shares is %s' % ( side, num_shares, symbol, target_num_of_shares ))
-        logging.info('submitting %s order for %s shares for %s. target number of shares is %s' % ( side, num_shares, symbol, target_num_of_shares ))
+        print('submitting %s order for %s shares for %s' % ( side, num_shares, symbol ))
+        #logging.info('submitting %s order for %s shares for %s. target number of shares is %s' % ( side, num_shares, symbol ))
         if side == 'buy':
             limit_price = current_price * 1.15
         elif side == 'sell':
@@ -233,39 +298,14 @@ class automated_trader():
             for i in range(10):
                 # wait for order to clear
                 sleep(1)
-                #try:
-                positions = self.api.get_positions()
-                print(positions)
-                input()
-
-                """
-                for position in positions:
-                    if position.symbol == symbol and side == 'sell':
-                        self.held_shares[symbol]['num_currently_held'] = position.qty
-                        logging.info('order successfully filled')
-                    
-
-                if int(position.qty) == int(target_num_of_shares):
-                    self.held_shares[symbol]['num_currently_held'] = position.qty
-                    logging.info('order successfully filled')
-                    print('order filled', position.symbol, position.qty)
+                
+                order = self.api.get_order(order.id)
+                if order.status == 'filled':
+                    print('order %s filled' % order.id)
                     return
-                """
-                """
-                except Exception as e:
-                    if side == 'sell':
-                        logging.info('order successfully filled')
-                        self.held_shares[symbol]['num_currently_held'] = target_num_of_shares
-                        print('order filled')
-                        return
-                    print(e)
-                    logging.error('got exception when checking if filled\n%s' % e)
                 
+            input()
                 
-                    logging.info('order has not been filled yet')
-                    sleep(2)
-                """
-            
             logging.info('order failed to be filled')
         except Exception as e:
             print(e)
