@@ -27,8 +27,8 @@ class automated_trader():
         
         
         self.api = tradeapi.REST(
-                                'PKY80T33QRG8ZMQPKI56',
-                                'TDDNW7Je2mnmPQ7DRFR8CfbYHsniu5Qzk3we3LrQ',
+                                'PKMOAVSZFGD24YGBSEDE',
+                                'DzOHQ6DjB1zh9SsZvjKGiRdUB0gFWzzNuYnPROzF',
                                 'https://paper-api.alpaca.markets'
                                 )
 
@@ -62,9 +62,20 @@ class automated_trader():
         logging.info('got account balance of %s' % self.account_equity)
 
         self.positions = self.api.list_positions()
+
+        symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
+        for symbol in symbols:
+            self.held_shares[symbol] = {'num_currently_held': 0, 'target_num_of_shares': 0}
+
         for position in self.positions:
-            self.held_shares[position.symbol] = {'num_currently_held': position.qty}
+            self.held_shares[position.symbol]['num_currently_held'] = position.qty
+            print('got %s shares currently held for %s' % (position.qty, position.symbol) )
             logging.info('got %s shares currently held for %s' % (position.qty, position.symbol) )
+
+        print('currently held', self.held_shares)
+
+        
+        
         
         
 
@@ -72,6 +83,12 @@ class automated_trader():
         logging.info('starting to make trades')
         days = self.todays_prediction.tail(10)
         today = self.todays_prediction.tail(1)
+
+        # test states
+        days['state']=1
+        today['state']=2
+
+        self.get_current_prices()
 
         # check if we have a short position
         try:
@@ -85,33 +102,40 @@ class automated_trader():
             self.short_held = False
             self.short_qty = 0
 
+        # close the short position as the current state is not 0
+        if self.short_held == True and int(today['state']!=0):
+            logging.info('closing short position of %s shares' % self.short_qty)
+            self.submit_order_wrapper(self.short_symbol, self.short_qty, self.short_qty, 'sell')
+
         if int(today['state'])==0:
             # sell everything 
             logging.info('state is bad, selling all holdings')
+            
             for symbol, held_shares in self.held_shares.items():
-                held_shares[symbol]['target_num_of_shares'] = 0
-                difference = held_shares['target_num_of_shares'] - held_shares['num_currently_held']
-                if difference>0:
+                held_shares['target_num_of_shares'] = 0
+                difference = int(held_shares['target_num_of_shares']) - int(held_shares['num_currently_held'])
+                if difference>=0:
+                    print('no need to sell shares')
                     logging.info('no need to sell shares for %s as the difference is %s' % ( symbol, difference ))
                     continue
                 else:
+                    
                     logging.info('selling %s shares for %s.' % ( difference, symbol ))
                     self.submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'sell')
             
             if self.short_held == True:
+                print('aready held short')
                 logging.info('already holding a short position. exiting')    
                 return
             # place short trade
             self.get_target_num_shares(self.short_symbol, percent = 0.20)
             num_shares = self.held_shares[self.short_symbol]['target_num_of_shares']
+            print('buying short shares')
             logging.info('placing short trade of %s shares for %s' % ( num_shares, self.short_symbol ))
             self.submit_order_wrapper(self.short_symbol, num_shares, num_shares, 'buy')
             return
 
-        # close the short position as the current state is not 0
-        if self.short_held == True:
-            logging.info('closing short position of %s shares' % self.short_qty)
-            self.submit_order_wrapper(self.short_symbol, self.short_qty, self.short_qty, 'sell')
+        
 
         # find out the counts to determine the percent of account to use for each ETF
         num_regular = days[days['state']==1.0]['state'].count()
@@ -136,20 +160,30 @@ class automated_trader():
         
         # check if any of the shares need to be sold
         for symbol, held_shares in self.held_shares.items():
-            difference = held_shares['target_num_of_shares'] - held_shares['num_currently_held']
+            print(self.held_shares)
+            print(symbol)
+            print(held_shares)
+            difference = int(held_shares['target_num_of_shares']) - int(held_shares['num_currently_held'])
             logging.info('determined we need to sell %s shares of %s for a target of %s shares' % ( abs(difference), symbol, held_shares['target_num_of_shares'] ) )
             if difference<0:
                 self.submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'sell')
 
         # check if any of the symbols need to be bought
         for symbol, held_shares in self.held_shares.items():
-            difference = held_shares['target_num_of_shares'] - held_shares['num_currently_held']
+            difference = int(held_shares['target_num_of_shares']) - int(held_shares['num_currently_held'])
             logging.info('determined we need to buy %s shares of %s for a target of %s shares' % ( abs(difference), symbol, held_shares['target_num_of_shares'] ) )
             if difference>0:
                 self.submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'buy')
 
         
-
+    def get_current_prices(self):
+        symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
+        for symbol in symbols:
+            # get current share price
+            symbol_bars = self.api.get_barset(symbol, 'minute', 1).df.iloc[0]
+            current_price = symbol_bars[symbol]['close']
+            self.current_prices[symbol] = current_price
+        
         
 
     def get_target_num_shares(self, symbol, percent):
@@ -169,26 +203,31 @@ class automated_trader():
 
         logging.info('determined we should hold %s shares of %s' % (num_shares, symbol) )
 
-        self.held_shares[symbol] = {'target_num_of_shares': num_shares}
+        self.held_shares[symbol]['target_num_of_shares'] = num_shares
 
 
 
     def submit_order_wrapper(self, symbol, num_shares, target_num_of_shares, side):
         current_price = self.current_prices[symbol]
+        num_shares = abs(int(num_shares))
+        print('submitting %s order for %s shares for %s. target number of shares is %s' % ( side, num_shares, symbol, target_num_of_shares ))
         logging.info('submitting %s order for %s shares for %s. target number of shares is %s' % ( side, num_shares, symbol, target_num_of_shares ))
         if side == 'buy':
             limit_price = current_price * 1.15
         elif side == 'sell':
             limit_price = current_price * 0.85
-        num_shares = int(abs(num_shares))
+        
+        
         try:
+            
             order = self.api.submit_order( 
                                     symbol=symbol, 
                                     qty = num_shares, 
                                     side = side, 
                                     type = 'limit', 
-                                    time_in_force = 'gtc', 
-                                    limit_price = float(round(current_price*.9, 2))
+                                    time_in_force = 'day',
+                                    extended_hours = True,
+                                    limit_price = float(round(limit_price, 2))
                                     )
             logging.info('order submitted')
             for i in range(10):
@@ -197,9 +236,17 @@ class automated_trader():
                 try:
                     position = self.api.get_position(symbol)
                     if int(position.qty) == int(target_num_of_shares):
+                        self.held_shares[symbol]['num_currently_held'] = position.qty
                         logging.info('order successfully filled')
+                        print('order filled', position.symbol, position.qty)
                         return
                 except Exception as e:
+                    if side == 'sell':
+                        logging.info('order successfully filled')
+                        self.held_shares[symbol]['num_currently_held'] = target_num_of_shares
+                        print('order filled')
+                        return
+                    print(e)
                     logging.error('got exception when checking if filled\n%s' % e)
                 
                 
@@ -208,6 +255,7 @@ class automated_trader():
             
             logging.info('order failed to be filled')
         except Exception as e:
+            print(e)
             logging.error('got exception when submitting order\n%s' % e)
 
 automated_trader()
