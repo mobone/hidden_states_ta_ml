@@ -43,6 +43,7 @@ class automated_trader():
         logging.info('all required trades submitted. automated trader exiting')
         logging.info('=============================================')
 
+
     def get_todays_prediction(self):
         x = pipeline(model_name = self.model_name)
         self.todays_prediction = x.new_predictions[['date', 'close', 'state']]
@@ -109,8 +110,6 @@ class automated_trader():
                 self.submit_order_wrapper(symbol, difference, 'buy')
 
 
-
-
     def get_equity_percents(self):
         if float(self.today['state'])==0.0:
             self.sell_everything = True
@@ -146,7 +145,8 @@ class automated_trader():
             current_price = symbol_bars[symbol]['close']
             self.current_prices[symbol] = current_price
             logging.info('got current price of $%s for %s' % ( current_price, symbol ))
-        
+
+
     def get_current_positions(self):
         symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
         for symbol in symbols:
@@ -156,7 +156,6 @@ class automated_trader():
                 self.held_shares[symbol]['num_currently_held'] = position.qty
             except Exception as e:
                 pass
-
 
 
     def get_target_num_shares(self, symbol, percent):
@@ -206,7 +205,7 @@ class automated_trader():
                 order = self.api.get_order(order.id)
                 if order.status == 'filled':
                     #print('order %s filled' % order.id)
-                    logging.info('order %s filled', % order.id)
+                    logging.info('order %s filled' % order.id)
                     return
                 
             logging.info('order %s failed to be filled' % order.id)
