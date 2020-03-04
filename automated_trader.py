@@ -7,8 +7,9 @@ import logging
 logging.basicConfig(filename='/tmp/trader.log', level=logging.DEBUG)
 logging.basicConfig(format='%(asctime)s %(message)s')
 
-# notes:
+
 """
+# TODO: use threading
 tAMO = threading.Thread(target=self.awaitMarketOpen)
 tAMO.start()
 tAMO.join()
