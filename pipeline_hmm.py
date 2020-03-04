@@ -24,22 +24,48 @@ from simple_trader_hmm import trader
 warnings.simplefilter("ignore")
 
 class pipeline():
-    def __init__(self, pca_n_components, k_features):
+    def __init__(self, params_dict = None, model_name = None):
         self.conn = sqlite3.connect('hmm.db')
-        self.name = namegenerator.gen()
+        
+        if model_name is None:
+            self.name = namegenerator.gen()
+            self.pca_n_components = params_dict.get('pca_n_components', 3)
+            self.k_features = params_dict.get('k_features', 3)
+        elif model_name is not None:
+            self.name = model_name
+            pca_n_components, k_features, features_found = self.get_model_from_db()
+            
+            self.pca_n_components = pca_n_components
+            self.k_features = k_features
+            self.features_found = features_found
+
         
         self.cutoff_date = '2017-01-01'
-        self.pca_n_components = pca_n_components
-        self.k_features = k_features
+        
         self.n_experiments = 35
 
         self.get_data()
-        self.run_decision_tree()
-        self.run_pipeline()
-        if self.pipeline_failed == False:
-            print('found model', self.features_found)
-            self.get_results()
-            self.store_results()
+
+        if model_name is not None:
+            # run production
+            print('running production')
+            self.run_pipeline(production=True)
+            print('predicting completed')
+        else:
+            self.run_decision_tree()
+            self.run_pipeline()
+            if self.pipeline_failed == False:
+                print('found model', self.features_found)
+                self.get_results()
+                self.store_results()
+
+    def get_model_from_db(self):
+        sql = 'select * from models_final where name == "%s"' % self.name
+        df = pd.read_sql(sql, self.conn)
+        pca_n_components = int(df['pca_n_components'].values[0])
+        k_features = int(df['k_features'].values[0])
+        features_found = eval(df['features'].values[0])
+        return pca_n_components, k_features, features_found
 
 
     def store_results(self):
@@ -60,7 +86,7 @@ class pipeline():
         
 
 
-    def run_pipeline(self):
+    def run_pipeline(self, production=False):
         self.pipeline_failed = True
         self.max_score = -np.inf
         self.max_correl = -np.inf
@@ -81,9 +107,12 @@ class pipeline():
             scores = []
             correls = []
 
-            # choose features
-            shuffle(self.starting_features)
-            test_cols = ['return'] + self.starting_features[0:self.k_features]
+            if production == False:
+                # choose features
+                shuffle(self.starting_features)
+                test_cols = ['return'] + self.starting_features[0:self.k_features]
+            elif production == True:
+                test_cols = self.features_found
 
             # test features on training dataset
             pipe_pca.fit(train[ test_cols ])
@@ -114,6 +143,11 @@ class pipeline():
                 self.test_score = None
             test['state'] = pipe_pca.predict(test[test_cols])
             test = self.rename_states(test)
+
+            if production == True:
+                self.new_predictions = test.tail(30)
+                return
+
             if test is None:
                 continue
             criteria_check = self.check_criteria(test)
@@ -126,7 +160,6 @@ class pipeline():
             test_correl = test_means.corr()
             self.test_correl = test_correl['return']['next_day']
 
-           
             
             if self.train_correl > self.max_correl and self.test_correl>0:
                 
@@ -255,22 +288,25 @@ class pipeline():
 
     
 
-def run_pipeline_class(params_list):
-    pca_n_components, k_features, _ = params_list    
-    pipeline(pca_n_components, k_features)
+def run_pipeline_class(params_dict):
+    
+    pipeline(params_dict = params_dict)
 
 
 
 if __name__ == '__main__':
     # create params list to iterate through
     #pca_n_components = list( range(3,15) )
+    params_list_of_dicts = []
     pca_n_components = [3]
     simulations = [0,1,2]
     k_features = list( range(3,15) )
     params_list = list(product( pca_n_components, k_features, simulations ))
     shuffle(params_list)
-
+    for pca_n_components, k_features, _ in params_list:
+        params_dict = {'pca_n_components': pca_n_components, 'k_features': k_features}
+        params_list_of_dicts.append(params_dict)
     p = Pool( int(cpu_count()-1) )
-    p.map(run_pipeline_class, params_list)
+    p.map(run_pipeline_class, params_list_of_dicts)
     #pca_n_components, k_features = params_list[0]
     #pipeline(pca_n_components, k_features)
