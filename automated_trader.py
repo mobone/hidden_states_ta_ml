@@ -49,6 +49,10 @@ class automated_trader():
         logging.info('\n'+str(
                                 self.todays_prediction.tail(1)
                              ))
+        logging.info('heres the last 10 days of predictions')
+        logging.info('\n' + str(
+                                 self.todays_prediction.tail(10)
+                                ))
 
     def get_account_info(self):
         logging.info('getting account info from alpaca')
@@ -176,15 +180,15 @@ class automated_trader():
             limit_price = current_price * 1.15
         elif side == 'sell':
             limit_price = current_price * 0.85
-
+        num_shares = int(abs(num_shares))
         try:
             order = self.api.submit_order( 
                                     symbol=symbol, 
-                                    qty = abs(num_shares), 
+                                    qty = num_shares, 
                                     side = side, 
                                     type = 'limit', 
                                     time_in_force = 'gtc', 
-                                    limit_price = round(current_price*.9, 2)
+                                    limit_price = float(round(current_price*.9, 2))
                                     )
             logging.info('order submitted')
             for i in range(10):
@@ -196,7 +200,7 @@ class automated_trader():
                         logging.info('order successfully filled')
                         return
                 except Exception as e:
-                    logging.error('got exception\n%e' % e)
+                    logging.error('got exception when checking if filled\n%s' % e)
                 
                 
                     logging.info('order has not been filled yet')
@@ -204,6 +208,6 @@ class automated_trader():
             
             logging.info('order failed to be filled')
         except Exception as e:
-            logging.error('got exception\n%s' % e)
+            logging.error('got exception when submitting order\n%s' % e)
 
 automated_trader()
