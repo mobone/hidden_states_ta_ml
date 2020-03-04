@@ -129,3 +129,7 @@ demo_cache.sqlite
 demo_cache.sqlite-journal
 demo_cache.sqlite
 hmm.db
+*.csv
+plots/.DS_Store
+*.csv
+demo_cache.sqlite

@@ -7,14 +7,14 @@ from multiprocessing import Pool, cpu_count
 warnings.simplefilter('ignore')
 
 class trader():
-    def __init__(self, model_name):
+    def __init__(self, model_name, symbol_1, symbol_2):
         self.model_name = model_name
         conn = sqlite3.connect('hmm.db')
-        sql = 'select * from trades_with_test where name ==  "%s"' % model_name
+        sql = 'select * from trades_final where name ==  "%s"' % model_name
         self.df = pd.read_sql(sql, conn)
         self.df['date'] = pd.to_datetime(self.df['date'])
-        self.regular_symbol = 'QQQ'
-        self.strong_symbol = 'QLD'
+        self.regular_symbol = symbol_1
+        self.strong_symbol = symbol_2
 
         self.stock_history = {}
         self.held_shares = {}
@@ -62,18 +62,27 @@ class trader():
                 #input()
                 continue
 
-            # find out the percentages for number of shares to buy
+            # find out the counts to determine the percent of account to use for each ETF
             num_regular = days[days['state']==1.0]['state'].count()
             num_strong = days[days['state']==2.0]['state'].count()
+            
+            # always hold one of the 2x or 3x ETF
+            if num_strong == 0:
+                num_strong = 1
 
+
+            # convert counts to percents to be used against the bank balance
             regular_percent = num_regular / sum([num_regular, num_strong])
             strong_percent = num_strong / sum([num_regular, num_strong])
+
             if regular_percent>0:
                 self.buy_shares(self.regular_symbol, day, regular_percent)
             if strong_percent>0:
                 self.buy_shares(self.strong_symbol, day, strong_percent)
+
         percent_change = round(self.bank_balance / self.starting_balance - 1, 4)*100
-        print('%s %s' % ( self.model_name, percent_change ) )
+        #print('%s %s' % ( self.model_name, percent_change ) )
+        self.return_percentage = percent_change
         #df = pd.DataFrame(list_of_trades, columns = ['date', 'balance'])
         #df.to_csv('qld.csv')
             

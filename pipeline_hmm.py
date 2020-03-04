@@ -20,6 +20,7 @@ import namegenerator
 import matplotlib
 import sqlite3
 from multiprocessing import Pool, cpu_count
+from simple_trader_hmm import trader
 warnings.simplefilter("ignore")
 
 class pipeline():
@@ -35,48 +36,48 @@ class pipeline():
         self.get_data()
         self.run_decision_tree()
         self.run_pipeline()
-        if self.failed_real_test == False:
+        if self.pipeline_failed == False:
+            print('found model', self.features_found)
             self.get_results()
             self.store_results()
 
 
     def store_results(self):
-        output_dict = {}
-        output_dict['name'] = self.name
-        output_dict['expirement_score'] = self.max_score
-        output_dict['expirement_correl'] = self.max_correl
-        output_dict['real_test_score'] = self.real_test_score
-        output_dict['real_test_correl'] = self.real_test_correl
-        output_dict['state_0_mean'] = self.state_0_mean * 100
-        output_dict['state_1_mean'] = self.state_1_mean * 100
-        output_dict['state_2_mean'] = self.state_2_mean * 100
-        output_dict['state_0_next_mean'] = self.state_0_next_mean * 100
-        output_dict['state_1_next_mean'] = self.state_1_next_mean * 100
-        output_dict['state_2_next_mean'] = self.state_2_next_mean * 100
+        self.results_df['name'] = self.name
+        self.results_df['train_score'] = self.train_score
+        self.results_df['test_score'] = self.test_score
+        self.results_df['train_correl'] = self.train_correl
+        self.results_df['test_correl'] = self.test_correl
+        self.results_df['pca_n_components'] = self.pca_n_components
+        self.results_df['k_features'] = self.k_features
+        self.results_df['features'] = str(self.features_found)
 
-        output_dict['pca_n_components'] = self.pca_n_components
-        output_dict['k_features'] = self.k_features
-        output_dict['features'] = str(self.features_found)
-
-        df = pd.DataFrame.from_dict(output_dict, orient='index').T
-        df.to_sql('models_with_test', self.conn, if_exists='append', index=False)
-        print(df)
-        self.test_predicted['name'] = self.name
-        self.test_predicted.to_sql('trades_with_test', self.conn, if_exists='append', index=False)
+        
+        self.results_df.to_sql('models_final', self.conn, if_exists='append', index=False)
+        print(self.results_df)
+        
         #input()
         
 
 
     def run_pipeline(self):
-        self.failed_real_test = True
+        self.pipeline_failed = True
         self.max_score = -np.inf
         self.max_correl = -np.inf
+        
+        # create pipeline
+        pipe_pca = make_pipeline(StandardScaler(),
+                                PrincipalComponentAnalysis(n_components=self.pca_n_components),
+                                #GMMHMM(n_components=3, covariance_type='full'))
+                                GaussianHMM(n_components=3, covariance_type='full'))
         
         for exp_num in range(self.n_experiments):
 
 
             train = self.clean_train.copy()
             test = self.clean_test.copy()
+            means = []
+            stddevs = []
             scores = []
             correls = []
 
@@ -84,130 +85,156 @@ class pipeline():
             shuffle(self.starting_features)
             test_cols = ['return'] + self.starting_features[0:self.k_features]
 
-            for cv_split_num in range(3):
-                X_train, X_test, y_train, y_test = train_test_split(train, train['return'], test_size=0.3)
-
-
-                # create pipeline
-                pipe_pca = make_pipeline(StandardScaler(),
-                                        PrincipalComponentAnalysis(n_components=self.pca_n_components),
-                                        #GMMHMM(n_components=3, covariance_type='full'))
-                                        GaussianHMM(n_components=3, covariance_type='full'))
-
-
-                # train model, get probability score, and predict new states    
-                try:
-                    pipe_pca.fit(X_train[ test_cols ])
-
-                    # get the probability score
-                    score = np.exp( pipe_pca.score(X_test[ test_cols ]) / len(X_test) ) * 100
-                    
-                    # predict the new states
-                    X_test['state'] = pipe_pca.predict(X_test[ test_cols ])
-
-                    # ensure all three states are used 
-                    counts = X_test.groupby(by='state')['state'].count()
-                    if not counts[counts<10].empty or len(X_test.groupby(by='state'))<3:
-                        continue
-
-                    # get the correlation between state and next day percent changes
-                    X_test['next_day'] = X_test['close'].shift(-1) / X_test['close'] - 1
-                    correl = X_test.dropna().groupby(by='state')[['return', 'next_day']].mean().corr()
-                    correl = correl['return']['next_day']
-
-                    scores.append(score)
-                    correls.append(correl)
-                except Exception as e:
-                    print(e)
-                    continue
-
-            if len(scores)<3:
+            # test features on training dataset
+            pipe_pca.fit(train[ test_cols ])
+            try:
+                self.train_score = np.exp( pipe_pca.score(train[ test_cols ]) / len(train) ) * 100
+            except:
+                self.train_score = None
+            train['state'] = pipe_pca.predict(train[test_cols])
+            train = self.rename_states(train)
+            if train is None:
                 continue
+            criteria_check = self.check_criteria(train)
+            if criteria_check == False:
+                continue
+
+            # get the correlation between state and next day percent changes
+            train['next_day'] = train['close'].shift(-1) / train['close'] - 1
+            train_means = train.dropna().groupby(by='state')[['return', 'next_day']].mean()
+            train_correl = train_means.corr()
+            self.train_correl = train_correl['return']['next_day']
+
+
+            # do the same for the test data
+            pipe_pca.fit(test[ test_cols ])
+            try:
+                self.test_score = np.exp( pipe_pca.score(test[ test_cols ]) / len(test) ) * 100
+            except:
+                self.test_score = None
+            test['state'] = pipe_pca.predict(test[test_cols])
+            test = self.rename_states(test)
+            if test is None:
+                continue
+            criteria_check = self.check_criteria(test)
+            if criteria_check == False:
+                continue
+
+            # get the correlation between state and next day percent changes
+            test['next_day'] = test['close'].shift(-1) / test['close'] - 1
+            test_means = test.dropna().groupby(by='state')[['return', 'next_day']].mean()
+            test_correl = test_means.corr()
+            self.test_correl = test_correl['return']['next_day']
+
+           
             
-            score = np.mean(scores)
-            correl = np.mean(correls)            
-            if score > self.max_score and correl > self.max_correl and correl>.5:
+            if self.train_correl > self.max_correl and self.test_correl>0:
                 
-                
-
-
-                test['state'] = pipe_pca.predict(test[test_cols])
-                
-                counts = test.groupby(by='state')['state'].count()
-                if not counts[counts<50].empty or len(test.groupby(by='state'))<3:
-                    self.failed_real_test = True
-                    #print('failed real world test')
-                    continue
-
-                # get the correlation between state and next day percent changes
-                test['next_day'] = test['close'].shift(-1) / test['close'] - 1
-                real_test_correl = test.dropna().groupby(by='state')[['return', 'next_day']].mean().corr()
-                real_test_correl = real_test_correl['return']['next_day']
-                if real_test_correl<0:
-                    self.failed_real_test = True
-                    #print('failed real world test')
-                    continue
-                self.real_test_correl = real_test_correl
-
-                # get the score for the real test data
-                self.real_test_score = np.exp( pipe_pca.score(test[ test_cols ]) / len(test) ) * 100
-
-                print('experiment %s found model' % exp_num, score, correl, test_cols)
+                self.train_predicted = train
                 self.test_predicted = test
                 self.features_found = test_cols
-                self.max_score = score
-                self.max_correl = correl
+
+                self.train_means = train_means
+                self.test_means = test_means
                 
-                self.probability = score
-                self.correl = correl
-                self.failed_real_test = False
 
-    def get_results(self):
+                #print('model found on expirement number', exp_num)
+                #print(self.features_found)
+                
+                self.max_correl = self.train_correl
+                self.pipeline_failed = False
+                
+                
+
+    def check_criteria(self, df):
+
+        counts_check = int( len(df) *.1 )
+        # ensure all three states are used 
+        counts = df.groupby(by='state')['state'].count()
+        if not counts[counts<counts_check].empty or len(df.groupby(by='state'))<3:
+            return False
+
+        # get the correlation between state and next day percent changes
+        df['next_day'] = df['close'].shift(-1) / df['close'] - 1
+        correl = df.dropna().groupby(by='state')[['return', 'next_day']].mean().corr()
         
-        self.test_predicted['next_day'] = self.test_predicted['close'].shift(-1) / self.test_predicted['close'] - 1
+        correl = correl['return']['next_day']
 
+        if correl<.5:
+            return False
+
+        # ensure buy and strong buy returns and next returns are positive
+        means = df.dropna().groupby(by='state')[['return', 'next_day']].mean()
+        
+        if float(means[means.index == 0]['return'])>0 or float(means[means.index == 1]['return'])<0 or float(means[means.index == 2]['return'])<0:
+            return False
+        if float(means[means.index == 0]['return'])>0 or float(means[means.index == 1]['next_day'])<0 or float(means[means.index == 2]['next_day'])<0:
+            return False
+        
+        return True
+
+    def rename_states(self, df):
         # rename states accordingly
-        state_nums = self.test_predicted.groupby(by='state').mean().sort_values(by='return')
+        state_nums = df.groupby(by='state').mean().sort_values(by='return')
+        if len(state_nums)<3:
+            return None
+
         state_nums['renamed_state'] = ['sell', 'buy', 'strong_buy']
         state_nums['renamed_state_nums'] = [0,1,2]
         
         for i in list(state_nums.index):
             #print('renaming state %s to state %s' % ( i, state_nums.loc[i]['renamed_state']))
-            self.test_predicted.loc[self.test_predicted['state']==i, 'renamed_state'] = state_nums.loc[i]['renamed_state']
-            self.test_predicted.loc[self.test_predicted['state']==i, 'renamed_state_num'] = state_nums.loc[i]['renamed_state_nums']
+            df.loc[df['state']==i, 'renamed_state'] = state_nums.loc[i]['renamed_state']
+            df.loc[df['state']==i, 'renamed_state_num'] = state_nums.loc[i]['renamed_state_nums']
 
-        self.test_predicted['state'] = self.test_predicted['renamed_state_num']
-        del self.test_predicted['renamed_state_num']
+        df['state'] = df['renamed_state_num']
+        #del df['renamed_state_num']
 
-        self.means = self.test_predicted.groupby(by='renamed_state')['return'].mean()
-        self.state_0_mean = self.means['sell']
-        self.state_1_mean = self.means['buy']
-        self.state_2_mean = self.means['strong_buy']
+        return df
+
+    def get_results(self):
+        df = pd.DataFrame()
         
-        self.means = self.test_predicted.dropna().groupby(by='renamed_state')['next_day'].mean()
-        self.state_0_next_mean = self.means['sell']
-        self.state_1_next_mean = self.means['buy']
-        self.state_2_next_mean = self.means['strong_buy']
+        self.train_means = self.train_means.unstack().to_frame().T
+        self.train_means.columns = ['train_0_return', 'train_1_return', 'train_2_return', 'train_0_next_day', 'train_1_next_day', 'train_2_next_day', ]
+        self.test_means = self.test_means.unstack().to_frame().T
+        self.test_means.columns = ['test_0_return', 'test_1_return', 'test_2_return', 'test_0_next_day', 'test_1_next_day', 'test_2_next_day', ]
+
+        self.results_df = pd.concat([self.train_means, self.test_means],axis=1)
+
+        # store trades to be used in trader
+        self.test_predicted['name'] = self.name
+        self.test_predicted.to_sql('trades_final', self.conn, if_exists='append', index=False)
         
+        safe_return = trader(self.name, 'QQQ', 'QLD').return_percentage
+        moderate_return = trader(self.name, 'QQQ', 'TQQQ').return_percentage
+        extreme_return = trader(self.name, 'QLD', 'TQQQ').return_percentage
+
+        self.results_df['safe_return'] = safe_return
+        self.results_df['moderate_return'] = moderate_return
+        self.results_df['extreme_return'] = extreme_return
+
         self.test_predicted.plot.scatter(x='date',
                                         y='close',
-                                        c='state',
+                                        c='renamed_state_num',
                                         colormap='viridis')
+
+                    
         fig = matplotlib.pyplot.gcf()
         fig.set_size_inches(18.5, 10.5, forward=True)
         plt.savefig('./plots/%s.png'% self.name )
 
 
     def get_data(self):
-        spy_data = yfinance.Ticker('SPY').history(period='7y')
-        spy_data = spy_data.reset_index()
-        spy_data = get_ta(spy_data, volume=True, pattern=False)
-        spy_data.columns = map(str.lower, spy_data.columns)
-        spy_data["return"] = spy_data["close"].pct_change()
-        spy_data.columns = map(str.lower, spy_data.columns)
-        spy_data = spy_data.dropna()
-        self.clean_train = spy_data[spy_data['date']<self.cutoff_date]
-        self.clean_test = spy_data[spy_data['date']>self.cutoff_date]
+        stock_df = yfinance.Ticker('QQQ').history(period='7y')
+        stock_df = stock_df.reset_index()
+        stock_df = get_ta(stock_df, volume=True, pattern=False)
+        stock_df.columns = map(str.lower, stock_df.columns)
+        stock_df["return"] = stock_df["close"].pct_change()
+        stock_df.columns = map(str.lower, stock_df.columns)
+        stock_df = stock_df.dropna()
+        self.clean_train = stock_df[stock_df['date']<self.cutoff_date]
+        self.clean_test = stock_df[stock_df['date']>self.cutoff_date]
 
     def run_decision_tree(self):
         
@@ -229,16 +256,18 @@ class pipeline():
     
 
 def run_pipeline_class(params_list):
-    pca_n_components, k_features = params_list    
+    pca_n_components, k_features, _ = params_list    
     pipeline(pca_n_components, k_features)
 
 
 
 if __name__ == '__main__':
     # create params list to iterate through
-    pca_n_components = list( range(3,15) )
+    #pca_n_components = list( range(3,15) )
+    pca_n_components = [3]
+    simulations = [0,1,2]
     k_features = list( range(3,15) )
-    params_list = list(product( pca_n_components, k_features ))
+    params_list = list(product( pca_n_components, k_features, simulations ))
     shuffle(params_list)
 
     p = Pool( int(cpu_count()-1) )
