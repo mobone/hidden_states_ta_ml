@@ -5,16 +5,11 @@ from math import floor
 import logging
 from time import sleep
 import pandas as pd
-logging.basicConfig(filename='/tmp/trader.log', level=logging.INFO)
+from threading import Thread
+
+logging.basicConfig(filename='./trader.log', level=logging.INFO)
 logging.basicConfig(format='%(asctime)s %(message)s')
 
-
-"""
-# TODO: use threading
-tAMO = threading.Thread(target=self.awaitMarketOpen)
-tAMO.start()
-tAMO.join()
-"""
 
 class automated_trader():
     def __init__(self):
@@ -28,8 +23,8 @@ class automated_trader():
         
         
         self.api = tradeapi.REST(
-                                'PKMOAVSZFGD24YGBSEDE',
-                                'DzOHQ6DjB1zh9SsZvjKGiRdUB0gFWzzNuYnPROzF',
+                                'PKJFBHN8NDD47V216FCJ',
+                                'iB/ZmUhsoZG7hvxJRsI7/xSZt/JBmUo/TBkfZNTG',
                                 'https://paper-api.alpaca.markets'
                                 )
 
@@ -61,8 +56,10 @@ class automated_trader():
         logging.info('getting account info from alpaca')
         
         self.account = self.api.get_account()
-        self.account_equity = self.account.equity
-        logging.info('got account balance of %s' % self.account_equity)
+        #self.account_equity = float(self.account.equity)
+        self.account_equity = float(self.account.buying_power) * .9
+        print('got buying power of %s' % self.account_equity)
+        logging.info('got buying power of %s' % self.account_equity)
 
         self.positions = self.api.list_positions()
 
@@ -82,7 +79,7 @@ class automated_trader():
         self.today = self.todays_prediction.tail(1)
 
         # test states
-        self.days['state']=1
+        self.days['state']=2
         self.today['state']=2
 
         self.get_current_prices()
@@ -98,17 +95,34 @@ class automated_trader():
         #print(pd.DataFrame.from_dict(self.held_shares))
 
         # place sell orders first
+        sell_orders = []
         for symbol, counts in self.held_shares.items():
             difference = int(counts['target_num_of_shares']) - int(counts['num_currently_held'])
             if difference<0:
-                self.submit_order_wrapper(symbol, difference, 'sell')
+                #self.submit_order_wrapper(symbol, difference, 'sell')
+                sell_orders.append([symbol, difference, 'sell'])
+        self.submit_order_threading(sell_orders)
 
         # then place buy orders
+        buy_orders = []
         for symbol, counts in self.held_shares.items():
             difference = int(counts['target_num_of_shares']) - int(counts['num_currently_held'])
             if difference>0:
-                self.submit_order_wrapper(symbol, difference, 'buy')
+                #self.submit_order_wrapper(symbol, difference, 'buy')
+                buy_orders.append([symbol, difference, 'buy'])
+        self.submit_order_threading(buy_orders)
 
+
+    def submit_order_threading(self, orders):
+        threads = []
+        for symbol, difference, side in orders:
+
+            t = Thread(target=self.submit_order_wrapper, args = (symbol, difference, side, ))
+            t.start()
+            threads.append(t)
+
+        for t in threads:
+            t.join()
 
     def get_equity_percents(self):
         if float(self.today['state'])==0.0:
@@ -177,12 +191,12 @@ class automated_trader():
     def submit_order_wrapper(self, symbol, num_shares, side):
         current_price = self.current_prices[symbol]
         num_shares = abs(int(num_shares))
-        
+        print('submitting %s order for %s shares for %s' % ( side, num_shares, symbol ))
         logging.info('submitting %s order for %s shares for %s' % ( side, num_shares, symbol ))
         if side == 'buy':
-            limit_price = current_price * 1.15
+            limit_price = current_price * 1.10
         elif side == 'sell':
-            limit_price = current_price * 0.85
+            limit_price = current_price * 0.90
         
         
         try:
