@@ -24,12 +24,21 @@ class automated_trader():
         self.strong_symbol = 'TQQQ'     # 3x long
         
         
+        # nick
         self.api = tradeapi.REST(
-                                'PKKR2LY13IPZUVZ1R3PZ',
-                                'llQBVI3TQrttJvmEiuxTraUNXr7xNc5MoGQI24uJ',
+                                'PK96YT85KHLEA2E5JYRK',
+                                'e80TjkGBk4w6Nnch2mlCggGhWih7aYudDmHaDdQ0',
                                 'https://paper-api.alpaca.markets'
                                 )
 
+        # tony
+        
+        self.api = tradeapi.REST(
+                                'PKSRALP8NRAJ9AFBMN0O',
+                                'Mu2Gv/V6AsWgWrGA48G6O2EjODh5DohpmklSQcZ6',
+                                'https://paper-api.alpaca.markets'
+                                )
+        
 
         self.held_shares = {}
         self.current_prices = {}
@@ -161,7 +170,7 @@ class automated_trader():
         for symbol in symbols:
             # get current share price
             symbol_bars = self.api.get_barset(symbol, 'minute', 1).df.iloc[0]
-            current_price = symbol_bars[symbol]['close']
+            current_price = round(symbol_bars[symbol]['close'],2)
             self.current_prices[symbol] = current_price
             logging.info('got current price of $%s for %s' % ( current_price, symbol ))
 
