@@ -4,7 +4,7 @@ import alpaca_trade_api as tradeapi
 from math import floor
 import logging
 from time import sleep
-logging.basicConfig(filename='/tmp/trader.log', level=logging.DEBUG)
+logging.basicConfig(filename='/tmp/trader.log', level=logging.INFO)
 logging.basicConfig(format='%(asctime)s %(message)s')
 
 
