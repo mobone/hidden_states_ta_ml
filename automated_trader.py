@@ -32,10 +32,6 @@ class automated_trader():
 
 
         self.held_shares = {}
-        
-        self.get_stock_data(self.short_symbol)
-        self.get_stock_data(self.regular_symbol)
-        self.get_stock_data(self.strong_symbol)
 
         self.get_todays_prediction()
         self.get_account_info()
@@ -49,12 +45,16 @@ class automated_trader():
 
     def get_account_info(self):
         logging.info('getting account info from alpaca')
+        
         self.account = self.api.get_account()
         self.account_equity = self.account.equity
+        logging.info('got account balance of %s' % self.account_equity)
+
         self.positions = self.api.list_positions()
         for position in self.positions:
             self.held_shares[position.symbol] = {'num_currently_held': position.qty}
-        logging.info('got account info from alpaca')
+            logging.info('got %s shares currently held for %s' (position.qty, position.symbol) )
+        
         
 
     def make_trades(self):
@@ -94,19 +94,24 @@ class automated_trader():
 
         # close the short position 
         if self.short_held == True:
+            logging.info('closing short position of %s shares' % self.short_qty)
             submit_order_wrapper(self.short_symbol, self.short_qty, self.short_qty, 'buy')
 
         # find out the counts to determine the percent of account to use for each ETF
         num_regular = days[days['state']==1.0]['state'].count()
         num_strong = days[days['state']==2.0]['state'].count()
+        logging.info('got %s state counts for regular and %s state counts for strong' % ( num_regular, num_strong ) )
 
         # always hold one of the 2x or 3x ETF
         if num_strong == 0:
             num_strong = 1
+            logging.info('bumping the strong count to always have a position')
 
         # convert counts to percents to be used against the bank balance
         regular_percent = num_regular / sum([num_regular, num_strong])
         strong_percent = num_strong / sum([num_regular, num_strong])
+
+        logging.info('using %s percent and %s percent of account for regular and strong' % ( round(regular_percent*100,2), round(strong_percent*100,2) ))
 
         if regular_percent>0:
             self.get_target_num_shares(self.regular_symbol, regular_percent)
@@ -116,28 +121,37 @@ class automated_trader():
         # check if any of the shares need to be sold
         for symbol, held_shares in self.held_shares.items():
             difference = held_shares['target_num_of_shares'] - held_shares['num_currently_held']
+            logging.info('determined we need to sell %s shares of %s for a target of %s shares' % ( abs(difference), symbol, held_shares['target_num_of_shares'] ) )
             if difference<0:
                 submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'sell')
 
         # check if any of the symbols need to be bought
         for symbol, held_shares in self.held_shares.items():
             difference = held_shares['target_num_of_shares'] - held_shares['num_currently_held']
+            logging.info('determined we need to buy %s shares of %s for a target of %s shares' % ( abs(difference), symbol, held_shares['target_num_of_shares'] ) )
             if difference>0:
                 submit_order_wrapper(symbol, difference, held_shares['target_num_of_shares'], 'buy')
+
+        logging.info('all required trades submitted. exiting')
 
         
 
     def get_target_num_shares(self, symbol, percent):
         # get amount of cash to use
-        equity_to_use = self.account_equity * percent
+        equity_to_use = round(self.account_equity * percent,2)
+        logging.info('using $%s on %s' % (equity_to_use, symbol))
 
         # get current share price
         symbol_bars = api.get_barset(symbol, 'minute', 1).df.iloc[0]
         current_price = symbol_bars[symbol]['close']
         self.current_prices[symbol] = current_price
 
+        logging.info('got current share price of %s for %s' % (current_price, symbol) )
+
         # get number of shares we should hold
         num_shares = floor( current_price * equity_to_use )
+
+        logging.info('determined we should hold %s shares of %s' % (num_shares, symbol) )
 
         self.held_shares[symbol]['target_num_of_shares'] = num_shares
 
