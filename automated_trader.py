@@ -107,7 +107,7 @@ class automated_trader():
             num_strong = 1
             logging.info('bumping the strong count to always have a position')
 
-        # convert counts to percents to be used against the bank balance
+        # convert counts to percents to be used against total account balance
         regular_percent = num_regular / sum([num_regular, num_strong])
         strong_percent = num_strong / sum([num_regular, num_strong])
 
