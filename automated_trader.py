@@ -17,14 +17,16 @@ class automated_trader():
         logging.info('started automated trader')
         self.model_name = "lumpy-linen-civet"
         
+        self.use_margin = True
+
         self.short_symbol = 'QID'       # 2x short
         self.regular_symbol = 'QLD'     # 2x long
         self.strong_symbol = 'TQQQ'     # 3x long
         
         
         self.api = tradeapi.REST(
-                                'PKJFBHN8NDD47V216FCJ',
-                                'iB/ZmUhsoZG7hvxJRsI7/xSZt/JBmUo/TBkfZNTG',
+                                'PKKR2LY13IPZUVZ1R3PZ',
+                                'llQBVI3TQrttJvmEiuxTraUNXr7xNc5MoGQI24uJ',
                                 'https://paper-api.alpaca.markets'
                                 )
 
@@ -56,11 +58,10 @@ class automated_trader():
         logging.info('getting account info from alpaca')
         
         self.account = self.api.get_account()
-        #self.account_equity = float(self.account.equity)
-        self.account_equity = float(self.account.buying_power) * .9
-        print('got buying power of %s' % self.account_equity)
-        logging.info('got buying power of %s' % self.account_equity)
-
+        self.account_equity = float(self.account.equity)
+        #self.buying_power = float(self.account.buying_power)
+        logging.info('got account value of %s' % self.account_equity)
+        
         self.positions = self.api.list_positions()
 
         symbols = [self.short_symbol, self.regular_symbol, self.strong_symbol]
@@ -78,9 +79,9 @@ class automated_trader():
         self.days = self.todays_prediction.tail(10)
         self.today = self.todays_prediction.tail(1)
 
-        # test states
-        self.days['state']=2
-        self.today['state']=2
+        # states used for testing
+        #self.days['state']=1
+        #self.today['state']=1
 
         self.get_current_prices()
         self.get_current_positions()
@@ -90,7 +91,7 @@ class automated_trader():
         self.get_target_num_shares(self.regular_symbol, self.regular_percent)
         self.get_target_num_shares(self.strong_symbol, self.strong_percent)
 
-        logging.info('currently held and target share counts')
+        logging.info('before sells, currently held and target share counts')
         logging.info(pd.DataFrame.from_dict(self.held_shares))
         #print(pd.DataFrame.from_dict(self.held_shares))
 
@@ -102,6 +103,10 @@ class automated_trader():
                 #self.submit_order_wrapper(symbol, difference, 'sell')
                 sell_orders.append([symbol, difference, 'sell'])
         self.submit_order_threading(sell_orders)
+
+        logging.info('after sells, currently held and target share counts')
+        logging.info(pd.DataFrame.from_dict(self.held_shares))
+
 
         # then place buy orders
         buy_orders = []
@@ -140,8 +145,8 @@ class automated_trader():
             logging.info('bumping the strong count to always have a position')
 
         # convert counts to percents to be used against total account balance
-        self.regular_percent = num_regular / sum([num_regular, num_strong])
-        self.strong_percent = num_strong / sum([num_regular, num_strong])
+        self.regular_percent = round(num_regular / sum([num_regular, num_strong]), 2)
+        self.strong_percent = round(num_strong / sum([num_regular, num_strong]), 2)
 
         if self.sell_everything:
             self.regular_percent = 0
@@ -173,16 +178,23 @@ class automated_trader():
 
 
     def get_target_num_shares(self, symbol, percent):
+        print('starting equity', self.account_equity)
         # get amount of cash to use
         equity_to_use = round( float(self.account_equity) * percent,2)
+        print('using percent', percent)
         logging.info('using $%s on %s' % (equity_to_use, symbol))
 
         # get current share price
-        current_price = self.current_prices[symbol]
+        current_price = self.current_prices[symbol] * 1.05
 
+        # if using margin, nearly double the equity to use
+        if self.use_margin:
+            equity_to_use = round(equity_to_use * 1.9,2)
+        print('using equity', equity_to_use)
         # get number of shares we should hold
         num_shares = floor( equity_to_use / current_price )
 
+        
         logging.info('determined we should hold %s shares of %s at $%s per share and using %s of equity' % (num_shares, symbol, current_price, percent*100) )
 
         self.held_shares[symbol]['target_num_of_shares'] = num_shares
@@ -191,13 +203,14 @@ class automated_trader():
     def submit_order_wrapper(self, symbol, num_shares, side):
         current_price = self.current_prices[symbol]
         num_shares = abs(int(num_shares))
-        print('submitting %s order for %s shares for %s' % ( side, num_shares, symbol ))
-        logging.info('submitting %s order for %s shares for %s' % ( side, num_shares, symbol ))
-        if side == 'buy':
-            limit_price = current_price * 1.10
-        elif side == 'sell':
-            limit_price = current_price * 0.90
         
+        if side == 'buy':
+            limit_price = round(current_price * 1.1,2)
+        elif side == 'sell':
+            limit_price = round(current_price * 0.90,2)
+        
+        print('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))
+        logging.info('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))
         
         try:
             
