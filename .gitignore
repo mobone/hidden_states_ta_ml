@@ -131,3 +131,4 @@ plots/.DS_Store
 *.joblib
 *.sqlite
 *.pyc
+.DS_Store
