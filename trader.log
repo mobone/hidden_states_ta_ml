@@ -1,0 +1,3135 @@
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 96148.58
+INFO:root:got 4200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $120.31 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $87407.8 on QLD
+INFO:root:determined we should hold 726 shares of QLD at $120.31 per share and using 90.9090909090909 of equity
+INFO:root:using $8740.78 on TQQQ
+INFO:root:determined we should hold 114 shares of TQQQ at $76.34 per share and using 9.090909090909092 of equity
+INFO:root:currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held    4200    0     0
+target_num_of_shares     0  726   114
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    2.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95770.58
+INFO:root:got 4200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $87064.16 on QLD
+INFO:root:determined we should hold 768 shares of QLD at $113.27 per share and using 90.9090909090909 of equity
+INFO:root:using $8706.42 on TQQQ
+INFO:root:determined we should hold 114 shares of TQQQ at $76.34 per share and using 9.090909090909092 of equity
+INFO:root:currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held    4200    0     0
+target_num_of_shares     0  768   114
+INFO:root:submitting sell order for 4200 shares for QID
+INFO:root:order submitted. got id of 4cfc44a6-e8cb-420d-a25a-4a0b5f2433d3
+INFO:root:order 4cfc44a6-e8cb-420d-a25a-4a0b5f2433d3 filled
+INFO:root:submitting buy order for 768 shares for QLD
+INFO:root:submitting buy order for 114 shares for TQQQ
+INFO:root:order submitted. got id of 4b083568-fb0f-4e19-8972-1e77350dab6c
+INFO:root:order submitted. got id of a0e89caa-6495-4ce0-98ff-1f1bb3653a78
+INFO:root:order 4b083568-fb0f-4e19-8972-1e77350dab6c filled
+INFO:root:order a0e89caa-6495-4ce0-98ff-1f1bb3653a78 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95834.42
+INFO:root:got 114 shares currently held for TQQQ
+INFO:root:got 768 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $82.93 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $23958.6 on QID
+INFO:root:determined we should hold 976 shares of QID at $24.54 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $82.93 per share and using 0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  768  114
+target_num_of_shares  976    0    0
+INFO:root:submitting sell order for 768 shares for QLD
+INFO:root:submitting sell order for 114 shares for TQQQ
+INFO:root:order submitted. got id of a5f77f4d-5223-41e5-8985-562bcc90385e
+INFO:root:order submitted. got id of 36b59ad0-33b5-4537-b86c-5db006523e2e
+INFO:root:order 36b59ad0-33b5-4537-b86c-5db006523e2e filled
+INFO:root:order a5f77f4d-5223-41e5-8985-562bcc90385e filled
+INFO:root:submitting buy order for 976 shares for QID
+INFO:root:order submitted. got id of b3fcecf6-f471-413a-8725-401bc33b1263
+INFO:root:order b3fcecf6-f471-413a-8725-401bc33b1263 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95813.7
+INFO:root:got 976 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $87103.36 on QLD
+INFO:root:determined we should hold 768 shares of QLD at $113.27 per share and using 90.9090909090909 of equity
+INFO:root:using $8710.34 on TQQQ
+INFO:root:determined we should hold 114 shares of TQQQ at $76.34 per share and using 9.090909090909092 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    976    0     0
+target_num_of_shares    0  768   114
+INFO:root:submitting sell order for 976 shares for QID
+INFO:root:order submitted. got id of 7124b303-8b69-4f5c-b4f6-b30a44531f39
+INFO:root:order 7124b303-8b69-4f5c-b4f6-b30a44531f39 filled
+INFO:root:submitting buy order for 768 shares for QLD
+INFO:root:submitting buy order for 114 shares for TQQQ
+INFO:root:order submitted. got id of 85993257-b3ea-49ac-aba2-e63b9f4002c7
+INFO:root:order submitted. got id of d7ee0d33-952a-47cd-bafb-a0a2ce7b1a72
+INFO:root:order 85993257-b3ea-49ac-aba2-e63b9f4002c7 filled
+INFO:root:order d7ee0d33-952a-47cd-bafb-a0a2ce7b1a72 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95747.6
+INFO:root:got 114 shares currently held for TQQQ
+INFO:root:got 768 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $120.01 for QLD
+INFO:root:got current price of $83.4 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $120.01 per share and using 0.0 of equity
+INFO:root:using $95747.6 on TQQQ
+INFO:root:determined we should hold 1148 shares of TQQQ at $83.4 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0  768   114
+target_num_of_shares    0    0  1148
+INFO:root:submitting sell order for 768 shares for QLD
+INFO:root:order submitted. got id of 5ceaaa95-ed0a-4ac6-8eee-da8b5dfd8776
+INFO:root:order 5ceaaa95-ed0a-4ac6-8eee-da8b5dfd8776 filled
+INFO:root:submitting buy order for 1034 shares for TQQQ
+INFO:root:order submitted. got id of f5a93dc3-7d82-4f4e-9402-c7398850a80f
+INFO:root:order f5a93dc3-7d82-4f4e-9402-c7398850a80f filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95621.92
+INFO:root:got 1148 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $86929.02 on QLD
+INFO:root:determined we should hold 767 shares of QLD at $113.27 per share and using 90.9090909090909 of equity
+INFO:root:using $8692.9 on TQQQ
+INFO:root:determined we should hold 113 shares of TQQQ at $76.34 per share and using 9.090909090909092 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1148
+target_num_of_shares    0  767   113
+INFO:root:submitting sell order for 1035 shares for TQQQ
+INFO:root:order submitted. got id of bf88b5b6-6311-4475-beca-51359e0417e0
+INFO:root:order bf88b5b6-6311-4475-beca-51359e0417e0 filled
+INFO:root:submitting buy order for 767 shares for QLD
+INFO:root:order submitted. got id of 9a17014a-6237-45c0-bf85-673e9f536229
+INFO:root:order 9a17014a-6237-45c0-bf85-673e9f536229 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    2.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95864.88
+INFO:root:got 113 shares currently held for TQQQ
+INFO:root:got 767 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $87149.89 on QLD
+INFO:root:determined we should hold 769 shares of QLD at $113.27 per share and using 90.9090909090909 of equity
+INFO:root:using $8714.99 on TQQQ
+INFO:root:determined we should hold 114 shares of TQQQ at $76.34 per share and using 9.090909090909092 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  767  113
+target_num_of_shares    0  769  114
+INFO:root:submitting buy order for 2 shares for QLD
+INFO:root:submitting buy order for 1 shares for TQQQ
+INFO:root:order submitted. got id of 6ee023c4-8dd5-44c1-97cb-fd10dccf4149
+INFO:root:order submitted. got id of cd0a5b2f-d248-4c03-b1d5-57912a197320
+INFO:root:order 6ee023c4-8dd5-44c1-97cb-fd10dccf4149 filled
+INFO:root:order cd0a5b2f-d248-4c03-b1d5-57912a197320 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95894.59
+INFO:root:got 114 shares currently held for TQQQ
+INFO:root:got 769 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $95894.59 on TQQQ
+INFO:root:determined we should hold 1256 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0  769   114
+target_num_of_shares    0    0  1256
+INFO:root:submitting sell order for 769 shares for QLD
+INFO:root:order submitted. got id of d89a2c66-8888-4e5f-9709-a6352e17e3d9
+INFO:root:order d89a2c66-8888-4e5f-9709-a6352e17e3d9 filled
+INFO:root:submitting buy order for 1142 shares for TQQQ
+INFO:root:order submitted. got id of 3b7b599d-cf9a-4266-ab2c-32f333a4ff65
+INFO:root:order 3b7b599d-cf9a-4266-ab2c-32f333a4ff65 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 96033.08
+INFO:root:got 1256 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $22.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $96033.08 on TQQQ
+INFO:root:determined we should hold 1257 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1256
+target_num_of_shares    0    0  1257
+INFO:root:submitting buy order for 1 shares for TQQQ
+INFO:root:order submitted. got id of c5114211-4e6b-4e14-a820-6cc50d445203
+INFO:root:order c5114211-4e6b-4e14-a820-6cc50d445203 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95919.92
+INFO:root:got 1257 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $120.01 for QLD
+INFO:root:got current price of $83.87 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $23979.98 on QID
+INFO:root:determined we should hold 977 shares of QID at $24.54 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $120.01 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $83.87 per share and using 0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1257
+target_num_of_shares  977    0     0
+INFO:root:submitting sell order for 1257 shares for TQQQ
+INFO:root:order submitted. got id of 798cff93-5584-4b70-adce-1c9ab300dcf6
+INFO:root:order 798cff93-5584-4b70-adce-1c9ab300dcf6 filled
+INFO:root:submitting buy order for 977 shares for QID
+INFO:root:order submitted. got id of f665248b-6212-4bc0-b9fb-291482f078ad
+INFO:root:order f665248b-6212-4bc0-b9fb-291482f078ad filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 95910.15
+INFO:root:got 977 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $95910.15 on TQQQ
+INFO:root:determined we should hold 1256 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    977    0     0
+target_num_of_shares    0    0  1256
+INFO:root:submitting sell order for 977 shares for QID
+INFO:root:order submitted. got id of 535110ba-d43f-4440-b8b7-c14d59edfca1
+INFO:root:order 535110ba-d43f-4440-b8b7-c14d59edfca1 filled
+INFO:root:submitting buy order for 1256 shares for TQQQ
+INFO:root:order submitted. got id of 94e9d5f0-d8c1-4224-a1bc-a9f0d5038dc1
+INFO:root:order 94e9d5f0-d8c1-4224-a1bc-a9f0d5038dc1 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 96020.4
+INFO:root:got 1256 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $96020.4 on TQQQ
+INFO:root:determined we should hold 1257 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1256
+target_num_of_shares    0    0  1257
+INFO:root:submitting buy order for 1 shares for TQQQ
+INFO:root:order submitted. got id of 7ad3aa7d-37a5-482d-ba5b-021a86ff3a2f
+INFO:root:order 7ad3aa7d-37a5-482d-ba5b-021a86ff3a2f filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 96183.81
+INFO:root:got 1257 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.67 for QID
+INFO:root:got current price of $120.01 for QLD
+INFO:root:got current price of $83.87 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $22.67 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $120.01 per share and using 0.0 of equity
+INFO:root:using $96183.81 on TQQQ
+INFO:root:determined we should hold 1146 shares of TQQQ at $83.87 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1257
+target_num_of_shares    0    0  1146
+INFO:root:submitting sell order for 111 shares for TQQQ
+INFO:root:order submitted. got id of 2d926f83-51f1-42d5-a4fb-900319f78a1a
+INFO:root:order 2d926f83-51f1-42d5-a4fb-900319f78a1a filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    2.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 368599.65
+INFO:root:got 1146 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $120.26 for QLD
+INFO:root:got current price of $83.33 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $120.26 per share and using 0.0 of equity
+INFO:root:using $368599.65 on TQQQ
+INFO:root:determined we should hold 4423 shares of TQQQ at $83.33 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1146
+target_num_of_shares    0    0  4423
+INFO:root:submitting buy order for 3277 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account balance of 460000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $83.26 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $460000.0 on TQQQ
+INFO:root:determined we should hold 5524 shares of TQQQ at $83.26 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  5524
+INFO:root:submitting buy order for 5524 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 360000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $83.26 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $360000.0 on TQQQ
+INFO:root:determined we should hold 4323 shares of TQQQ at $83.26 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4323
+INFO:root:submitting buy order for 4323 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 360000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $22.67 for QID
+INFO:root:got current price of $120.26 for QLD
+INFO:root:got current price of $82.66 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $22.67 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $120.26 per share and using 0.0 of equity
+INFO:root:using $360000.0 on TQQQ
+INFO:root:determined we should hold 4355 shares of TQQQ at $82.66 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4355
+INFO:root:submitting buy order for 4355 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 360000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $360000.0 on TQQQ
+INFO:root:determined we should hold 4715 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4715
+INFO:root:submitting buy order for 4715 shares for TQQQ
+INFO:root:order submitted. got id of 198e5f0b-f748-42f9-8022-3881edf4f87f
+INFO:root:order 198e5f0b-f748-42f9-8022-3881edf4f87f filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 8171.415000000001
+INFO:root:got 4715 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $83.11 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2042.85 on QID
+INFO:root:determined we should hold 83 shares of QID at $24.54 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $83.11 per share and using 0 of equity
+INFO:root:currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  4715
+target_num_of_shares   83    0     0
+INFO:root:submitting sell order for 4715 shares for TQQQ
+INFO:root:order submitted. got id of d3f17a31-74a3-42b1-ac5c-a2f5a0b8f01d
+INFO:root:order d3f17a31-74a3-42b1-ac5c-a2f5a0b8f01d filled
+INFO:root:submitting buy order for 83 shares for QID
+INFO:root:order submitted. got id of e43328c8-c671-40de-892a-a905476cd724
+INFO:root:order e43328c8-c671-40de-892a-a905476cd724 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 456934.97500000003
+INFO:root:got 83 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $22.67 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $82.77 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $114233.74 on QID
+INFO:root:determined we should hold 5038 shares of QID at $22.67 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $119.91 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $82.77 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held      83    0     0
+target_num_of_shares  5038    0     0
+INFO:root:getting account info from alpaca
+INFO:root:got buying power of 456934.145
+INFO:root:got 83 shares currently held for QID
+INFO:root:using $114233.54 on QID
+INFO:root:determined we should hold 5038 shares of QID at $22.67 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $119.91 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $82.77 per share and using 0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held      83    0     0
+target_num_of_shares  5038    0     0
+INFO:root:submitting buy order for 4955 shares for QID
+INFO:root:order submitted. got id of 8e6fff14-8f00-49fe-a750-7b62afa4b229
+INFO:root:order 8e6fff14-8f00-49fe-a750-7b62afa4b229 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 355576.325
+INFO:root:got 5038 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $22.67 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $82.77 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $22.67 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $119.91 per share and using 0.0 of equity
+INFO:root:using $355576.32 on TQQQ
+INFO:root:determined we should hold 4295 shares of TQQQ at $82.77 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held    5038    0     0
+target_num_of_shares     0    0  4295
+INFO:root:submitting sell order for 5038 shares for QID
+INFO:root:order submitted. got id of 2af47042-434c-4b9f-b853-300fceea47cc
+INFO:root:order 2af47042-434c-4b9f-b853-300fceea47cc filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 458692.25
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $22.67 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $119.91 per share and using 0.0 of equity
+INFO:root:using $458692.25 on TQQQ
+INFO:root:determined we should hold 5541 shares of TQQQ at $82.77 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  5541
+INFO:root:submitting buy order for 5541 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369869.22500000003
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $83.2 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369869.22 on TQQQ
+INFO:root:determined we should hold 4445 shares of TQQQ at $83.2 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4445
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369869.22500000003
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369869.22 on TQQQ
+INFO:root:determined we should hold 4445 shares of TQQQ at $83.2 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4445
+INFO:root:submitting buy order for 4445 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4845 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4845
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4845 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4845
+INFO:root:submitting buy order for 4845 shares for TQQQ
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4845 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4845
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.54 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $113.27 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4845 shares of TQQQ at $76.34 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4845
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $124.59700000000001 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4404 shares of TQQQ at $83.974 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4404
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 369882.56000000006
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $124.59700000000001 per share and using 0.0 of equity
+INFO:root:using $369882.56 on TQQQ
+INFO:root:determined we should hold 4404 shares of TQQQ at $83.974 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4404
+INFO:root:submitting buy order for 4404 shares for TQQQ at $83.974 per share for a total cost of $369821.49600000004
+INFO:root:order submitted. got id of 647c8554-baca-4a29-b1ec-4399e3f6a155
+INFO:root:order 647c8554-baca-4a29-b1ec-4399e3f6a155 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 42793.075999999994
+INFO:root:got 4404 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $38902.8 on QLD
+INFO:root:determined we should hold 294 shares of QLD at $131.901 per share and using 90.9090909090909 of equity
+INFO:root:using $3890.28 on TQQQ
+INFO:root:determined we should hold 46 shares of TQQQ at $83.974 per share and using 9.090909090909092 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  4404
+target_num_of_shares    0  294    46
+INFO:root:submitting sell order for 4358 shares for TQQQ at $68.706 per share for a total cost of $299420.748
+INFO:root:order submitted. got id of 33afcb8b-f1c8-4234-9fcf-8da89d57aac4
+INFO:root:order 33afcb8b-f1c8-4234-9fcf-8da89d57aac4 filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 366484.62
+INFO:root:got 46 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $333167.84 on QLD
+INFO:root:determined we should hold 2525 shares of QLD at $131.901 per share and using 90.9090909090909 of equity
+INFO:root:using $33316.78 on TQQQ
+INFO:root:determined we should hold 396 shares of TQQQ at $83.974 per share and using 9.090909090909092 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0     0   46
+target_num_of_shares    0  2525  396
+INFO:root:submitting buy order for 2525 shares for QLD at $131.901 per share for a total cost of $333050.025
+INFO:root:submitting buy order for 350 shares for TQQQ at $83.974 per share for a total cost of $29390.9
+INFO:root:order submitted. got id of 8bb59a48-e7ca-44bd-8868-f5d1b22c4689
+INFO:root:order submitted. got id of 12be375b-3158-4c72-a045-0781e350017e
+INFO:root:order 8bb59a48-e7ca-44bd-8868-f5d1b22c4689 filled
+INFO:root:order 12be375b-3158-4c72-a045-0781e350017e filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 68554.745
+INFO:root:got 396 shares currently held for TQQQ
+INFO:root:got 2525 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $131.901 per share and using 0.0 of equity
+INFO:root:using $68554.74 on TQQQ
+INFO:root:determined we should hold 816 shares of TQQQ at $83.974 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  2525  396
+target_num_of_shares    0     0  816
+INFO:root:submitting sell order for 2525 shares for QLD at $107.919 per share for a total cost of $272495.475
+INFO:root:order submitted. got id of 5c542000-550d-4fd3-a2eb-c2c9c36af1c7
+INFO:root:order 5c542000-550d-4fd3-a2eb-c2c9c36af1c7 filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 340511.356
+INFO:root:got 396 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $26.994 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $131.901 per share and using 0.0 of equity
+INFO:root:using $340511.36 on TQQQ
+INFO:root:determined we should hold 4054 shares of TQQQ at $83.974 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0   396
+target_num_of_shares    0    0  4054
+INFO:root:submitting buy order for 3658 shares for TQQQ at $83.974 per share for a total cost of $307176.892
+INFO:root:order submitted. got id of e5014286-6d32-4ffb-9245-27dd53a6d832
+INFO:root:order e5014286-6d32-4ffb-9245-27dd53a6d832 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 68253.544
+INFO:root:got 4054 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.89 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $82.65 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.0345 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $125.9055 per share and using 0.0 of equity
+INFO:root:using $68253.54 on TQQQ
+INFO:root:determined we should hold 786 shares of TQQQ at $86.78250000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  4054
+target_num_of_shares    0    0   786
+INFO:root:submitting sell order for 3268 shares for TQQQ at $78.5175 per share for a total cost of $256595.19
+INFO:root:order submitted. got id of a07ca57e-f0e1-4661-83e4-6da384ab0752
+INFO:root:order a07ca57e-f0e1-4661-83e4-6da384ab0752 filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 311497.636
+INFO:root:got 786 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.0345 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $125.9055 per share and using 0.0 of equity
+INFO:root:using $311497.64 on TQQQ
+INFO:root:determined we should hold 3589 shares of TQQQ at $86.78250000000001 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0   786
+target_num_of_shares    0    0  3589
+INFO:root:submitting buy order for 2803 shares for TQQQ at $86.78250000000001 per share for a total cost of $243251.34750000003
+INFO:root:order submitted. got id of 4e6497b6-5903-4c7d-9c90-165f3604da33
+INFO:root:order 4e6497b6-5903-4c7d-9c90-165f3604da33 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 370023.745
+INFO:root:starting to make trades
+INFO:root:got current price of $22.89 for QID
+INFO:root:got current price of $119.91 for QLD
+INFO:root:got current price of $82.97 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.0345 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $125.9055 per share and using 0.0 of equity
+INFO:root:using $370023.74 on TQQQ
+INFO:root:determined we should hold 4247 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4247
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 370023.745
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.0345 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $125.9055 per share and using 0.0 of equity
+INFO:root:using $370023.74 on TQQQ
+INFO:root:determined we should hold 4247 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  4247
+INFO:root:submitting buy order for 4247 shares for TQQQ at $87.1185 per share for a total cost of $369992.2695
+INFO:root:order submitted. got id of 3753e3b0-38d6-4d6f-924a-9cf519c71aa5
+INFO:root:order 3753e3b0-38d6-4d6f-924a-9cf519c71aa5 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 48178.52
+INFO:root:got 4247 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $82.97 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $48178.52 on TQQQ
+INFO:root:determined we should hold 553 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  4247
+target_num_of_shares    0    0   553
+INFO:root:submitting sell order for 3694 shares for TQQQ at $78.8215 per share for a total cost of $291166.621
+INFO:root:order submitted. got id of da3aff64-ce51-4347-9eb9-d6835d3a900d
+INFO:root:order da3aff64-ce51-4347-9eb9-d6835d3a900d filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 354189.48
+INFO:root:got 553 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $354189.48 on TQQQ
+INFO:root:determined we should hold 4065 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0   553
+target_num_of_shares    0    0  4065
+INFO:root:submitting buy order for 3512 shares for TQQQ at $87.1185 per share for a total cost of $305960.17199999996
+INFO:root:order submitted. got id of ab00f60c-dd63-43eb-bbd5-1d3e7a6da559
+INFO:root:order ab00f60c-dd63-43eb-bbd5-1d3e7a6da559 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 136520.3
+INFO:root:got 4065 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $82.97 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $136520.3 on TQQQ
+INFO:root:determined we should hold 1567 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  4065
+target_num_of_shares    0    0  1567
+INFO:root:submitting sell order for 2498 shares for TQQQ at $78.8215 per share for a total cost of $196896.107
+INFO:root:order submitted. got id of c1b8f388-05dd-44b5-9987-3f3076e28dd8
+INFO:root:order c1b8f388-05dd-44b5-9987-3f3076e28dd8 filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of -69872.65000000001
+INFO:root:got 1567 shares currently held for TQQQ
+INFO:root:using $-0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $-0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $-69872.65 on TQQQ
+INFO:root:determined we should hold -803 shares of TQQQ at $87.1185 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1567
+target_num_of_shares    0    0  -803
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 370857.53
+INFO:root:got 1567 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $370857.53 on TQQQ
+INFO:root:determined we should hold 4626 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1567
+target_num_of_shares    0    0  4626
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 370763.51
+INFO:root:got 1567 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $370763.51 on TQQQ
+INFO:root:determined we should hold 4625 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  1567
+target_num_of_shares    0    0  4625
+INFO:root:submitting buy order for 3058 shares for TQQQ at $80.15700000000001 per share for a total cost of $245120.10600000003
+INFO:root:order submitted. got id of c63fc7c8-9502-4854-80fd-91da2eeb9cdc
+INFO:root:order c63fc7c8-9502-4854-80fd-91da2eeb9cdc failed to be filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 300000.0
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100000.0
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 200000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $200000.0 on TQQQ
+INFO:root:determined we should hold 2495 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2495
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 200000.0
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $200000.0 on TQQQ
+INFO:root:determined we should hold 2495 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2495
+INFO:root:submitting buy order for 2495 shares for TQQQ at $80.15700000000001 per share for a total cost of $199991.71500000003
+INFO:root:order submitted. got id of 560e2ae9-ee90-444d-866f-8ffb8857b0f5
+INFO:root:order 560e2ae9-ee90-444d-866f-8ffb8857b0f5 failed to be filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 200000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.02 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $200000.0 on TQQQ
+INFO:root:determined we should hold 2294 shares of TQQQ at $87.171 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2294
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 200000.0
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $200000.0 on TQQQ
+INFO:root:determined we should hold 2294 shares of TQQQ at $87.171 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2294
+INFO:root:submitting buy order for 2294 shares for TQQQ at $91.32 per share for a total cost of $209488.08
+INFO:root:order submitted. got id of f9eb67cf-7e7e-4b7c-be5e-0deaaa06f6b0
+INFO:root:order f9eb67cf-7e7e-4b7c-be5e-0deaaa06f6b0 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 104741.65
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.1 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $100000.0 on TQQQ
+INFO:root:determined we should hold 2234 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2234
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100000.0
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $100000.0 on TQQQ
+INFO:root:determined we should hold 2234 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2234
+INFO:root:submitting buy order for 2234 shares for TQQQ at $91.41 per share for a total cost of $204209.94
+INFO:root:order submitted. got id of 9a297369-82f3-4be6-8598-14079449884a
+INFO:root:order 9a297369-82f3-4be6-8598-14079449884a filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99687.24
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.1 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $99687.24 on TQQQ
+INFO:root:determined we should hold 2284 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2284
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99687.24
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $99687.24 on TQQQ
+INFO:root:determined we should hold 2284 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0    0  2284
+INFO:root:submitting buy order for 2284 shares for TQQQ at $91.41 per share for a total cost of $208780.44
+INFO:root:order submitted. got id of cb647466-d92f-4604-bb18-aa6a91b08ee6
+INFO:root:order cb647466-d92f-4604-bb18-aa6a91b08ee6 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100007.0
+INFO:root:got 2284 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $100007.0 on TQQQ
+INFO:root:determined we should hold 2495 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2284
+target_num_of_shares    0    0  2495
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100007.0
+INFO:root:got 2284 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $100007.0 on TQQQ
+INFO:root:determined we should hold 2495 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2284
+target_num_of_shares    0    0  2495
+INFO:root:submitting buy order for 211 shares for TQQQ at $83.97 per share for a total cost of $17717.67
+INFO:root:order submitted. got id of 4b7709ec-450f-49eb-9d6e-3d35226befbe
+INFO:root:order 4b7709ec-450f-49eb-9d6e-3d35226befbe filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100029.84
+INFO:root:got 2495 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.1 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $100029.84 on TQQQ
+INFO:root:determined we should hold 2292 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2495
+target_num_of_shares    0    0  2292
+INFO:root:submitting sell order for 203 shares for TQQQ at $74.79 per share for a total cost of $15182.37
+INFO:root:order submitted. got id of 99424e89-92a6-4ca4-9620-830a5837b033
+INFO:root:order 99424e89-92a6-4ca4-9620-830a5837b033 filled
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100152.56
+INFO:root:got 2292 shares currently held for TQQQ
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0.0 of equity
+INFO:root:using $100152.56 on TQQQ
+INFO:root:determined we should hold 2295 shares of TQQQ at $87.255 per share and using 100.0 of equity
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2292
+target_num_of_shares    0    0  2295
+INFO:root:submitting buy order for 3 shares for TQQQ at $91.41 per share for a total cost of $274.23
+INFO:root:order submitted. got id of 5399256c-aabd-47be-ab6c-b60c98888426
+INFO:root:order 5399256c-aabd-47be-ab6c-b60c98888426 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100083.68
+INFO:root:got 2295 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $100083.68 on TQQQ
+INFO:root:determined we should hold 2497 shares of TQQQ at $80.15700000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2295
+target_num_of_shares    0    0  2497
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0  2295
+target_num_of_shares    0    0  2497
+INFO:root:submitting buy order for 202 shares for TQQQ at $83.97 per share for a total cost of $16961.94
+INFO:root:order submitted. got id of f77729ee-e5cd-4b97-a9d9-6af76a4f6ffa
+INFO:root:order f77729ee-e5cd-4b97-a9d9-6af76a4f6ffa filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99659.19
+INFO:root:got 2497 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.42 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $90599.26 on QLD
+INFO:root:determined we should hold 1437 shares of QLD at $126.03675 per share and using 90.9090909090909 of equity
+INFO:root:using $9059.93 on TQQQ
+INFO:root:determined we should hold 206 shares of TQQQ at $87.59100000000001 per share and using 9.090909090909092 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD  TQQQ
+num_currently_held      0     0  2497
+target_num_of_shares    0  1437   206
+INFO:root:submitting sell order for 2291 shares for TQQQ at $75.08 per share for a total cost of $172008.28
+INFO:root:order submitted. got id of 707c7d5d-e881-40ba-9489-fdf4c63f85f3
+INFO:root:order 707c7d5d-e881-40ba-9489-fdf4c63f85f3 filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD  TQQQ
+num_currently_held      0     0  2497
+target_num_of_shares    0  1437   206
+INFO:root:submitting buy order for 1437 shares for QLD at $132.04 per share for a total cost of $189741.47999999998
+INFO:root:order submitted. got id of b196b9fb-a342-40ee-8950-9572dfc5592c
+INFO:root:order b196b9fb-a342-40ee-8950-9572dfc5592c filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99540.52
+INFO:root:got 206 shares currently held for TQQQ
+INFO:root:got 1437 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $90491.38 on QLD
+INFO:root:determined we should hold 1521 shares of QLD at $118.9335 per share and using 90.9090909090909 of equity
+INFO:root:using $9049.14 on TQQQ
+INFO:root:determined we should hold 225 shares of TQQQ at $80.15700000000001 per share and using 9.090909090909092 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1437  206
+target_num_of_shares    0  1521  225
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1437  206
+target_num_of_shares    0  1521  225
+INFO:root:submitting buy order for 84 shares for QLD at $124.6 per share for a total cost of $10466.4
+INFO:root:submitting buy order for 19 shares for TQQQ at $83.97 per share for a total cost of $1595.43
+INFO:root:order submitted. got id of b625b0e9-bc42-4c21-add2-dffea25dd33a
+INFO:root:order submitted. got id of e0ee7960-55fc-410b-a725-92a6bbf719e1
+INFO:root:order b625b0e9-bc42-4c21-add2-dffea25dd33a filled
+INFO:root:order e0ee7960-55fc-410b-a725-92a6bbf719e1 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99721.41
+INFO:root:got 225 shares currently held for TQQQ
+INFO:root:got 1521 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.3 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $90655.83 on QLD
+INFO:root:determined we should hold 1438 shares of QLD at $126.03675 per share and using 90.9090909090909 of equity
+INFO:root:using $9065.58 on TQQQ
+INFO:root:determined we should hold 207 shares of TQQQ at $87.465 per share and using 9.090909090909092 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1521  225
+target_num_of_shares    0  1438  207
+INFO:root:submitting sell order for 83 shares for QLD at $108.03 per share for a total cost of $8966.49
+INFO:root:submitting sell order for 18 shares for TQQQ at $74.97 per share for a total cost of $1349.46
+INFO:root:order submitted. got id of 359436a0-75df-49e3-8044-b4872f6a93af
+INFO:root:order submitted. got id of b41190f9-5bb9-458e-b0e2-8c61d290070a
+INFO:root:order 359436a0-75df-49e3-8044-b4872f6a93af filled
+INFO:root:order b41190f9-5bb9-458e-b0e2-8c61d290070a filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1521  225
+target_num_of_shares    0  1438  207
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99956.99
+INFO:root:got 207 shares currently held for TQQQ
+INFO:root:got 1438 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $90869.99 on QLD
+INFO:root:determined we should hold 1528 shares of QLD at $118.9335 per share and using 90.9090909090909 of equity
+INFO:root:using $9087.0 on TQQQ
+INFO:root:determined we should hold 226 shares of TQQQ at $80.15700000000001 per share and using 9.090909090909092 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1438  207
+target_num_of_shares    0  1528  226
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1438  207
+target_num_of_shares    0  1528  226
+INFO:root:submitting buy order for 90 shares for QLD at $124.6 per share for a total cost of $11214.0
+INFO:root:submitting buy order for 19 shares for TQQQ at $83.97 per share for a total cost of $1595.43
+INFO:root:order submitted. got id of 5dc7b79a-f1a4-4bc9-9df2-69f7d70e3cc2
+INFO:root:order submitted. got id of fd58e71e-7bed-491f-8cc2-7bab0bcde1ab
+INFO:root:order 5dc7b79a-f1a4-4bc9-9df2-69f7d70e3cc2 filled
+INFO:root:order fd58e71e-7bed-491f-8cc2-7bab0bcde1ab filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 99507.88
+INFO:root:got 226 shares currently held for TQQQ
+INFO:root:got 1528 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.44 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $90552.17 on QLD
+INFO:root:determined we should hold 1436 shares of QLD at $126.03675 per share and using 91.0 of equity
+INFO:root:using $8955.71 on TQQQ
+INFO:root:determined we should hold 204 shares of TQQQ at $87.612 per share and using 9.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1528  226
+target_num_of_shares    0  1436  204
+INFO:root:submitting sell order for 92 shares for QLD at $108.03 per share for a total cost of $9938.76
+INFO:root:submitting sell order for 22 shares for TQQQ at $75.1 per share for a total cost of $1652.1999999999998
+INFO:root:order submitted. got id of 2fa711ef-f6a3-4e10-b0b4-0ed8a31cf8c0
+INFO:root:order submitted. got id of 6394ec6d-6566-4ebd-b23c-fd65c1782c0d
+INFO:root:order 2fa711ef-f6a3-4e10-b0b4-0ed8a31cf8c0 filled
+INFO:root:order 6394ec6d-6566-4ebd-b23c-fd65c1782c0d filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID   QLD TQQQ
+num_currently_held      0  1528  226
+target_num_of_shares    0  1436  204
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.6 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $9100.0 on QLD
+INFO:root:determined we should hold 144 shares of QLD at $126.03675 per share and using 91.0 of equity
+INFO:root:using $900.0 on TQQQ
+INFO:root:determined we should hold 20 shares of TQQQ at $87.78 per share and using 9.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0  144    20
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares    0  144    20
+INFO:root:submitting buy order for 144 shares for QLD at $132.04 per share for a total cost of $19013.76
+INFO:root:submitting buy order for 20 shares for TQQQ at $91.96 per share for a total cost of $1839.1999999999998
+INFO:root:order submitted. got id of 8113f535-1ea0-4b3b-9c5a-26472e02a074
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:order 8113f535-1ea0-4b3b-9c5a-26472e02a074 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10009.6
+INFO:root:got 20 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $9108.74 on QLD
+INFO:root:determined we should hold 149 shares of QLD at $118.9335 per share and using 91.0 of equity
+INFO:root:using $900.86 on TQQQ
+INFO:root:determined we should hold 21 shares of TQQQ at $80.15700000000001 per share and using 9.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0   20
+target_num_of_shares    0  149   21
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0   20
+target_num_of_shares    0  149   21
+INFO:root:submitting buy order for 149 shares for QLD at $124.6 per share for a total cost of $18565.399999999998
+INFO:root:submitting buy order for 1 shares for TQQQ at $83.97 per share for a total cost of $83.97
+INFO:root:order submitted. got id of 74a636f3-f178-4eb3-96f6-44e56d90a444
+ERROR:root:got exception when submitting order
+insufficient buying power
+INFO:root:order 74a636f3-f178-4eb3-96f6-44e56d90a444 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10007.08
+INFO:root:got 21 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $9106.44 on QLD
+INFO:root:determined we should hold 145 shares of QLD at $118.9335 per share and using 91.0 of equity
+INFO:root:using $900.64 on TQQQ
+INFO:root:determined we should hold 21 shares of TQQQ at $80.15700000000001 per share and using 9.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0   21
+target_num_of_shares    0  145   21
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0   21
+target_num_of_shares    0  145   21
+INFO:root:submitting buy order for 145 shares for QLD at $124.6 per share for a total cost of $18067.0
+INFO:root:order submitted. got id of ec87cfe3-ae27-4c6e-a0ab-513cffab1c49
+INFO:root:order ec87cfe3-ae27-4c6e-a0ab-513cffab1c49 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 9987.6
+INFO:root:got 21 shares currently held for TQQQ
+INFO:root:got 145 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $83.37 for TQQQ
+INFO:root:got 0 state counts for regular and 10 state counts for strong
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $25.767 per share and using 0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0.0 of equity
+INFO:root:using $9987.6 on TQQQ
+INFO:root:determined we should hold 216 shares of TQQQ at $87.53850000000001 per share and using 100.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  145   21
+target_num_of_shares    0    0  216
+INFO:root:submitting sell order for 145 shares for QLD at $101.94 per share for a total cost of $14781.3
+INFO:root:order submitted. got id of aa4184b1-f6dd-4212-bf3a-6d734ecf018f
+INFO:root:order aa4184b1-f6dd-4212-bf3a-6d734ecf018f filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  145   21
+target_num_of_shares    0    0  216
+INFO:root:submitting buy order for 195 shares for TQQQ at $91.71 per share for a total cost of $17883.449999999997
+INFO:root:order submitted. got id of 80ddcaf4-78c6-47d8-b4e7-ddf9d3c0e392
+INFO:root:order 80ddcaf4-78c6-47d8-b4e7-ddf9d3c0e392 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10010.99
+INFO:root:got 216 shares currently held for TQQQ
+INFO:root:starting to make trades
+INFO:root:got current price of $22.88 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.37 for TQQQ
+INFO:root:got 10 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $0.0 on QID
+INFO:root:determined we should hold 0 shares of QID at $24.024 per share and using 0 of equity
+INFO:root:using $9110.0 on QLD
+INFO:root:determined we should hold 137 shares of QLD at $126.03675 per share and using 91.0 of equity
+INFO:root:using $900.99 on TQQQ
+INFO:root:determined we should hold 19 shares of TQQQ at $87.53850000000001 per share and using 9.0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0  216
+target_num_of_shares    0  137   19
+INFO:root:submitting sell order for 197 shares for TQQQ at $75.03 per share for a total cost of $14780.91
+INFO:root:order submitted. got id of d3c66890-cd02-4d78-b3e4-370927960198
+INFO:root:order d3c66890-cd02-4d78-b3e4-370927960198 filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0    0  216
+target_num_of_shares    0  137   19
+INFO:root:submitting buy order for 137 shares for QLD at $132.04 per share for a total cost of $18089.48
+INFO:root:order submitted. got id of b4354d66-50a8-4155-9864-49d5c94565db
+INFO:root:order b4354d66-50a8-4155-9864-49d5c94565db filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10019.93
+INFO:root:got 19 shares currently held for TQQQ
+INFO:root:got 137 shares currently held for QLD
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2504.98 on QID
+INFO:root:determined we should hold 184 shares of QID at $25.767 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  137   19
+target_num_of_shares  184    0    0
+INFO:root:submitting sell order for 137 shares for QLD at $101.94 per share for a total cost of $13965.779999999999
+INFO:root:submitting sell order for 19 shares for TQQQ at $68.71 per share for a total cost of $1305.4899999999998
+INFO:root:order submitted. got id of d5909d6b-3642-474a-a215-fea207708d72
+INFO:root:order submitted. got id of 3d97da1b-9d72-4098-8cfa-591c77c2fb1e
+INFO:root:order d5909d6b-3642-474a-a215-fea207708d72 filled
+INFO:root:order 3d97da1b-9d72-4098-8cfa-591c77c2fb1e filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD TQQQ
+num_currently_held      0  137   19
+target_num_of_shares  184    0    0
+INFO:root:submitting buy order for 184 shares for QID at $26.99 per share for a total cost of $4966.16
+INFO:root:order submitted. got id of a79844ca-20cb-4b0a-a635-cf92b1796433
+INFO:root:order a79844ca-20cb-4b0a-a635-cf92b1796433 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10017.43
+INFO:root:got 184 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $22.57 for QID
+INFO:root:got current price of $120.035 for QLD
+INFO:root:got current price of $83.72 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2504.36 on QID
+INFO:root:determined we should hold 200 shares of QID at $23.698500000000003 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.03675 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $87.906 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    184    0     0
+target_num_of_shares  200    0     0
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    184    0     0
+target_num_of_shares  200    0     0
+INFO:root:submitting buy order for 16 shares for QID at $24.83 per share for a total cost of $397.28
+INFO:root:order submitted. got id of 563e8b77-8fa0-4d73-be30-b22118bc7f3b
+INFO:root:order 563e8b77-8fa0-4d73-be30-b22118bc7f3b filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 100000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $22.57 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $25000.0 on QID
+INFO:root:determined we should hold 2004 shares of QID at $23.698500000000003 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held       0    0     0
+target_num_of_shares  2004    0     0
+INFO:root:after sells, currently held and target share counts
+INFO:root:                       QID  QLD  TQQQ
+num_currently_held       0    0     0
+target_num_of_shares  2004    0     0
+INFO:root:submitting buy order for 2004 shares for QID at $24.83 per share for a total cost of $49759.32
+INFO:root:order submitted. got id of 71df8b15-8ce7-49f1-8682-31e05de84f3c
+INFO:root:order 71df8b15-8ce7-49f1-8682-31e05de84f3c filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10003.27
+INFO:root:got 200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2500.82 on QID
+INFO:root:determined we should hold 184 shares of QID at $25.767 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  184    0     0
+INFO:root:submitting sell order for 16 shares for QID at $22.09 per share for a total cost of $353.44
+ERROR:root:got exception when submitting order
+trade denied due to pattern day trading protection
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  184    0     0
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 10000.0
+INFO:root:starting to make trades
+INFO:root:got current price of $22.57 for QID
+INFO:root:got current price of $120.69 for QLD
+INFO:root:got current price of $83.88 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2500.0 on QID
+INFO:root:determined we should hold 200 shares of QID at $23.698500000000003 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.7245 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $88.074 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares  200    0     0
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares  200    0     0
+INFO:root:submitting buy order for 200 shares for QID at $24.83 per share for a total cost of $4966.0
+INFO:root:order submitted. got id of bd00b710-e8d8-4de2-b093-7680a801c1f7
+INFO:root:order bd00b710-e8d8-4de2-b093-7680a801c1f7 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 3511.92
+INFO:root:starting to make trades
+INFO:root:got current price of $22.57 for QID
+INFO:root:got current price of $120.69 for QLD
+INFO:root:got current price of $83.77 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $877.98 on QID
+INFO:root:determined we should hold 70 shares of QID at $23.698500000000003 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $126.7245 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $87.9585 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares   70    0     0
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held      0    0     0
+target_num_of_shares   70    0     0
+INFO:root:submitting buy order for 70 shares for QID at $24.83 per share for a total cost of $1738.1
+INFO:root:order submitted. got id of 13af584e-e501-4c38-9733-4d02da374fca
+INFO:root:order 13af584e-e501-4c38-9733-4d02da374fca filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date  close  state
+1763 2020-03-04  213.4    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1754 2020-02-20  234.78    0.0
+1755 2020-02-21  230.27    0.0
+1756 2020-02-24  221.39    0.0
+1757 2020-02-25  215.37    0.0
+1758 2020-02-26  216.48    0.0
+1759 2020-02-27  205.64    0.0
+1760 2020-02-28  205.80    0.0
+1761 2020-03-02  216.42    0.0
+1762 2020-03-03  209.48    0.0
+1763 2020-03-04  213.40    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 9850.0
+INFO:root:got 200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2462.5 on QID
+INFO:root:determined we should hold 181 shares of QID at $25.767 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  181    0     0
+INFO:root:submitting sell order for 19 shares for QID at $22.09 per share for a total cost of $419.71
+INFO:root:order submitted. got id of 242ced92-c70f-4d17-af27-f2cb621a1a3d
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date   close  state
+1762 2020-03-04  218.22    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 9850.0
+INFO:root:got 200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2462.5 on QID
+INFO:root:determined we should hold 181 shares of QID at $25.767 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  181    0     0
+INFO:root:submitting sell order for 19 shares for QID at $22.09 per share for a total cost of $419.71
+INFO:root:order submitted. got id of b3c8dce0-d627-48ef-b208-c20dd5f8eab9
+INFO:root:order b3c8dce0-d627-48ef-b208-c20dd5f8eab9 failed to be filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  181    0     0
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date   close  state
+1762 2020-03-04  218.22    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 3458.02
+INFO:root:got 70 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $24.54 for QID
+INFO:root:got current price of $113.27 for QLD
+INFO:root:got current price of $76.34 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $864.5 on QID
+INFO:root:determined we should hold 63 shares of QID at $25.767 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $118.9335 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $80.15700000000001 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                     QID  QLD  TQQQ
+num_currently_held    70    0     0
+target_num_of_shares  63    0     0
+INFO:root:submitting sell order for 7 shares for QID at $22.09 per share for a total cost of $154.63
+INFO:root:order submitted. got id of d388727d-01d4-42c4-875d-f52f629d1207
+INFO:root:order d388727d-01d4-42c4-875d-f52f629d1207 failed to be filled
+INFO:root:after sells, currently held and target share counts
+INFO:root:                     QID  QLD  TQQQ
+num_currently_held    70    0     0
+target_num_of_shares  63    0     0
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date   close  state
+1762 2020-03-04  218.22    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 9856.0
+INFO:root:got 200 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $21.58 for QID
+INFO:root:got current price of $125.88 for QLD
+INFO:root:got current price of $88.98 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $2464.0 on QID
+INFO:root:determined we should hold 206 shares of QID at $22.659 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $132.174 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $93.429 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                      QID  QLD  TQQQ
+num_currently_held    200    0     0
+target_num_of_shares  206    0     0
+INFO:root:submitting buy order for 6 shares for QID at $25.9 per share for a total cost of $155.39999999999998
+INFO:root:order submitted. got id of 1ed6793f-a388-4469-baef-5f73e6c04615
+INFO:root:order 1ed6793f-a388-4469-baef-5f73e6c04615 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:
+           date   close  state
+1762 2020-03-04  218.22    0.0
+INFO:root:heres the last 10 days of predictions
+INFO:root:
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+INFO:root:getting account info from alpaca
+INFO:root:got account value of 3460.12
+INFO:root:got 70 shares currently held for QID
+INFO:root:starting to make trades
+INFO:root:got current price of $21.58 for QID
+INFO:root:got current price of $125.88 for QLD
+INFO:root:got current price of $88.98 for TQQQ
+INFO:root:got 0 state counts for regular and 0 state counts for strong
+INFO:root:bumping the strong count to always have a position
+INFO:root:using $865.03 on QID
+INFO:root:determined we should hold 72 shares of QID at $22.659 per share and using 25.0 of equity
+INFO:root:using $0.0 on QLD
+INFO:root:determined we should hold 0 shares of QLD at $132.174 per share and using 0 of equity
+INFO:root:using $0.0 on TQQQ
+INFO:root:determined we should hold 0 shares of TQQQ at $93.429 per share and using 0 of equity
+INFO:root:before sells, currently held and target share counts
+INFO:root:                     QID  QLD  TQQQ
+num_currently_held    70    0     0
+target_num_of_shares  72    0     0
+INFO:root:submitting buy order for 2 shares for QID at $25.9 per share for a total cost of $51.8
+INFO:root:order submitted. got id of 66cee7b9-be93-43c8-b421-c01382a332e9
+INFO:root:order 66cee7b9-be93-43c8-b421-c01382a332e9 filled
+INFO:root:all required trades submitted. automated trader exiting
+INFO:root:=============================================
+INFO:root:started automated trader
+INFO:root:started automated trader
+INFO:root:started automated trader
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+INFO:root:started automated trader
+INFO:root:got todays state prediction
+umINFO:root:started automated trader
+INFO:root:got todays state prediction
+2020-03-05 15:07:55,077 INFO started automated trader
+2020-03-05 15:07:57,104 INFO got todays state prediction
+2020-03-05 15:08:03,229 INFO 
+           date   close  state
+1762 2020-03-04  218.22    0.0
+2020-03-05 15:08:03,229 INFO heres the last 10 days of predictions
+2020-03-05 15:08:03,238 INFO 
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+2020-03-05 15:08:03,239 INFO getting account info from alpaca
+2020-03-05 15:08:03,673 INFO got account value of 10097.02
+2020-03-05 15:08:03,719 INFO got 206 shares currently held for QID
+2020-03-05 15:08:03,719 INFO starting to make trades
+2020-03-05 15:08:04,284 INFO got current price of $22.97 for QID
+2020-03-05 15:08:04,421 INFO got current price of $117.57 for QLD
+2020-03-05 15:08:04,582 INFO got current price of $81.05 for TQQQ
+2020-03-05 15:08:04,725 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-05 15:08:04,725 INFO bumping the strong count to always have a position
+2020-03-05 15:08:04,725 INFO using $5048.51 on QID
+2020-03-05 15:08:04,725 INFO determined we should hold 428 shares of QID at $22.97 per share and using 50.0 of equity
+2020-03-05 15:08:04,725 INFO using $0.0 on QLD
+2020-03-05 15:08:04,725 INFO determined we should hold 0 shares of QLD at $117.57 per share and using 0 of equity
+2020-03-05 15:08:04,725 INFO using $0.0 on TQQQ
+2020-03-05 15:08:04,725 INFO determined we should hold 0 shares of TQQQ at $81.05 per share and using 0 of equity
+2020-03-05 15:08:04,725 INFO currently held and target share counts
+2020-03-05 15:08:04,726 INFO                       QID  QLD  TQQQ
+num_currently_held    206    0     0
+target_num_of_shares  428    0     0
+2020-03-05 15:08:04,732 INFO submitting buy order for 222 shares for QID at $27.56 per share for a total cost of $6118.32
+2020-03-05 15:08:04,860 INFO order submitted. got id of cfc0f891-d6e0-4fc9-b90e-b7f95a3af7f7
+2020-03-05 15:08:05,913 INFO order cfc0f891-d6e0-4fc9-b90e-b7f95a3af7f7 filled
+2020-03-05 15:08:05,913 INFO all required trades submitted. automated trader exiting
+2020-03-05 15:08:05,913 INFO =============================================
+2020-03-05 15:08:22,473 INFO started automated trader
+2020-03-05 15:08:23,166 INFO got todays state prediction
+2020-03-05 15:08:23,857 INFO 
+           date   close  state
+1762 2020-03-04  218.22    0.0
+2020-03-05 15:08:23,857 INFO heres the last 10 days of predictions
+2020-03-05 15:08:23,868 INFO 
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+2020-03-05 15:08:23,870 INFO getting account info from alpaca
+2020-03-05 15:08:24,207 INFO got account value of 3545.06
+2020-03-05 15:08:24,260 INFO got 72 shares currently held for QID
+2020-03-05 15:08:24,260 INFO starting to make trades
+2020-03-05 15:08:24,541 INFO got current price of $24.54 for QID
+2020-03-05 15:08:24,684 INFO got current price of $113.27 for QLD
+2020-03-05 15:08:24,850 INFO got current price of $76.34 for TQQQ
+2020-03-05 15:08:24,991 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-05 15:08:24,991 INFO bumping the strong count to always have a position
+2020-03-05 15:08:24,991 INFO using $1772.53 on QID
+2020-03-05 15:08:24,992 INFO determined we should hold 140 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-05 15:08:24,992 INFO using $0.0 on QLD
+2020-03-05 15:08:24,992 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-05 15:08:24,992 INFO using $0.0 on TQQQ
+2020-03-05 15:08:24,993 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-05 15:08:24,993 INFO currently held and target share counts
+2020-03-05 15:08:24,995 INFO                       QID  QLD  TQQQ
+num_currently_held     72    0     0
+target_num_of_shares  140    0     0
+2020-03-05 15:08:25,007 INFO submitting buy order for 68 shares for QID at $29.45 per share for a total cost of $2002.6
+2020-03-05 15:08:25,131 INFO order submitted. got id of fd1695bf-7f35-49df-b15a-08952f61f51d
+2020-03-05 15:08:26,179 INFO order fd1695bf-7f35-49df-b15a-08952f61f51d filled
+2020-03-05 15:08:26,179 INFO all required trades submitted. automated trader exiting
+2020-03-05 15:08:26,179 INFO =============================================
+2020-03-05 16:01:31,500 INFO started automated trader
+2020-03-05 16:01:32,068 INFO got todays state prediction
+2020-03-05 16:01:33,535 INFO 
+           date   close  state
+1762 2020-03-04  218.22    0.0
+2020-03-05 16:01:33,535 INFO heres the last 10 days of predictions
+2020-03-05 16:01:33,543 INFO 
+           date   close  state
+1753 2020-02-20  234.78    0.0
+1754 2020-02-21  230.27    0.0
+1755 2020-02-24  221.39    0.0
+1756 2020-02-25  215.37    0.0
+1757 2020-02-26  216.48    0.0
+1758 2020-02-27  205.64    0.0
+1759 2020-02-28  205.80    0.0
+1760 2020-03-02  216.42    0.0
+1761 2020-03-03  209.48    0.0
+1762 2020-03-04  218.22    0.0
+2020-03-05 16:01:33,546 INFO getting account info from alpaca
+2020-03-05 16:01:34,047 INFO got account value of 3524.78
+2020-03-05 16:01:34,089 INFO got 140 shares currently held for QID
+2020-03-05 16:01:34,090 INFO starting to make trades
+2020-03-05 16:01:34,629 INFO got current price of $24.54 for QID
+2020-03-05 16:01:34,758 INFO got current price of $113.27 for QLD
+2020-03-05 16:01:34,894 INFO got current price of $76.34 for TQQQ
+2020-03-05 16:01:35,024 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-05 16:01:35,025 INFO bumping the strong count to always have a position
+2020-03-05 16:01:35,025 INFO using $1762.39 on QID
+2020-03-05 16:01:35,025 INFO determined we should hold 140 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-05 16:01:35,025 INFO using $0.0 on QLD
+2020-03-05 16:01:35,025 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-05 16:01:35,025 INFO using $0.0 on TQQQ
+2020-03-05 16:01:35,025 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-05 16:01:35,025 INFO currently held and target share counts
+2020-03-05 16:01:35,026 INFO                       QID  QLD  TQQQ
+num_currently_held    140    0     0
+target_num_of_shares  140    0     0
+2020-03-05 16:01:35,031 INFO all required trades submitted. automated trader exiting
+2020-03-05 16:01:35,031 INFO =============================================

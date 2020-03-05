@@ -1,5 +1,4 @@
 
-#from pipeline_hmm_moving_training import pipeline
 from pipeline_hmm import pipeline
 import alpaca_trade_api as tradeapi
 from math import floor
@@ -9,7 +8,6 @@ import pandas as pd
 from threading import Thread
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', filename='./trader.log', level=logging.INFO)
-#logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 
 class automated_trader():
