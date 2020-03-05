@@ -1,5 +1,6 @@
 
-from pipeline_hmm_moving_training import pipeline
+#from pipeline_hmm_moving_training import pipeline
+from pipeline_hmm import pipeline
 import alpaca_trade_api as tradeapi
 from math import floor
 import logging
@@ -7,8 +8,8 @@ from time import sleep
 import pandas as pd
 from threading import Thread
 
-logging.basicConfig(filename='./trader.log', level=logging.INFO)
-logging.basicConfig(format='%(asctime)s %(message)s')
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', filename='./trader.log', level=logging.INFO)
+#logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 
 class automated_trader():
@@ -32,13 +33,13 @@ class automated_trader():
                                 )
 
         # tony
-        """
+        
         self.api = tradeapi.REST(
                                 'PKSRALP8NRAJ9AFBMN0O',
                                 'Mu2Gv/V6AsWgWrGA48G6O2EjODh5DohpmklSQcZ6',
                                 'https://paper-api.alpaca.markets'
                                 )
-        """
+        
 
         self.held_shares = {}
         self.current_prices = {}
@@ -51,10 +52,12 @@ class automated_trader():
 
 
     def get_todays_prediction(self):
-        x = pipeline('production', params_dict = self.params_dict)
+        #x = pipeline('production', params_dict = self.params_dict)
+        x = pipeline(model_name = self.model_name)
         self.todays_prediction = x.new_predictions[['date', 'close', 'state']]
         logging.info('got todays state prediction')
-        print(self.todays_prediction.tail(10))
+        print(self.todays_prediction.tail(15))
+        print('ready to trade?')
         input()
         logging.info('\n'+str(
                                 self.todays_prediction.tail(1)
@@ -213,9 +216,9 @@ class automated_trader():
         num_shares = abs(int(num_shares))
         
         if side == 'buy':
-            limit_price = round(current_price * 1.2,2)
+            limit_price = round(current_price * 1.15,2)
         elif side == 'sell':
-            limit_price = round(current_price * 0.80,2)
+            limit_price = round(current_price * 0.85,2)
         
         print('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))
         logging.info('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))

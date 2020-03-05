@@ -26,7 +26,10 @@ warnings.simplefilter("ignore")
 
 class pipeline():
     def __init__(self, run_type, params_dict = None):
-        self.conn = sqlite3.connect('hmm_rolling.db')
+        if run_type == 'production':
+            self.conn = sqlite3.connect('hmm.db')
+        else:
+            self.conn = sqlite3.connect('hmm_rolling.db')
 
         self.run_type = run_type
         
@@ -48,6 +51,7 @@ class pipeline():
             print('testing using\n', self.features_found, '\nand date of', self.cutoff_date)
         elif self.run_type == 'production':
             # read params from database
+            self.cutoff_date = '2017-01-01'
             self.production = True
             self.name = params_dict.get('name')
             pca_n_components, k_features, features_found = self.get_model_from_db()
