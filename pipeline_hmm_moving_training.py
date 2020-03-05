@@ -54,6 +54,7 @@ class pipeline():
             self.pca_n_components = pca_n_components
             self.k_features = k_features
             self.features_found = features_found
+            print('using features', features_found)
         
         
         #self.cutoff_date = '2017-01-01'

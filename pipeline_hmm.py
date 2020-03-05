@@ -97,15 +97,11 @@ class pipeline():
                                 #GMMHMM(n_components=3, covariance_type='full'))
                                 GaussianHMM(n_components=3, covariance_type='full'))
         
-        for exp_num in range(self.n_experiments):
+        for _ in range(self.n_experiments):
 
 
             train = self.clean_train.copy()
             test = self.clean_test.copy()
-            means = []
-            stddevs = []
-            scores = []
-            correls = []
 
             if production == False:
                 # choose features

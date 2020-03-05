@@ -136,3 +136,4 @@ demo_cache.sqlite
 demo_cache.sqlite
 demo_cache.sqlite
 *.joblib
+*.sqlite

@@ -1,5 +1,5 @@
 
-from pipeline_hmm import pipeline
+from pipeline_hmm_moving_training import pipeline
 import alpaca_trade_api as tradeapi
 from math import floor
 import logging
@@ -16,7 +16,7 @@ class automated_trader():
 
         logging.info('started automated trader')
         self.model_name = "lumpy-linen-civet"
-        params_dict = {'name': self.model_name}
+        self.params_dict = {'name': self.model_name}
         self.use_margin = True
 
         self.short_symbol = 'QID'       # 2x short
@@ -32,13 +32,13 @@ class automated_trader():
                                 )
 
         # tony
-        
+        """
         self.api = tradeapi.REST(
                                 'PKSRALP8NRAJ9AFBMN0O',
                                 'Mu2Gv/V6AsWgWrGA48G6O2EjODh5DohpmklSQcZ6',
                                 'https://paper-api.alpaca.markets'
                                 )
-        
+        """
 
         self.held_shares = {}
         self.current_prices = {}
@@ -51,9 +51,11 @@ class automated_trader():
 
 
     def get_todays_prediction(self):
-        x = pipeline('production', params_dict = params_dict)
+        x = pipeline('production', params_dict = self.params_dict)
         self.todays_prediction = x.new_predictions[['date', 'close', 'state']]
         logging.info('got todays state prediction')
+        print(self.todays_prediction.tail(10))
+        input()
         logging.info('\n'+str(
                                 self.todays_prediction.tail(1)
                              ))
@@ -100,7 +102,7 @@ class automated_trader():
         self.get_target_num_shares(self.regular_symbol, self.regular_percent)
         self.get_target_num_shares(self.strong_symbol, self.strong_percent)
 
-        logging.info('before sells, currently held and target share counts')
+        logging.info('currently held and target share counts')
         logging.info(pd.DataFrame.from_dict(self.held_shares))
         #print(pd.DataFrame.from_dict(self.held_shares))
 
@@ -112,9 +114,6 @@ class automated_trader():
                 #self.submit_order_wrapper(symbol, difference, 'sell')
                 sell_orders.append([symbol, difference, 'sell'])
         self.submit_order_threading(sell_orders)
-
-        logging.info('after sells, currently held and target share counts')
-        logging.info(pd.DataFrame.from_dict(self.held_shares))
 
 
         # then place buy orders
@@ -160,7 +159,7 @@ class automated_trader():
         if self.sell_everything:
             self.regular_percent = 0
             self.strong_percent = 0
-            self.short_percent = 0.25
+            self.short_percent = 0.50
         else:
             self.short_percent = 0
 
@@ -194,11 +193,11 @@ class automated_trader():
         logging.info('using $%s on %s' % (equity_to_use, symbol))
 
         # get current share price
-        current_price = self.current_prices[symbol] * 1.05
+        current_price = self.current_prices[symbol]
 
         # if using margin, nearly double the equity to use
         if self.use_margin:
-            equity_to_use = round(equity_to_use * 1.9,2)
+            equity_to_use = round(equity_to_use * 1.95,2)
         print('using equity', equity_to_use)
         # get number of shares we should hold
         num_shares = floor( equity_to_use / current_price )
@@ -214,9 +213,9 @@ class automated_trader():
         num_shares = abs(int(num_shares))
         
         if side == 'buy':
-            limit_price = round(current_price * 1.1,2)
+            limit_price = round(current_price * 1.2,2)
         elif side == 'sell':
-            limit_price = round(current_price * 0.90,2)
+            limit_price = round(current_price * 0.80,2)
         
         print('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))
         logging.info('submitting %s order for %s shares for %s at $%s per share for a total cost of $%s' % ( side, num_shares, symbol, limit_price, limit_price * num_shares ))
@@ -240,7 +239,7 @@ class automated_trader():
                 # check order status
                 order = self.api.get_order(order.id)
                 if order.status == 'filled':
-                    #print('order %s filled' % order.id)
+                    print('order %s filled' % order.id)
                     logging.info('order %s filled' % order.id)
                     return
                 
