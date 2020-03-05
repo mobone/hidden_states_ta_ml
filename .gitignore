@@ -58,8 +58,6 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -125,15 +123,11 @@ dmypy.json
 .pyre/
 hidden_states.db
 *.png
-demo_cache.sqlite
 demo_cache.sqlite-journal
 demo_cache.sqlite
 
 *.csv
 plots/.DS_Store
 *.csv
-demo_cache.sqlite
-demo_cache.sqlite
-demo_cache.sqlite
 *.joblib
 *.sqlite
