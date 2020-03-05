@@ -135,3 +135,4 @@ plots/.DS_Store
 demo_cache.sqlite
 demo_cache.sqlite
 demo_cache.sqlite
+*.joblib

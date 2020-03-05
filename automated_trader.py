@@ -16,7 +16,7 @@ class automated_trader():
 
         logging.info('started automated trader')
         self.model_name = "lumpy-linen-civet"
-        
+        params_dict = {'name': self.model_name}
         self.use_margin = True
 
         self.short_symbol = 'QID'       # 2x short
@@ -51,7 +51,7 @@ class automated_trader():
 
 
     def get_todays_prediction(self):
-        x = pipeline(model_name = self.model_name)
+        x = pipeline('production', params_dict = params_dict)
         self.todays_prediction = x.new_predictions[['date', 'close', 'state']]
         logging.info('got todays state prediction')
         logging.info('\n'+str(

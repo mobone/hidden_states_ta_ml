@@ -9,7 +9,10 @@ def get_ta(df, volume, pattern):
     else:
         open, high, low, close, volume = df['Open'], df['High'], df['Low'], df['Close'], df['Volume']
 
-    
+    if 'Dividends' in df.columns:
+        del df['Dividends']
+    if 'Stock Splits' in df.columns:
+        del df['Stock Splits']
     df['intraday_change'] = df['Close'] / df['Open'] - 1
     
     for i in range(1,2):

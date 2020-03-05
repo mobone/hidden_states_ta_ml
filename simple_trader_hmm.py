@@ -7,11 +7,21 @@ from multiprocessing import Pool, cpu_count
 warnings.simplefilter('ignore')
 
 class trader():
-    def __init__(self, model_name, symbol_1, symbol_2):
-        self.model_name = model_name
-        conn = sqlite3.connect('hmm_rolling.db')
-        sql = 'select * from trades_final where name ==  "%s"' % model_name
-        self.df = pd.read_sql(sql, conn)
+    def __init__(self, symbol_1, symbol_2, model_name=None, data=None):
+        if model_name is None and data is not None:
+            self.df = data[['date','close','state']]
+            self.df = self.df.reset_index(drop=True)
+        elif model_name is not None and data is None:
+            self.model_name = model_name
+            conn = sqlite3.connect('hmm_rolling.db')
+            sql = 'select * from trades_final where name ==  "%s"' % model_name
+            self.df = pd.read_sql(sql, conn)
+            self.df = self.df.reset_index(drop=True)
+        elif data is None and model_name is None:
+            print('need data or model name')
+            raise
+
+        
         self.df['date'] = pd.to_datetime(self.df['date'])
         self.regular_symbol = symbol_1
         self.strong_symbol = symbol_2
@@ -24,6 +34,7 @@ class trader():
         self.get_stock_data(self.strong_symbol)
         self.starting_balance = 10000
         self.bank_balance = self.starting_balance
+        
         self.run_trades()
 
     def get_stock_data(self, symbol):
@@ -34,9 +45,11 @@ class trader():
 
 
     def run_trades(self):
+
         list_of_trades = []
         last_date = self.df['date'].tail(1).values[0]
         for day_index in range(10,len(self.df)):
+            
             
             days = self.df.loc[:day_index, ['date', 'state', 'close']].tail(10)
             day = days.tail(1)
@@ -81,7 +94,7 @@ class trader():
                 self.buy_shares(self.strong_symbol, day, strong_percent)
 
         percent_change = round(self.bank_balance / self.starting_balance - 1, 4)*100
-        #print('%s %s' % ( self.model_name, percent_change ) )
+        print('%s %s' % (  self.bank_balance, percent_change ) )
         self.return_percentage = percent_change
         #df = pd.DataFrame(list_of_trades, columns = ['date', 'balance'])
         #df.to_csv('qld.csv')

@@ -25,23 +25,36 @@ from datetime import timedelta
 warnings.simplefilter("ignore")
 
 class pipeline():
-    def __init__(self, params_dict = None, model_name = None):
+    def __init__(self, run_type, params_dict = None):
         self.conn = sqlite3.connect('hmm_rolling.db')
-        print(params_dict)
-        if model_name is None:
+
+        self.run_type = run_type
+        
+        self.pca_n_components = params_dict.get('pca_n_components', 3)
+        self.k_features = params_dict.get('k_features', 3)
+        self.train_length =  params_dict.get('train_length', 3)
+        
+        if self.run_type == 'find_features':
+            # run decision tree and features finder algorithms
             self.name = params_dict.get('name', namegenerator.gen())
-            self.pca_n_components = params_dict.get('pca_n_components', 3)
-            self.k_features = params_dict.get('k_features', 3)
-            self.cutoff_date =  params_dict.get('cutoff_date', '2017-01-01')
-            self.train_length =  params_dict.get('train_length', 3)
-        elif model_name is not None:
-            self.name = model_name
-            pca_n_components, k_features, features_found = self.get_model_from_db()
             
+            self.cutoff_date =  params_dict.get('cutoff_date', '2017-01-01')
+            
+        elif self.run_type == 'rolling_test':
+            # run test on new test data cutoffs using features already defined
+            self.name = params_dict.get('name')
+            self.features_found = params_dict.get('features')
+            self.cutoff_date =  params_dict.get('cutoff_date')
+            print('testing using\n', self.features_found, '\nand date of', self.cutoff_date)
+        elif self.run_type == 'production':
+            # read params from database
+            self.production = True
+            self.name = params_dict.get('name')
+            pca_n_components, k_features, features_found = self.get_model_from_db()
             self.pca_n_components = pca_n_components
             self.k_features = k_features
             self.features_found = features_found
-
+        
         
         #self.cutoff_date = '2017-01-01'
         
@@ -49,12 +62,19 @@ class pipeline():
 
         self.get_data()
 
-        if model_name is not None:
+        if self.run_type == 'production':
             # run production
             print('running production')
-            self.run_pipeline(production=True)
+            self.run_pipeline()
             print('predicting completed')
-        else:
+        elif self.run_type == 'rolling_test':
+            print('running test on other dates', self.cutoff_date)
+            self.run_pipeline()
+            if self.pipeline_failed == False:
+                self.get_results()
+                self.store_results()
+        elif self.run_type == 'find_features':
+            # run feature selection and test data prediction
             self.run_decision_tree()
             self.run_pipeline()
             if self.pipeline_failed == False:
@@ -102,6 +122,8 @@ class pipeline():
                                 #GMMHMM(n_components=3, covariance_type='full'))
                                 GaussianHMM(n_components=3, covariance_type='full'))
         exp_num = 0
+        if self.run_type == 'find features':
+            print('finding features')
         while exp_num < self.n_experiments:
 
 
@@ -112,7 +134,7 @@ class pipeline():
             scores = []
             correls = []
 
-            if production == False:
+            if self.run_type == 'find_features':
                 # choose features
                 shuffle(self.starting_features)
                 test_cols = ['return'] + self.starting_features[0:self.k_features]
@@ -120,7 +142,7 @@ class pipeline():
                 if 'stoch' not in str(test_cols):
                     continue
                 
-            elif production == True:
+            elif self.run_type == 'production' or self.run_type == 'rolling_test':
                 test_cols = self.features_found
 
             
@@ -140,7 +162,7 @@ class pipeline():
 
             # get the correlation between state and next day percent changes
             train['next_day'] = train['close'].shift(-1) / train['close'] - 1
-            train_means = train.dropna().groupby(by='state')[['return', 'next_day']].mean()
+            train_means = train.dropna().groupby(by='state')[['return', 'next_day']].mean()*100
             train_correl = train_means.corr()
             self.train_correl = train_correl['return']['next_day']
 
@@ -154,25 +176,27 @@ class pipeline():
             test['state'] = pipe_pca.predict(test[test_cols])
             test = self.rename_states(test)
 
-            if production == True:
+            if self.run_type == 'production':
                 self.new_predictions = test.tail(30)
                 return
-
-            if test is None:
-                continue
-            criteria_check = self.check_criteria(test)
-            if criteria_check == False:
-                continue
+            
+            
+            if self.run_type == 'find_features':
+                if test is None:
+                    continue
+                criteria_check = self.check_criteria(test)
+                if criteria_check == False:
+                    continue
 
             # get the correlation between state and next day percent changes
             test['next_day'] = test['close'].shift(-1) / test['close'] - 1
-            test_means = test.dropna().groupby(by='state')[['return', 'next_day']].mean()
+            test_means = test.dropna().groupby(by='state')[['return', 'next_day']].mean()*100
             test_correl = test_means.corr()
             self.test_correl = test_correl['return']['next_day']
 
             exp_num = exp_num + 1
             
-            if self.train_correl > self.max_correl and self.test_correl>0:
+            if ( self.train_correl > self.max_correl and self.test_correl>0 ) or self.run_type == 'rolling_test':
                 
                 self.train_predicted = train
                 self.test_predicted = test
@@ -200,7 +224,7 @@ class pipeline():
 
         # get the correlation between state and next day percent changes
         df['next_day'] = df['close'].shift(-1) / df['close'] - 1
-        correl = df.dropna().groupby(by='state')[['return', 'next_day']].mean().corr()
+        correl = (df.dropna().groupby(by='state')[['return', 'next_day']].mean() * 100).corr()
         
         correl = correl['return']['next_day']
 
@@ -208,7 +232,7 @@ class pipeline():
             return False
 
         # ensure buy and strong buy returns and next returns are positive
-        means = df.dropna().groupby(by='state')[['return', 'next_day']].mean()
+        means = df.dropna().groupby(by='state')[['return', 'next_day']].mean() * 100
         
         if float(means[means.index == 0]['return'])>0 or float(means[means.index == 1]['return'])<0 or float(means[means.index == 2]['return'])<0:
             return False
@@ -267,7 +291,10 @@ class pipeline():
         fig = matplotlib.pyplot.gcf()
         fig.set_size_inches(18.5, 10.5, forward=True)
         file_name = self.name+'_'+str(self.cutoff_date).replace('-','')
+        print('plotting', file_name)
+        
         plt.savefig('./plots_rolling/%s.png'% file_name )
+        
 
 
     def get_data(self):
@@ -311,8 +338,18 @@ class pipeline():
     
 
 def run_pipeline_class(params_dict):
+    cutoff_dates = ['2017-01-01', '2018-01-01', '2019-01-01', ] 
     
-    pipeline(params_dict = params_dict)
+    params_dict['cutoff_date'] = cutoff_dates[0]
+    x = pipeline('find_features', params_dict = params_dict)
+    params_dict['name'] = x.name
+    params_dict['features'] = x.features_found
+
+    params_dict['cutoff_date'] = cutoff_dates[1]
+    pipeline('rolling_test', params_dict)
+
+    params_dict['cutoff_date'] = cutoff_dates[2]
+    pipeline('rolling_test', params_dict)
 
 
 
@@ -328,8 +365,8 @@ if __name__ == '__main__':
     #simulations = [0,]
     #k_features = list( range(3,4) )
 
-    cutoff_dates = ['2017-01-01', '2018-01-01', '2019-01-01', ] 
-    train_length = [2,3,4,5]
+    
+    train_length = [2,3,4,5,6,7]
 
     params_list = list(product( pca_n_components, k_features, train_length, simulations ))
     
@@ -337,15 +374,13 @@ if __name__ == '__main__':
     shuffle(params_list)
     
     for pca_n_components, k_features, train_length, _ in params_list:
-        name = namegenerator.gen()
-        for cutoff_date in cutoff_dates:
-            params_dict = { 
-                            'pca_n_components': pca_n_components, 
-                            'k_features': k_features,
-                            'cutoff_date': cutoff_date, 
-                            'train_length': train_length,
-                            'name': name}
-            params_list_of_dicts.append(params_dict)
+        
+        params_dict = { 
+                        'pca_n_components': pca_n_components, 
+                        'k_features': k_features,
+                        'train_length': train_length,
+                      }
+        params_list_of_dicts.append(params_dict)
 
     p = Pool( int(cpu_count()-1) )
     p.map(run_pipeline_class, params_list_of_dicts)
