@@ -149,14 +149,14 @@ class pipeline():
         
         negative_train_states = self.results[self.results['train_mean']<0]
         negative_test_states = self.results[self.results['test_mean']<0]
-        negative_next_test_states = self.results[self.results['test_next_mean']<0]
-        if len(negative_train_states)>1 or len(negative_test_states)>1 or len(negative_next_test_states)>1:
+        #negative_next_test_states = self.results[self.results['test_next_mean']<0]
+        if len(negative_train_states)>1 or len(negative_test_states)>1: # or len(negative_next_test_states)>1:
             raise model_check_error('multiple negative means in states')
 
-        if negative_train_states.empty or negative_test_states.empty or negative_next_test_states.empty:
+        if negative_train_states.empty or negative_test_states.empty: # or negative_next_test_states.empty:
             raise model_check_error('negative state does not exist')
         
-        if int(negative_train_states.index.values[0]) != int(negative_test_states.index.values[0]) or int(negative_test_states.index.values[0]) != int(negative_next_test_states.index.values[0]):
+        if int(negative_train_states.index.values[0]) != int(negative_test_states.index.values[0]): # or int(negative_test_states.index.values[0]) != int(negative_next_test_states.index.values[0]):
             raise model_check_error('negative state indexes do not match')
 
         
@@ -400,13 +400,13 @@ def queue_monitor(input_queue):
 if __name__ == '__main__':
 
     train, test, test_cols = get_data('QQQ')
-
+    print(test_cols)
     #starting_features = run_decision_tree(train, test_cols)
     starting_features = test_cols
     feature_combos = []
-    feature_combos.extend(list(combinations(starting_features, 3)))
+    #feature_combos.extend(list(combinations(starting_features, 3)))
     feature_combos.extend(list(combinations(starting_features, 4)))
-    #feature_combos.extend(list(combinations(starting_features, 5)))
+    feature_combos.extend(list(combinations(starting_features, 5)))
     #feature_combos.extend(list(combinations(starting_features, 6)))
     shuffle(feature_combos)
     print('total qsize', len(feature_combos))

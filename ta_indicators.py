@@ -1,21 +1,10 @@
 from talib import *
 from talib._ta_lib import *
-
+from more_indicators import *
+import pandas as pd
 #[a-zA-Z, ]* \= [a-zA-Z0-9_]*\([a-zA-Z, _=0-9]*\)
 
-#Pivot Points, Supports and Resistances  
-def PPSR(df):  
-    PP = pd.Series((df['High'] + df['Low'] + df['Close']) / 3)  
-    R1 = pd.Series(2 * PP - df['Low'])  
-    S1 = pd.Series(2 * PP - df['High'])  
-    R2 = pd.Series(PP + df['High'] - df['Low'])  
-    S2 = pd.Series(PP - df['High'] + df['Low'])  
-    R3 = pd.Series(df['High'] + 2 * (PP - df['Low']))  
-    S3 = pd.Series(df['Low'] - 2 * (df['High'] - PP))  
-    psr = {'PP':PP, 'R1':R1, 'S1':S1, 'R2':R2, 'S2':S2, 'R3':R3, 'S3':S3}  
-    PSR = pd.DataFrame(psr)  
-    df = df.join(PSR)  
-    return df
+
 
 def get_ta(df, volume, pattern):
     if volume is None:
@@ -31,43 +20,47 @@ def get_ta(df, volume, pattern):
     
     for i in range(1,2):
         df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
+
+    df = PPSR(df)
     """
     MA
     EMA
-    BOLL
-    KC*
-    IC*
+    BOLL    
     SAR
-    VWAP*
-    Pivot point*
+    Pivot point
     DC
-
     VOL
     MACD
-    KDJ*
     RSI
     ROC
-    DMA*
-    FSTO*
     Aroon
     ADX
-    DMI*
-    HA*
     MFI
     ATR
     CCI
+    W%R
+    Net Volume
+    OBV
+    Percent B
+    Chaikin Oscillator
+
+
+    ADL*
+    EFI*
     CC*
     DPO*
     UOS*
-    W%R*
-    ADL*
-    Net Volume*
-    OBV
-    EFI*
-    Percent B*
-    Chaikin Oscillator
+    DMI*
+    HA*
+    DMA*
+    FSTO*
+    KC*
+    IC*
+    VWAP*
+    KDJ*
     """
     df['MA'] = MA(close)
+    df['WMA'] = WMA(close)
     df['EMA'] = EMA(close)
     df['BBANDS_upper'],df['BBANDS_middle'],df['BBANDS_lower'] = BBANDS(close)
     df['SAR'] = SAR(high, low)
@@ -78,6 +71,7 @@ def get_ta(df, volume, pattern):
     df['MACD'],df['MACD_signal'],df['MACD_hist'] = MACD(close)
     df['RSI'] = RSI(close)
     df['ROC'] = ROC(close)
+    df['MOM'] = MOM(close)
     df['AROON_down'],df['AROON_up'] = AROON(high, low)
     df['AROONOSC'] = AROONOSC(high, low)
     df['ADX'] = ADX(high, low, close)
@@ -88,6 +82,21 @@ def get_ta(df, volume, pattern):
     df['CCI'] = CCI(high, low, close)
     df['BETA'] = BETA(high, low)
     df['CORREL'] = CORREL(high, low)
+    df['TRANGE'] = TRANGE(high, low, close)
+
+    # more indicators
+    df = williams_r(df, high_col = 'High', low_col = 'Low', close_col = 'Close')
+    df = chaikin_oscillator(df, high_col = 'High', low_col = 'Low', close_col = 'Close',  vol_col = 'Volume')
+    df = chaikin_volatility(df, high_col = 'High', low_col = 'Low', close_col = 'Close')
+    df = ultimate_oscillator(df, high_col = 'High', low_col = 'Low', close_col = 'Close')
+    df = price_volume_trend(df, close_col = 'Close',  vol_col = 'Volume')
+    df = negative_volume_index(df, close_col = 'Close',  vol_col = 'Volume')
+    df = positive_volume_index(df, close_col = 'Close',  vol_col = 'Volume')
+
+
+    for col in ['BBANDS_upper', 'BBANDS_middle', 'BBANDS_lower']:
+            df[col+'_p'] = df['Close'] / df[col] - 1
+    
     """
     
 
