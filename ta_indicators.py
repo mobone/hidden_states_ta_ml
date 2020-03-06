@@ -3,6 +3,20 @@ from talib._ta_lib import *
 
 #[a-zA-Z, ]* \= [a-zA-Z0-9_]*\([a-zA-Z, _=0-9]*\)
 
+#Pivot Points, Supports and Resistances  
+def PPSR(df):  
+    PP = pd.Series((df['High'] + df['Low'] + df['Close']) / 3)  
+    R1 = pd.Series(2 * PP - df['Low'])  
+    S1 = pd.Series(2 * PP - df['High'])  
+    R2 = pd.Series(PP + df['High'] - df['Low'])  
+    S2 = pd.Series(PP - df['High'] + df['Low'])  
+    R3 = pd.Series(df['High'] + 2 * (PP - df['Low']))  
+    S3 = pd.Series(df['Low'] - 2 * (df['High'] - PP))  
+    psr = {'PP':PP, 'R1':R1, 'S1':S1, 'R2':R2, 'S2':S2, 'R3':R3, 'S3':S3}  
+    PSR = pd.DataFrame(psr)  
+    df = df.join(PSR)  
+    return df
+
 def get_ta(df, volume, pattern):
     if volume is None:
         open, high, low, close = df['Open'], df['High'], df['Low'], df['Close']
@@ -17,18 +31,76 @@ def get_ta(df, volume, pattern):
     
     for i in range(1,2):
         df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
-    
-    df['BBANDS_upper'],df['BBANDS_middle'],df['BBANDS_lower'] = BBANDS(close)
-    df['DEMA'] = DEMA(close)
+    """
+    MA
+    EMA
+    BOLL
+    KC*
+    IC*
+    SAR
+    VWAP*
+    Pivot point*
+    DC
+
+    VOL
+    MACD
+    KDJ*
+    RSI
+    ROC
+    DMA*
+    FSTO*
+    Aroon
+    ADX
+    DMI*
+    HA*
+    MFI
+    ATR
+    CCI
+    CC*
+    DPO*
+    UOS*
+    W%R*
+    ADL*
+    Net Volume*
+    OBV
+    EFI*
+    Percent B*
+    Chaikin Oscillator
+    """
+    df['MA'] = MA(close)
     df['EMA'] = EMA(close)
+    df['BBANDS_upper'],df['BBANDS_middle'],df['BBANDS_lower'] = BBANDS(close)
+    df['SAR'] = SAR(high, low)
+    df['HT_DCPERIOD'] = HT_DCPERIOD(close)
+    df['HT_DCPHASE'] = HT_DCPHASE(close)
+    df['HT_PHASOR_inphase'],df['HT_PHASOR_quadrature'] = HT_PHASOR(close)
+
+    df['MACD'],df['MACD_signal'],df['MACD_hist'] = MACD(close)
+    df['RSI'] = RSI(close)
+    df['ROC'] = ROC(close)
+    df['AROON_down'],df['AROON_up'] = AROON(high, low)
+    df['AROONOSC'] = AROONOSC(high, low)
+    df['ADX'] = ADX(high, low, close)
+    if volume is not None:
+        df['MFI'] = MFI(high, low, close, volume)
+        df['OBV'] = OBV(close, volume)
+    df['ATR'] = ATR(high, low, close)
+    df['CCI'] = CCI(high, low, close)
+    df['BETA'] = BETA(high, low)
+    df['CORREL'] = CORREL(high, low)
+    """
+    
+
+    df['DEMA'] = DEMA(close)
+    
     df['HT_TRENDLINE'] = HT_TRENDLINE(close)
     df['KAMA'] = KAMA(close)
-    df['MA'] = MA(close)
+    
     df['MAMA'],df['FAMA'] = MAMA(close)
     #df['MAVP'] = MAVP(close, periods)
     df['MIDPOINT'] = MIDPOINT(close)
     df['MIDPRICE'] = MIDPRICE(high, low)
-    df['SAR'] = SAR(high, low)
+    
     df['SAREXT'] = SAREXT(high, low)
     df['SMA'] = SMA(close)
     df['T3'] = T3(close)
@@ -47,8 +119,7 @@ def get_ta(df, volume, pattern):
     df['DX'] = DX(high, low, close)
     df['MACD'],df['MACD_signal'],df['MACD_hist'] = MACD(close)
     df['MACDFIX'],df['MACDFIX_signal'],df['MACDFIX_hist'] = MACDFIX(close)
-    if volume is not None:
-        df['MFI'] = MFI(high, low, close, volume)
+    
     df['MINUS_DI'] = MINUS_DI(high, low, close)
     df['MINUS_DM'] = MINUS_DM(high, low)
     df['MOM'] = MOM(close)
@@ -154,7 +225,7 @@ def get_ta(df, volume, pattern):
     df['STDDEV'] = STDDEV(close)
     df['TSF'] = TSF(close)
     df['VAR'] = VAR(close)
-    
+    """
     """
     for col in df.columns.drop(['Adj Close', 'Volume', 'Close', 'Open', 'High', 'Low']):
 

@@ -1,9 +1,9 @@
 import sqlite3
 import pandas as pd
 
-conn = sqlite3.connect('markov_models.db')
+conn = sqlite3.connect('tiny_pipeline.db')
 
-sql = 'select features, percent_return from models'
+sql = 'select features, moderate_return from models group by features order by moderate_return desc limit 10'
 df = pd.read_sql(sql, conn)
 
 all_features_used = []
@@ -17,6 +17,8 @@ for key, value in df.iterrows():
         df.loc[key,'feature_'+str(i)] = features[i]
     """
 features_used = list(set(all_features_used))
+print(features_used)
+input()
 for feature in features_used:
     df[feature] = 0
     for key, values in df.iterrows():
@@ -25,13 +27,14 @@ for feature in features_used:
 
 print(df)
 
+input()
 
 result_features = []
 for feature in features_used:
     
     group = list(df.groupby(by=feature))[1]
     
-    group = group[1]['percent_return']
+    group = group[1]['moderate_return']
     
     result_features.append([feature, len(group), group.mean()])
 

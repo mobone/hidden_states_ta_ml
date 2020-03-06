@@ -37,7 +37,7 @@ class trader():
 
 
     def get_stock_data(self, symbol):
-        x = yfinance.Ticker(symbol).history(period='5y', auto_adjust=False)
+        x = yfinance.Ticker(symbol).history(period='10y', auto_adjust=False)
         x = x.reset_index()
         x.columns = map(str.lower, x.columns)
         x['date'] = pd.to_datetime(x['date'])
