@@ -72,6 +72,7 @@ def get_ta(df, volume, pattern):
     df['RSI'] = RSI(close)
     df['ROC'] = ROC(close)
     df['MOM'] = MOM(close)
+    df['DX'] = DX(high, low, close)
     df['AROON_down'],df['AROON_up'] = AROON(high, low)
     df['AROONOSC'] = AROONOSC(high, low)
     df['ADX'] = ADX(high, low, close)
@@ -83,6 +84,10 @@ def get_ta(df, volume, pattern):
     df['BETA'] = BETA(high, low)
     df['CORREL'] = CORREL(high, low)
     df['TRANGE'] = TRANGE(high, low, close)
+    df['STOCH_slowk'],df['STOCH_slowk'] = STOCH(high, low, close)
+    df['STOCHF_fastk'],df['STOCHF_fastd'] = STOCHF(high, low, close)
+    df['STOCHRSI_fastk'],df['STOCHRSI_fastd'] = STOCHRSI(close)
+    df['HT_TRENDLINE'] = HT_TRENDLINE(close)
 
     # more indicators
     df = williams_r(df, high_col = 'High', low_col = 'Low', close_col = 'Close')
@@ -97,9 +102,9 @@ def get_ta(df, volume, pattern):
     for col in ['BBANDS_upper', 'BBANDS_middle', 'BBANDS_lower']:
             df[col+'_p'] = df['Close'] / df[col] - 1
     
-    """
     
-
+    
+    """
     df['DEMA'] = DEMA(close)
     
     df['HT_TRENDLINE'] = HT_TRENDLINE(close)

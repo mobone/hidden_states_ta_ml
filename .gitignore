@@ -131,3 +131,4 @@ plots/.DS_Store
 *.csv
 *.joblib
 *.sqlite
+*.html

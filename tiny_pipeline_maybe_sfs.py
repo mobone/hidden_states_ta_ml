@@ -24,28 +24,27 @@ from simple_trader_stripped import trader
 import matplotlib.cm as cm
 from sklearn.mixture import GaussianMixture
 from sklearn.neighbors import KNeighborsRegressor
-from backtest_trader import Backtest, MyStrat, MyStratWithShort
-
+from random import choice
 class model_check_error(Exception):
     pass
 
-conn = sqlite3.connect('tiny_pipeline_finding_features.db')
+conn = sqlite3.connect('tiny_pipeline.db')
 class pipeline():
-    def __init__(self, train, test, features, name, window_length):
+    def __init__(self, train, test, features, name, feature_combos):
         
         self.name = name
         self.train = train
         self.test = test
+        
         self.features = list(features)
-        self.window_length = window_length
+        self.feature_combos = feature_combos
 
-
-    def plot(self, df, show=False, window_length = ''):
+    def plot(self, df, show=False, filename = None):
                
         df.loc[df['state_name']=='sell', 'color'] = 'firebrick'
         df.loc[df['state_name']=='buy', 'color'] = 'yellowgreen'
         df.loc[df['state_name']=='strong_buy', 'color'] = 'forestgreen'
-        df = df.dropna()
+
         df.plot.scatter(x='date',
                         y='close',
                         #c='state_name',
@@ -55,8 +54,8 @@ class pipeline():
         fig.set_size_inches(18.5*.75, 10.5*.75, forward=True)
         
         if show==False:
-            
-            plt.savefig('./plots_new_features/%s.png'% (self.name + '_' +str(window_length)) )
+            file_name = self.name + '_' + filename
+            plt.savefig('./plots/%s.png'% file_name )
         else:
             plt.legend(fontsize='small')
 
@@ -64,14 +63,78 @@ class pipeline():
 
         plt.close(fig)
 
+    def get_sfs(self):
+        
+        self.pipe_pca = make_pipeline(StandardScaler(),
+                         PrincipalComponentAnalysis(n_components=3),
+                         GaussianHMM(n_components=3, covariance_type='full',random_state=7, n_iter=100)
+                         #GaussianMixture(n_components=3, covariance_type="full",  n_init=100, random_state=7)
+                         #KNeighborsRegressor(n_neighbors=3)
+                         
+                         )
+        
+        
+        max_score = 0
+        for i in range(30):
+            #shuffle(self.feature_combos)
+            #test_cols = list(self.feature_combos[7])
+            test_cols = list(choice(self.feature_combos))
+            
+            X_train, X_test, y_train, y_test = train_test_split(self.train[['return'] + test_cols], self.train['return'])
+            
+            self.pipe_pca.fit(X_train)
+            
+            
+            score = round( np.exp( self.pipe_pca.score(X_test) / len(X_test) ) * 100, 4)
+
+            X_test['state'] = self.pipe_pca.predict(X_test)
+            results = pd.DataFrame()
+            for state, group in X_test.groupby(by='state'):
+                results.loc[state, 'test_mean'] = group['return'].mean()
+                results.loc[state, 'test_var'] = group['return'].std()
+            
+            
+            if len( results[results['test_mean']<0]!=1 ):
+                i = i -1
+                continue
+            
+            if score>max_score:
+                max_score = score
+                self.features = test_cols
+
+        #print('found these features', self.features)
+        #print('with a score of', max_score)
+        
+        
+        """
+        from mlxtend.feature_selection import SequentialFeatureSelector as SFS
+        #knn = KNeighborsRegressor(n_neighbors=3)
+        hmm = GaussianHMM(n_components=3, covariance_type='full', random_state=7)
+        sfs1 = SFS(hmm, 
+                k_features=5, 
+                forward=True, 
+                floating=True, 
+                verbose=2,
+                scoring='r2',
+                n_jobs=-1,
+                cv=15)
+
+        sfs1 = sfs1.fit(self.train[self.features])
+
+        print(sfs1.subsets_)
+        print(sfs1.k_feature_names_)
+        print(sfs1.k_score_)
+        self.features = features
+        input()
+        """
 
     def get_model(self):
         #print('building model', self.features)
 
-        # TODO: look into kNeighborsRegressor
+        # TODO: look into KNeighborsRegressor
         self.pipe_pca = make_pipeline(StandardScaler(),
                          PrincipalComponentAnalysis(n_components=3),
-                         GaussianHMM(n_components=3, covariance_type='full', n_iter=100, random_state=7)
+                         GaussianHMM(n_components=3, covariance_type='full', random_state=7,n_iter=100)
                          #GaussianMixture(n_components=3, covariance_type="full",  n_init=100, random_state=7)
                          #KNeighborsRegressor(n_neighbors=3)
                          
@@ -107,31 +170,22 @@ class pipeline():
         self.test['state'] = states
         """
 
-        train_length = len(self.train)
+        
         original_test_len = len(self.test)
         test_data = self.train.append(self.test)
-        test_data = test_data[ ['date','return'] + self.features ]
+        test_data = test_data[ ['return'] + self.features ]
         #test_data = self.test[ ['return'] + self.features ]
         
         
         individual_states = []
-        for i in range(train_length,len(test_data)+1):
-            test_slice = test_data.iloc[i-self.window_length:i]
-            
-            state = self.pipe_pca.predict(test_slice[ ['return'] + self.features ])
-            
-            individual_states.append( [test_slice['date'].tail(1).values[0], state[-1:][0]])
-            
+        for i in range(1,len(test_data)+1):
+            test_slice = test_data.iloc[:i]
+            state = self.pipe_pca.predict(test_slice)
+            individual_states.append(state[-1:][0])
             
         individual_states = pd.DataFrame(individual_states).tail(original_test_len)
-        individual_states.columns = ['date','state']
         
-        
-        
-        self.test['state'] = individual_states['state'].values
-        self.test = self.test.tail(252*4)
-
-        
+        self.test['state'] = individual_states
         
         self.train_score = np.exp( self.pipe_pca.score( self.train[ ['return'] + self.features ] ) / len(self.train) ) * 100
 
@@ -148,13 +202,12 @@ class pipeline():
         self.get_renamed_states()
         self.train = self.apply_rename_states(self.train)
         self.test = self.apply_rename_states(self.test)
-
         
         
     def check_model(self):
         
         self.results = self.results.sort_values(by=['train_mean'])
-        
+        #print(self.results)
         # check that all states are used
         if len(self.results.dropna())<3:
             raise model_check_error('not all states used')
@@ -162,16 +215,15 @@ class pipeline():
         negative_train_states = self.results[self.results['train_mean']<0]
         negative_test_states = self.results[self.results['test_mean']<0]
         #negative_next_test_states = self.results[self.results['test_next_mean']<0]
-        if len(negative_train_states)>1 or len(negative_test_states)>1:# or len(negative_next_test_states)>1:
+        if len(negative_train_states)>1 or len(negative_test_states)>1: # or len(negative_next_test_states)>1:
             raise model_check_error('multiple negative means in states')
 
-        if negative_train_states.empty or negative_test_states.empty:# or negative_next_test_states.empty:
+        if negative_train_states.empty or negative_test_states.empty: # or negative_next_test_states.empty:
             raise model_check_error('negative state does not exist')
         
-        if int(negative_train_states.index.values[0]) != int(negative_test_states.index.values[0]):# or int(negative_test_states.index.values[0]) != int(negative_next_test_states.index.values[0]):
+        if int(negative_train_states.index.values[0]) != int(negative_test_states.index.values[0]): # or int(negative_test_states.index.values[0]) != int(negative_next_test_states.index.values[0]):
             raise model_check_error('negative state indexes do not match')
-        
-        print(self.results)
+
         
     """
     def get_trained_model_results(self):
@@ -233,13 +285,12 @@ class pipeline():
 
 
     def apply_rename_states(self, df):
-        #print('renaming states')
-        #print(self.results)
+        
         for index, group in self.results.iterrows():
             df.loc[df['state']==int(group['old_state']), 'state_name'] = group['state_name']
             df.loc[df['state']==int(group['old_state']), 'state_num'] = group['state_num']
         
-        df['state'] = df['state_num']
+        #df['state'] = df['state_num']
         return df
         
         
@@ -250,7 +301,7 @@ class pipeline():
             self.results.loc[state, name+'_mean'] = group['return'].mean()
             self.results.loc[state, name+'_var'] = group['return'].std()
             if name == 'test':
-                if group['return'].count()<50:
+                if group['return'].count()<10:
                     #print(group)
                     raise model_check_error('not enough states in count')
                 self.results.loc[state, name+'_count'] = group['return'].count()
@@ -279,7 +330,7 @@ def run_decision_tree(train, test_cols):
     starting_features = list(df['feature'].values)
     return starting_features
 
-def get_data(symbol):
+def get_data(symbol,amount='first'):
         
         history = yfinance.Ticker(symbol).history(period='20y', auto_adjust=False).reset_index()
         
@@ -289,12 +340,11 @@ def get_data(symbol):
         history = history.dropna()
         history['next_return'] = history['return'].shift(-1)
         
-        """
         num_rows = len(history)
         if amount == 'first':
             #history = history.tail( int(num_rows/3) )
-            history = history.tail( 7500*1 )
-            history = history.head( 7500 )
+            history = history.tail( 2500*1 )
+            history = history.head( 2500 )
         elif amount == 'second':
             #history = history.tail( int(num_rows/3*1) )
             history = history.tail( int(2500*1.25) )
@@ -307,12 +357,7 @@ def get_data(symbol):
         #num_rows = len(history)
         train = history.head( int(num_rows * .75) )
         test = history.tail( int(num_rows *.25) )
-        """
-        train_start_date =  '2009-01-01'
-        train_end_date =  '2012-12-31'
-        train = history[ (history['date']>train_start_date) & (history['date']<train_end_date) ]
-
-        test = history.tail((252*4) + 300)
+        
         
         
         test_cols = train.columns.drop(['date','return', 'next_return'])
@@ -320,70 +365,36 @@ def get_data(symbol):
         return train, test, test_cols
 
 
-
-def get_stock_data(symbol):
-    x = yfinance.Ticker(symbol).history(period='10y', auto_adjust=False)
-    x = x.reset_index()
-    #x.columns = map(str.lower, x.columns)
-    x['Date'] = pd.to_datetime(x['Date'])
-    x = x.set_index('Date')
-    return x
-
-def get_backtest(name, symbol, df, with_short = False):
-    
-    
-    history = get_stock_data(symbol)
-    
-    states = df[ ['date','state'] ]
-    states.columns = ['Date', 'State']
-    states = states.set_index('Date')
-    history['State'] = states
-    history = history.dropna()
-    
-    if with_short == False:
-        strat = MyStrat
-        filename = name + '_' + symbol + '.html'
-    elif with_short == True:
-        strat = MyStratWithShort
-        filename = name + '_' + symbol + '_short.html'
-    bt = Backtest(history, strat, margin=1/2, cash=10000, commission=.0004, trade_on_close=1)
-
-    output = bt.run()
-    output['With Short'] = with_short
-    output['Symbol'] = symbol
-    output['Name'] = name
-
-
-    
-
-    bt.plot(filename = './backtests_new_features/'+filename, open_browser = False, plot_drawdown=True)
-    return output
-
-
 def pipeline_runner(input_queue):
+    train, test, test_cols = get_data('QQQ')
     
-    while True:
-        name = namegenerator.gen()
-        if type(input_queue) is list:
-            features = input_queue
-        else:
-            features = input_queue.get()
-            
+    feature_combos =  list(combinations( test_cols,5) )
 
-        for window_length in [100]:
-            safe_return = 0
-            train, test, test_cols = get_data('QQQ')
+    while True:
+        #features = input_queue.get()
+        features = []
+        name = namegenerator.gen()
+        features_found = False
+        for test_amount in ['second', 'first']:
+            train, test, test_cols = get_data('QQQ', amount = test_amount)
             
             try:
-                
-                x = pipeline(train, test, features, name, window_length)
-                x.get_model()
+                if features_found == False:
+                    print('finding new features')
+                    x = pipeline(train, test, features, name, feature_combos = feature_combos)
+                    x.get_sfs()
+                    x.get_model()
+                elif features_found == True:
+                    print('using previously found features', features)
+                    x = pipeline(train, test, features, name, feature_combos = feature_combos)
+                    
+                    x.get_model()
             except Exception as e:
                 
                 #print(features, e)
                 
                 #print(test_amount)
-                continue
+                break
                 
             
 
@@ -393,8 +404,8 @@ def pipeline_runner(input_queue):
             corr_2 = x.results[['train_mean','test_next_mean']].corr().values[0][1]
             corr_3 = x.results[['test_mean','test_next_mean']].corr().values[0][1]
 
-            if abs(corr_1)<0.10 or abs(corr_2)<0.10 or abs(corr_3)<0.10:
-                continue
+            if abs(corr_1)<0.25 or abs(corr_2)<0.25 or abs(corr_3)<0.25:
+                break
 
             x.results['corr_1'] = corr_1
             x.results['corr_2'] = corr_2
@@ -403,54 +414,41 @@ def pipeline_runner(input_queue):
             x.results['train_score'] = x.train_score
             x.results['test_score'] = x.test_score
 
-            safe_results        =   get_backtest(name, 'QQQ', x.test)
-            moderate_results    =   get_backtest(name, 'QLD', x.test)
-            extreme_results     =   get_backtest(name, 'TQQQ', x.test)
             
-            if safe_results['Return [%]']<75:
-                continue
+            safe_return = trader(x.test, 'QQQ', 'QLD').return_percentage
+            moderate_return = trader(x.test, 'QQQ', 'TQQQ').return_percentage
+            extreme_return = trader(x.test, 'QLD', 'TQQQ').return_percentage
 
-            backtest_results = pd.DataFrame([safe_results, moderate_results, extreme_results])
-            del backtest_results['_strategy']
-            backtest_results.to_sql('backtest_results', conn, if_exists = 'append', index=False)
-            """
-            try:
-                if safe_results['Max. Drawdown [%]']>-30:
-                    safe_results        =   get_backtest(name, 'QQQ', x.test, with_short=True)
-                    moderate_results    =   get_backtest(name, 'QLD', x.test, with_short=True )
-                    extreme_results     =   get_backtest(name, 'TQQQ', x.test, with_short=True)
+            x.results['safe_return'] = safe_return
+            x.results['moderate_return'] = moderate_return
+            x.results['extreme_return'] = extreme_return
 
-                backtest_results = pd.DataFrame([safe_results, moderate_results, extreme_results])
-                del backtest_results['_strategy']
-                backtest_results.to_sql('backtest_results', conn, if_exists = 'append', index=False)
-            except Exception as e:
-                print('failed creating short trades', e)
-            """
-            x.results['buy_and_hold'] = safe_results['Buy & Hold Return [%]']
-            x.results['safe_return'] = safe_results['Return [%]']
-            x.results['safe_drawdown'] = safe_results['Max. Drawdown [%]']
-            x.results['moderate_return'] = moderate_results['Return [%]']
-            x.results['moderate_drawdown'] = moderate_results['Max. Drawdown [%]']
-            x.results['extreme_return'] = extreme_results['Return [%]']
-            x.results['extreme_drawdown'] = extreme_results['Max. Drawdown [%]']
-            x.results['num_trades'] = safe_results['# Trades']
-            x.results['share_ratio'] = safe_results['Sharpe Ratio']
-            x.results['win_rate'] = safe_results['Win Rate [%]']
+            if safe_return<0 or moderate_return<0 or extreme_return<0:
+                break
+
+            safe_return = trader(x.test, 'QQQ', 'QLD', short_symbol = 'QID').return_percentage
+            moderate_return = trader(x.test, 'QQQ', 'TQQQ', short_symbol = 'QID').return_percentage
+            extreme_return = trader(x.test, 'QLD', 'TQQQ', short_symbol = 'QID').return_percentage
+
+            x.results['safe_return_with_short'] = safe_return
+            x.results['moderate_return_with_short'] = moderate_return
+            x.results['extreme_return_with_short'] = extreme_return
                     
             x.results['state_date'] = x.test['date'].head(1).values[0]
             x.results['end_date'] = x.test['date'].tail(1).values[0]
             x.results['name'] = name
 
-            x.results['features'] = str(features)
-            x.results['k_features'] = len(features)
+            x.results['features'] = str(x.features)
+            x.results['k_features'] = len(x.features)
             x.results['rename_step'] = x.rename_step
-            x.results['window_length'] = window_length
-            x.plot(x.test, show=False, window_length = window_length)
+            x.results['trade_period'] = test_amount
+            x.plot(x.test, show=False, filename = test_amount)
             
             #print(x.results)
-            print('\t\tfouund model', window_length, features, name)
-            print(backtest_results)
-            x.results.to_sql('models', conn, if_exists='append')
+            print('\t\tfouund model', test_amount, x.features, name, safe_return, moderate_return, extreme_return)
+            x.results.to_sql('models_run_with_feature_select', conn, if_exists='append')
+            features = x.features
+            features_found = True
             #print(input_queue.qsize())
         
     print('PROCESS EXITING')
@@ -482,39 +480,70 @@ if __name__ == '__main__':
 
     train, test, test_cols = get_data('QQQ')
     
-    #starting_features = run_decision_tree(train, test_cols)
-    starting_features = test_cols
-    feature_combos = []
-    print('creating features list')
-    feature_combos.extend(list(combinations(starting_features, 3)))
-    feature_combos.extend(list(combinations(starting_features, 4)))
-    #feature_combos.extend(list(combinations(starting_features, 5)))
-    #feature_combos.extend(list(combinations(starting_features, 6)))
-    shuffle(feature_combos)
-    print('features list created')
+    feature_combos =  list(combinations( test_cols,5) )
+    print(test_cols)
+    """
+    # use for individual testing
+    features = test_cols
+    while True:
+        
+        
+        try:
+            name = namegenerator.gen()
+            x = pipeline(train, test, features, name, feature_combos = feature_combos)
+            x.get_sfs()
+            x.get_model()
+        except Exception as e:
+            print(e)    
+            continue
+        x.plot(x.test, show=True)            
+
+       
+        safe_return = trader(x.test, 'QQQ', 'QLD').return_percentage
+        moderate_return = trader(x.test, 'QQQ', 'TQQQ').return_percentage
+        extreme_return = trader(x.test, 'QLD', 'TQQQ').return_percentage
+
+        x.results['safe_return'] = safe_return
+        x.results['moderate_return'] = moderate_return
+        x.results['extreme_return'] = extreme_return
+
+        if safe_return<0 or moderate_return<0 or extreme_return<0:
+            continue
+
+        safe_return = trader(x.test, 'QQQ', 'QLD', short_symbol = 'QID').return_percentage
+        moderate_return = trader(x.test, 'QQQ', 'TQQQ', short_symbol = 'QID').return_percentage
+        extreme_return = trader(x.test, 'QLD', 'TQQQ', short_symbol = 'QID').return_percentage
+
+        x.results['safe_return_with_short'] = safe_return
+        x.results['moderate_return_with_short'] = moderate_return
+        x.results['extreme_return_with_short'] = extreme_return
+                
+        x.results['state_date'] = x.test['date'].head(1).values[0]
+        x.results['end_date'] = x.test['date'].tail(1).values[0]
+        x.results['name'] = name
+        print(x.results)
+    """
+    
     
     
     input_queue = Queue()
+    """
     feature_input_list = []
     for features in feature_combos:
-        #if 'stoch' not in str(features) or 'aroon' not in str(features) or 'beta' not in str(features) or 'mom' not in str(features):
-            #continue
         input_queue.put( features )
-    print('total qsize', input_queue.qsize())
+    """ 
     
-    #features = ['volume', 'mom', 'aroon_down', 'beta', 'stochf_fastd']
-    #features = ['mom', 'aroon_up', 'beta', 'stochf_fastd', 'bbands_upper_p'] #geeky-green-seal
-    #pipeline_runner(features)
-    
-    #for i in range(cpu_count()/2):
-    for i in range(8):
+    for i in range(cpu_count()):
+    #for i in range(1):
         p = Process(target=pipeline_runner, args=(input_queue,) )
         p.start()
-    
+        
 
-    p = Process(target=queue_monitor, args=(input_queue, ))
-    p.start()
-    p.join()
+    #p = Process(target=queue_monitor, args=(input_queue, ))
+    #p.start()
+    #p.join()
+    while True:
+        sleep(40)
     
     
     
