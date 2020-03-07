@@ -502,8 +502,8 @@ if __name__ == '__main__':
         input_queue.put( features )
     print('total qsize', input_queue.qsize())
     
-    #features = ['volume', 'mom', 'aroon_down', 'beta', 'stochf_fastd']
-    #features = ['mom', 'aroon_up', 'beta', 'stochf_fastd', 'bbands_upper_p'] #geeky-green-seal
+    # LOOK INTO THESE FEATURES!
+    #('mfi', 'ch_osc', 'pvt', 'bbands_lower_p')
     #pipeline_runner(features)
     
     #for i in range(cpu_count()/2):
