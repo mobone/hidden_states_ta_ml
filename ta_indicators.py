@@ -17,10 +17,10 @@ def get_ta(df, volume, pattern):
     if 'Stock Splits' in df.columns:
         del df['Stock Splits']
     df['intraday_change'] = df['Close'] / df['Open'] - 1
-    
+    """
     for i in range(1,2):
         df['%s_day_change' % i] = df['Close'].shift(i) / df['Close'] - 1
-
+    """
     df = PPSR(df)
     """
     MA
@@ -104,7 +104,7 @@ def get_ta(df, volume, pattern):
     
     
     
-    """
+    
     df['DEMA'] = DEMA(close)
     
     df['HT_TRENDLINE'] = HT_TRENDLINE(close)
@@ -239,7 +239,7 @@ def get_ta(df, volume, pattern):
     df['STDDEV'] = STDDEV(close)
     df['TSF'] = TSF(close)
     df['VAR'] = VAR(close)
-    """
+    
     """
     for col in df.columns.drop(['Adj Close', 'Volume', 'Close', 'Open', 'High', 'Low']):
 

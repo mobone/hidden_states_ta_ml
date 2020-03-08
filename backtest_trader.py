@@ -4,7 +4,7 @@ from backtesting.lib import crossover
 from backtesting.test import SMA, GOOG
 import pandas as pd
 
-
+from QuantConnect.Data.UniverseSelection import *
 def Alert(values):
     #print(values)
     return values
@@ -30,7 +30,20 @@ class MyStrat(Strategy):
         
         
             #self.sell()
+
+class quant_connect(QCAlgorithm):
+    def __init__(self):
+        self.tickers = ['QLD', 'TQQQ']
         
+    def initialize(self):
+        self.SetCash(10000)
+
+        
+        
+        #self.AddEquity('QQQ')
+        self.AddEquity('QLD')
+        self.AddEquity('TQQQ')
+
         
 class MyStratWithShort(Strategy):
 
