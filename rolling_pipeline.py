@@ -29,7 +29,10 @@ from strategy import setup_strategy
 import sklearn.mixture as mix
 import numpy as np
 import seaborn as sns
-
+import random
+from random import randint
+import warnings
+warnings.simplefilter("ignore")
 class model_check_error(Exception):
     pass
 
@@ -43,21 +46,57 @@ class pipeline():
         self.test = test
         
         self.n_components = 3
-        self.look_back = 100
+        self.look_back = int(252/2)
         
         
         self.features = ['return'] + list(features)
 
-    def run_pipeline(self):
-        self.pipe_pca = make_pipeline(StandardScaler(),
+    def get_pipe_results(self, test):
+        pipe_pca = make_pipeline(StandardScaler(),
                          PrincipalComponentAnalysis(n_components=self.n_components),
                          GMMHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
                          #GaussianHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
                          #mix.GaussianMixture(n_components=self.n_components, covariance_type='full', n_init=150, random_state=7)
                          )
         
+    
+        
+        k = 252*3
+        start_cutoff = randint(0,len(self.train)-k)
+        train = self.train.iloc[start_cutoff:start_cutoff+k]
+        cutoff_datetime = train.head(1)['date'].values[0]
+
+        try:
+            pipe_pca.fit ( train[ self.features ] )
+            #self.train_score = np.exp( self.pipe_pca.score( self.train[ self.features ]) / len(self.train) ) * 100
+            test_score =  np.exp( pipe_pca.score( test[ self.features ]) / len(test) ) * 100
+            states = pipe_pca.predict( test[ self.features]  )
+            pipe_results = [pipe_pca, test_score, states, train]
+            #print('outputting', pipe_results)
+            return pipe_results
+        except Exception as e:
+            print(e)
+            return None
+            
+            
+
+        
+
+
+
+    def run_pipeline(self):
+        pipe_pca = make_pipeline(StandardScaler(),
+                         PrincipalComponentAnalysis(n_components=self.n_components),
+                         GMMHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
+                         #GaussianHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
+                         #mix.GaussianMixture(n_components=self.n_components, covariance_type='full', n_init=150, random_state=7)
+                         )
+        
+        
         self.train = self.train.reset_index()
         self.test = self.test.reset_index()
+
+        
         self.pipe_pca.fit ( self.train[ self.features ] )
 
         self.train['state'] = self.pipe_pca.predict( self.train[ self.features ] )
@@ -76,6 +115,59 @@ class pipeline():
         self.get_model_results()
         self.get_renamed_states()
 
+        self.test = self.test.dropna()
+
+        self.get_model_results()
+        self.get_renamed_states()
+
+    def get_model_results(self):
+        test = self.test.dropna(subset=['state'])
+        self.results = pd.DataFrame()
+        for state, group in test.groupby(by='state'):
+            self.results.loc[state, 'test_mean'] = group['return'].mean()
+            self.results.loc[state, 'test_var'] = group['return'].std()
+
+        for state, group in test.groupby(by='state'):
+            self.results.loc[state, 'next_test_mean'] = group['next_return'].mean()
+            self.results.loc[state, 'next_test_var'] = group['next_return'].std()
+        print(self.results)
+        self.results = self.results.sort_values(by='test_mean')
+
+        print(self.results)
+        sleep(1)
+        """
+        for state, group in self.test.groupby(by='state'):
+            if group['next_return'].count()<10:
+                
+                raise model_check_error('not enough trades in state')
+            
+
+        self.results = pd.DataFrame()
+        for state, group in self.train.groupby(by='state'):
+            self.results.loc[state, 'mean'] = group['return'].mean()
+            self.results.loc[state, 'var'] = group['return'].std()
+
+        for state, group in self.test.groupby(by='state'):
+            self.results.loc[state, 'test_mean'] = group['return'].mean()
+            self.results.loc[state, 'test_var'] = group['return'].std()
+
+        for state, group in self.test.groupby(by='state'):
+            self.results.loc[state, 'next_test_mean'] = group['next_return'].mean()
+            self.results.loc[state, 'next_test_var'] = group['next_return'].std()
+        self.results = self.results.sort_values(by='mean')
+        
+        self.results['train_score'] = self.train_score
+        self.results['test_score'] = self.test_score
+        
+        self.results = self.results.dropna()
+        if len(self.results)<3:
+            raise model_check_error('not using all states')
+
+        if float(self.results['mean'].head(1))>0 or float( self.results['test_mean'].head(1) )>0:
+            print(self.results)
+            raise model_check_error('negative states exception')
+        """
+        
         
     def plot_prob_dist(self, df, show=False):
         
@@ -117,6 +209,7 @@ class pipeline():
             plt.show()
         else:
             plt.savefig('./plots/%s.png' %  ( self.name + '_pd' ) )
+        plt.close(fig)
         
 
     def plot(self,df, show=False):
@@ -128,19 +221,21 @@ class pipeline():
         #df.loc[df['state_name']=='sell', 'color'] = 'firebrick'
         #df.loc[df['state_name']=='buy', 'color'] = 'yellowgreen'
         #df.loc[df['state_name']=='strong buy', 'color'] = 'forestgreen'
-        #df.loc[df['state']==0, 'color'] = 'firebrick'
-        #df.loc[df['state']==1, 'color'] = 'yellowgreen'
-        #df.loc[df['state']==2, 'color'] = 'forestgreen'
+        df.loc[df['state']==0, 'color'] = 'firebrick'
+        df.loc[df['state']==1, 'color'] = 'yellowgreen'
+        df.loc[df['state']==2, 'color'] = 'forestgreen'
+        df.loc[df['state']==3, 'color'] = 'darkslategray'
+
         #print(df[['state','color']])
         
         
 
         df = df.dropna()
-        df.plot.scatter(x='date'
+        df.plot.scatter(x='date',
                         y='close',
-                        c='state',
-                        #c='color'
-                        colormap = 'viridis'
+                        #c='state',
+                        c='color',
+                        #colormap = 'viridis'
                         )
                     
         fig = matplotlib.pyplot.gcf()
@@ -154,46 +249,36 @@ class pipeline():
         plt.close(fig)
         
 
-    def get_model_results(self):
-        
-        self.results = pd.DataFrame()
-        for state, group in self.train.groupby(by='state'):
-            self.results.loc[state, 'mean'] = group['return'].mean()
-            self.results.loc[state, 'var'] = group['return'].std()
 
-        for state, group in self.test.groupby(by='state'):
-            self.results.loc[state, 'test_mean'] = group['return'].mean()
-            self.results.loc[state, 'test_var'] = group['return'].std()
-
-        self.results = self.results.sort_values(by='mean')
-        
-        #print(self.results)
-        if float(self.results['mean'].head(1))>0 or float( self.results['test_mean'].head(1) )>0:
-            print(self.results)
-            raise model_check_error('negative states exception')
-        
 
         
             
 
     def get_renamed_states(self):
         
-        self.results = self.results.sort_values(by=['var'])
+        self.results = self.results.sort_values(by=['mean'])
         self.results['state_name'] = None
         self.results['state_num'] = None
         #print('renaming states')
         #print(self.results)
+
+        """
         self.results.loc[self.results['mean']==self.results['mean'].min(), 'state_name'] = 'sell'
         self.results.loc[self.results['mean']==self.results['mean'].min(), 'state_num'] = 0
 
         
 
         self.results.loc[self.results['mean']==self.results['mean'].max(), 'state_name'] = 'strong buy'
-        self.results.loc[self.results['mean']==self.results['mean'].max(), 'state_num'] = 2
+        self.results.loc[self.results['mean']==self.results['mean'].max(), 'state_num'] = 3
 
-        self.results.loc[self.results['state_name'].isnull(), 'state_name'] = 'buy'
-        self.results.loc[self.results['state_num'].isnull(), 'state_num'] = 1
-        #print(self.results)
+        self.results.iloc[2, 'state_name'] = 'buy'
+        self.results.iloc[2, 'state_num'] = 1
+        self.results.iloc[3, 'state_name'] = 'buy'
+        self.results.iloc[3, 'state_num'] = 2
+        """
+        self.results['state_name'] = ['sell', 'conserve_buy', 'buy', 'strong buy']
+        self.results['state_num'] = [0,1,2]
+        print(self.results)
         #input()
 
         """
@@ -285,8 +370,15 @@ def get_backtest(name, symbol_1, symbol_2, df, short=False):
     #output = bt.run()
     #print(output)
     #bt.plot(plot_drawdown=True)
+    import os
+    for symbol, filename in filenames:
+        try:
+            os.remove(filename)
+        except Exception as e:
+            print(e)
     
     print(backtest_results)
+    
 
 
 
@@ -298,21 +390,26 @@ def get_backtest(name, symbol_1, symbol_2, df, short=False):
 
 def get_data(symbol, get_train_test=True):
         
-        history = yfinance.Ticker(symbol).history(period='10y', auto_adjust=False).reset_index()
+        history = yfinance.Ticker(symbol).history(period='20y', auto_adjust=False).reset_index()
         if get_train_test:
             history = get_ta(history, volume=True, pattern=False)
         history.columns = map(str.lower, history.columns)
         history['return'] = history['close'].pct_change() * 100
         history = history.dropna()
         
+        history.loc[history['high']<history['open'], 'high'] = history['open']+.01
 
         if get_train_test:
             history['next_return'] = history['return'].shift(-1)
-            train_start_date =  '2009-01-01'
-            train_end_date =  '2012-12-31'
-            train = history[ (history['date']>train_start_date) & (history['date']<train_end_date) ]
+            #train_start_date =  '2009-01-01'
+            #train_end_date =  '2012-12-31'
+            #train = history[ (history['date']>train_start_date) & (history['date']<train_end_date) ]
 
-            test = history.tail((252*3) + 300)
+            test = history.tail( 252*2 )
+
+            train = history[ history['date']<test['date'].head(1).values[0] ]
+
+            
 
             #test_cols = train.columns.drop(['date','return', 'next_return'])
 
@@ -332,8 +429,12 @@ def run_decision_tree(train, test_cols):
     starting_features = list(df['feature'].values)
     return starting_features
 
-def run_ml(features):
-    try:
+def run_ml(features_list, k_features):
+    model_count = 0
+    while True:
+        features = random.sample(features_list, k_features)
+        model_count = model_count+1
+        #try:
         conn = sqlite3.connect('models.db')
         
         train, test = get_data('QQQ')
@@ -348,24 +449,27 @@ def run_ml(features):
 
         backtest_results = get_backtest(x.name, 'QLD', 'TQQQ', x.test).T
         #print(backtest_results)
-        if backtest_results['cum_returns'].values[0] < 50:
-            raise model_check_error('returns not great enough %s' % backtest_results['cum_returns'])
+        if backtest_results['sharpe_ratio'].values[0]<.8:
+            raise model_check_error('sharpe ratio not great enough: %s' % float(backtest_results['sharpe_ratio']))
+        if backtest_results['cum_returns'].values[0] < 150:
+            raise model_check_error('returns not great enough: %s' % float(backtest_results['cum_returns']))
         backtest_results['name'] = x.name
         backtest_results['features'] = str(features)
-        backtest_results.to_sql('backtests', conn, if_exists='append')
+        backtest_results['k_features'] = len(features)
+        backtest_results.to_sql('backtests_dynamic', conn, if_exists='append')
 
         model_results = x.results
         #print(model_results)
         model_results.loc[:, 'name'] = x.name
         model_results.loc[:, 'features'] = str(features)
+        model_results.loc[:, 'k_features'] = len(features)
+        model_results.to_sql('models_dynamic', conn, if_exists='append')
 
-        model_results.to_sql('models', conn, if_exists='append')
-
-        x.plot(x.test, show=True)
-        x.plot_prob_dist(x.test, show=True)
-    except Exception as e:
-        print(e)
-        return
+        x.plot(x.test, show=False)
+        x.plot_prob_dist(x.test, show=False)
+        #except Exception as e:
+        #    print(e)
+        #    continue
 
 
 
@@ -374,28 +478,19 @@ if __name__ == "__main__":
     train, test = get_data('QQQ')
     test_cols = train.columns.drop(['date','return', 'next_return'])
     starting_features = run_decision_tree(train, test_cols)
-
+    print(train)
+    print(test)
+    
     print(starting_features)
-    
-    good_features = ['stoch', 'beta', 'mom', 'pvt', 'bands', 'rsi', 'roon']
-    feature_combos = list(combinations(starting_features, 4))
-    shuffle(feature_combos)
-    kept_features_list = []
-    for combo in feature_combos:
-        for good_feature in good_features:
+    processes = []
+    for j in [3,6]:
+        for k in range(3):
+            p = Process(target=run_ml, args=(starting_features,j,))
+            p.start()
+            processes.append(p)
+            input()
 
-            if good_feature in str(combo):
-                kept_features_list.append(combo)
-                #print(combo)
-                break
-
-
-    print(len(kept_features_list))
-    
-    for f in kept_features_list:
-        run_ml(f)
-    #p = Pool(16)
-    #p.map(run_ml, kept_features_list)
-
+    while any(process.is_alive() for process in processes):
+        sleep(1)
 
 

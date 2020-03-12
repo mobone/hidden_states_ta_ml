@@ -16,7 +16,7 @@ from pyalgotrade.stratanalyzer import drawdown
 from pyalgotrade.stratanalyzer import trades
 from pyalgotrade.bar import Frequency
 from pyalgotrade import plotter
-
+import matplotlib
 
 class MyStrategy(strategy.BacktestingStrategy):
     def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
@@ -72,10 +72,13 @@ class MyStrategy(strategy.BacktestingStrategy):
 
         elif state == 2:
             instrument = self.__instrument_2
-            self.usage[self.__instrument_1] = 0
-            self.usage[self.__instrument_2] = 1
-            
-            
+            self.usage[self.__instrument_1] = .2
+            self.usage[self.__instrument_2] = .8
+        
+        #elif state == 3:
+        #    self.usage[self.__instrument_1] = .2
+        #    self.usage[self.__instrument_2] = .8
+        
         elif state == 0:
             instrument = None
             
@@ -90,6 +93,7 @@ class MyStrategy(strategy.BacktestingStrategy):
                     self.limitOrder(instrument, close * 0.9, currentPos)
             #print(self.getBroker().getPositions())
             #input()
+            self.last_state = state
             return
 
 
@@ -106,9 +110,12 @@ class MyStrategy(strategy.BacktestingStrategy):
             num_shares = num_shares - currentPos
 
             if num_shares<0:
+                
                 self.limitOrder(instrument, close * 0.9, num_shares)
                 
+
                 #print('limit sell order', self.getBroker().getEquity(), usage, instrument, close * 0.9, num_shares, close *0.9 * num_shares)
+                #print(self.getBroker().getCash())
         
         for instrument in [self.__instrument_1, self.__instrument_2]:
             bar = bars.getBar(instrument)
@@ -198,19 +205,25 @@ def setup_strategy(files, name, smaPeriod=1):
     myStrategy.attachAnalyzer(tradesAnalyzer)
 
     # Attach the plotter to the strategy.
-    #plt = plotter.StrategyPlotter(myStrategy)
+    plt = plotter.StrategyPlotter(myStrategy)
     # Include the SMA in the instrument's subplot to get it displayed along with the closing prices.
     #plt.getInstrumentSubplot("orcl").addDataSeries("SMA", myStrategy.getSMA())
     # Plot the simple returns on each bar.
-    #plt.getOrCreateSubplot("returns").addDataSeries("Simple returns", retAnalyzer.getReturns())
-    print('here',retAnalyzer.getReturns())
+    plt.getOrCreateSubplot("returns").addDataSeries("Simple returns", retAnalyzer.getReturns())
+    
 
     #plt.plot()
-    #plt.savePlot('./plots/%s.png' % ('backtest_'+name))
+    #
 
     # Run the strategy.
     myStrategy.run()
 
+    fig = matplotlib.pyplot.gcf()
+    fig.set_size_inches(18.5, 10.5, forward=True)
+    plt.savePlot('./plots/%s.png' % ('backtest_'+name))
+
+    del plt
+        
     results = {}
     results['final_value'] = myStrategy.getResult()
     results['cum_returns'] = retAnalyzer.getCumulativeReturns()[-1] * 100
@@ -235,7 +248,6 @@ def setup_strategy(files, name, smaPeriod=1):
     results['min_profit_%'] = returns.min() * 100
     results = pd.DataFrame.from_dict(results, orient='index')
     #print(results)
-
 
     return results
 
