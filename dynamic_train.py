@@ -33,6 +33,7 @@ import random
 from random import randint
 import warnings
 from datetime import timedelta
+from sklearn.neural_network import BernoulliRBM
 warnings.simplefilter("ignore")
 class model_check_error(Exception):
     pass
@@ -62,11 +63,17 @@ class pipeline():
         for train in self.trains:
             pipe_pca = make_pipeline(StandardScaler(),
                             PrincipalComponentAnalysis(n_components=self.n_components),
-                            GMMHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
+                            #GMMHMM(n_components=self.n_components, covariance_type='full', n_iter=150, random_state=7),
+                            BernoulliRBM(n_components = self.n_components, random_state = 7, n_iter = 150, learning_rate=.01)
                             )
+            pd.set_option("display.max_rows", 1001)
+            pd.options.display.max_rows = 999
 
             pipe_pca.fit(train[ self.features ])
-            train['state'] = pipe_pca.predict(train[ self.features ])
+            #train['state'] = pipe_pca.predict(train[ self.features ])
+            states = pipe_pca.transform(test[ self.features ])
+            print(pd.DataFrame(states))
+            input()
 
             results = pd.DataFrame()
             for key, group in train.groupby(by='state'):
@@ -321,10 +328,13 @@ if __name__ == '__main__':
     test_cols = list(test.columns.drop(['date','return', 'next_return']))
     starting_features = run_decision_tree(trains[0], test_cols)
     print(starting_features)
-
+    
+    """
     for i in range(16):
         p = Process(target=pipeline_runner, args=(trains, test, starting_features,))
         p.start()
 
     while True:
         sleep(10)
+    """
+    pipeline_runner(trains, test, starting_features)
