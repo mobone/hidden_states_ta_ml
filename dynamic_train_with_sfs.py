@@ -481,7 +481,7 @@ def run_decision_tree(train, test_cols):
     print(df)
     
     starting_features = list(df['feature'].values)
-    top_starting_features = list(df.sort_values(by='importances').tail(10)['feature'].values)
+    top_starting_features = list(df.sort_values(by='importances').tail(8)['feature'].values)
     return starting_features, top_starting_features
 
 if __name__ == '__main__':
