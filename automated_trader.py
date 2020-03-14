@@ -38,6 +38,7 @@ class automated_trader():
                                 'https://paper-api.alpaca.markets'
                                 )
         
+        
 
         self.held_shares = {}
         self.current_prices = {}
@@ -54,7 +55,7 @@ class automated_trader():
         x = pipeline(model_name = self.model_name)
         self.todays_prediction = x.new_predictions[['date', 'close', 'state']]
         logging.info('got todays state prediction')
-        print(self.todays_prediction.tail(15))
+        print(self.todays_prediction.tail(25))
         print('ready to trade?')
         input()
         logging.info('\n'+str(

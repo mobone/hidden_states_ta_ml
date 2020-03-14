@@ -102,6 +102,7 @@ class pipeline():
 
             train = self.clean_train.copy()
             test = self.clean_test.copy()
+            
 
             if production == False:
                 # choose features

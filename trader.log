@@ -3133,3 +3133,483 @@ num_currently_held    140    0     0
 target_num_of_shares  140    0     0
 2020-03-05 16:01:35,031 INFO all required trades submitted. automated trader exiting
 2020-03-05 16:01:35,031 INFO =============================================
+2020-03-06 13:31:57,093 INFO started automated trader
+2020-03-06 13:32:00,415 INFO got todays state prediction
+2020-03-06 15:01:30,528 INFO started automated trader
+2020-03-06 15:01:32,744 INFO got todays state prediction
+2020-03-06 15:01:34,578 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-06 15:01:34,578 INFO heres the last 10 days of predictions
+2020-03-06 15:01:34,584 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-06 15:01:34,586 INFO getting account info from alpaca
+2020-03-06 15:01:35,236 INFO got account value of 10437.2
+2020-03-06 15:01:35,280 INFO got 428 shares currently held for QID
+2020-03-06 15:01:35,280 INFO starting to make trades
+2020-03-06 15:01:35,777 INFO got current price of $24.54 for QID
+2020-03-06 15:01:35,935 INFO got current price of $113.27 for QLD
+2020-03-06 15:01:36,066 INFO got current price of $76.34 for TQQQ
+2020-03-06 15:01:36,198 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-06 15:01:36,198 INFO bumping the strong count to always have a position
+2020-03-06 15:01:36,198 INFO using $5218.6 on QID
+2020-03-06 15:01:36,198 INFO determined we should hold 414 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-06 15:01:36,198 INFO using $0.0 on QLD
+2020-03-06 15:01:36,198 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-06 15:01:36,198 INFO using $0.0 on TQQQ
+2020-03-06 15:01:36,199 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-06 15:01:36,199 INFO currently held and target share counts
+2020-03-06 15:01:36,200 INFO                       QID  QLD  TQQQ
+num_currently_held    428    0     0
+target_num_of_shares  414    0     0
+2020-03-06 15:01:36,205 INFO submitting sell order for 14 shares for QID at $20.86 per share for a total cost of $292.03999999999996
+2020-03-06 15:01:36,291 INFO order submitted. got id of 17cb274a-99ed-41d4-9fa5-e730fa2c10e3
+2020-03-06 15:01:37,341 INFO order 17cb274a-99ed-41d4-9fa5-e730fa2c10e3 filled
+2020-03-06 15:01:37,341 INFO all required trades submitted. automated trader exiting
+2020-03-06 15:01:37,341 INFO =============================================
+2020-03-06 15:02:00,997 INFO started automated trader
+2020-03-06 15:02:01,514 INFO got todays state prediction
+2020-03-06 15:02:02,222 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-06 15:02:02,222 INFO heres the last 10 days of predictions
+2020-03-06 15:02:02,227 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-06 15:02:02,229 INFO getting account info from alpaca
+2020-03-06 15:02:02,560 INFO got account value of 3649.38
+2020-03-06 15:02:02,609 INFO got 140 shares currently held for QID
+2020-03-06 15:02:02,609 INFO starting to make trades
+2020-03-06 15:02:02,871 INFO got current price of $24.54 for QID
+2020-03-06 15:02:02,998 INFO got current price of $113.27 for QLD
+2020-03-06 15:02:03,116 INFO got current price of $76.34 for TQQQ
+2020-03-06 15:02:03,244 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-06 15:02:03,244 INFO bumping the strong count to always have a position
+2020-03-06 15:02:03,244 INFO using $1824.69 on QID
+2020-03-06 15:02:03,244 INFO determined we should hold 144 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-06 15:02:03,244 INFO using $0.0 on QLD
+2020-03-06 15:02:03,245 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-06 15:02:03,245 INFO using $0.0 on TQQQ
+2020-03-06 15:02:03,245 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-06 15:02:03,245 INFO currently held and target share counts
+2020-03-06 15:02:03,246 INFO                       QID  QLD  TQQQ
+num_currently_held    140    0     0
+target_num_of_shares  144    0     0
+2020-03-06 15:02:03,252 INFO submitting buy order for 4 shares for QID at $28.22 per share for a total cost of $112.88
+2020-03-06 15:02:03,357 INFO order submitted. got id of c2bc8a7d-5b91-4727-9df4-f2d125638eb2
+2020-03-06 15:02:04,403 INFO order c2bc8a7d-5b91-4727-9df4-f2d125638eb2 filled
+2020-03-06 15:02:04,404 INFO all required trades submitted. automated trader exiting
+2020-03-06 15:02:04,404 INFO =============================================
+2020-03-06 15:04:07,786 INFO started automated trader
+2020-03-06 15:04:20,404 INFO started automated trader
+2020-03-06 15:05:14,632 INFO started automated trader
+2020-03-06 15:05:20,833 INFO started automated trader
+2020-03-06 15:05:44,980 INFO started automated trader
+2020-03-06 15:05:47,770 INFO got todays state prediction
+2020-03-06 15:06:37,153 INFO started automated trader
+2020-03-06 15:07:37,021 INFO started automated trader
+2020-03-06 15:07:55,792 INFO started automated trader
+2020-03-06 15:09:00,984 INFO started automated trader
+2020-03-06 15:09:33,012 INFO started automated trader
+2020-03-06 15:09:59,967 INFO got todays state prediction
+2020-03-06 15:10:46,223 INFO started automated trader
+2020-03-06 15:10:46,702 INFO got todays state prediction
+2020-03-10 15:01:47,758 INFO started automated trader
+2020-03-10 15:01:50,492 INFO got todays state prediction
+2020-03-10 15:02:04,469 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-10 15:02:04,469 INFO heres the last 10 days of predictions
+2020-03-10 15:02:04,475 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-10 15:02:04,475 INFO getting account info from alpaca
+2020-03-10 15:02:05,230 INFO got account value of 10532.14
+2020-03-10 15:02:05,276 INFO got 414 shares currently held for QID
+2020-03-10 15:02:05,276 INFO starting to make trades
+2020-03-10 15:02:05,654 INFO got current price of $24.32 for QID
+2020-03-10 15:02:05,800 INFO got current price of $108.55 for QLD
+2020-03-10 15:02:05,941 INFO got current price of $70.43 for TQQQ
+2020-03-10 15:02:06,068 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-10 15:02:06,068 INFO bumping the strong count to always have a position
+2020-03-10 15:02:06,068 INFO using $5266.07 on QID
+2020-03-10 15:02:06,068 INFO determined we should hold 422 shares of QID at $24.32 per share and using 50.0 of equity
+2020-03-10 15:02:06,068 INFO using $0.0 on QLD
+2020-03-10 15:02:06,068 INFO determined we should hold 0 shares of QLD at $108.55 per share and using 0 of equity
+2020-03-10 15:02:06,068 INFO using $0.0 on TQQQ
+2020-03-10 15:02:06,069 INFO determined we should hold 0 shares of TQQQ at $70.43 per share and using 0 of equity
+2020-03-10 15:02:06,069 INFO currently held and target share counts
+2020-03-10 15:02:06,070 INFO                       QID  QLD  TQQQ
+num_currently_held    414    0     0
+target_num_of_shares  422    0     0
+2020-03-10 15:02:06,076 INFO submitting buy order for 8 shares for QID at $27.97 per share for a total cost of $223.76
+2020-03-10 15:02:06,661 INFO order submitted. got id of 9e778de2-95a8-47af-9b6f-16a50a2fda92
+2020-03-10 15:02:07,705 INFO order 9e778de2-95a8-47af-9b6f-16a50a2fda92 filled
+2020-03-10 15:02:07,706 INFO all required trades submitted. automated trader exiting
+2020-03-10 15:02:07,706 INFO =============================================
+2020-03-10 15:02:24,037 INFO started automated trader
+2020-03-10 15:02:24,584 INFO got todays state prediction
+2020-03-10 15:02:25,709 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-10 15:02:25,710 INFO heres the last 10 days of predictions
+2020-03-10 15:02:25,716 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-10 15:02:25,717 INFO getting account info from alpaca
+2020-03-10 15:02:26,466 INFO got account value of 3688.34
+2020-03-10 15:02:26,510 INFO got 144 shares currently held for QID
+2020-03-10 15:02:26,511 INFO starting to make trades
+2020-03-10 15:02:26,767 INFO got current price of $24.54 for QID
+2020-03-10 15:02:26,891 INFO got current price of $113.27 for QLD
+2020-03-10 15:02:27,019 INFO got current price of $76.34 for TQQQ
+2020-03-10 15:02:27,149 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-10 15:02:27,150 INFO bumping the strong count to always have a position
+2020-03-10 15:02:27,150 INFO using $1844.17 on QID
+2020-03-10 15:02:27,150 INFO determined we should hold 146 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-10 15:02:27,150 INFO using $0.0 on QLD
+2020-03-10 15:02:27,150 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-10 15:02:27,150 INFO using $0.0 on TQQQ
+2020-03-10 15:02:27,150 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-10 15:02:27,150 INFO currently held and target share counts
+2020-03-10 15:02:27,151 INFO                       QID  QLD  TQQQ
+num_currently_held    144    0     0
+target_num_of_shares  146    0     0
+2020-03-10 15:02:27,158 INFO submitting buy order for 2 shares for QID at $28.22 per share for a total cost of $56.44
+2020-03-10 15:02:27,641 INFO order submitted. got id of ab2b9119-7aa7-485f-84d3-5982bda02eee
+2020-03-10 15:02:28,770 INFO order ab2b9119-7aa7-485f-84d3-5982bda02eee filled
+2020-03-10 15:02:28,771 INFO all required trades submitted. automated trader exiting
+2020-03-10 15:02:28,771 INFO =============================================
+2020-03-11 16:32:52,644 INFO started automated trader
+2020-03-11 16:32:54,554 INFO got todays state prediction
+2020-03-11 16:33:44,988 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-11 16:33:44,988 INFO heres the last 10 days of predictions
+2020-03-11 16:33:44,994 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-11 16:33:44,995 INFO getting account info from alpaca
+2020-03-11 16:33:46,344 INFO got account value of 11430.6
+2020-03-11 16:33:46,391 INFO got 422 shares currently held for QID
+2020-03-11 16:33:46,391 INFO starting to make trades
+2020-03-11 16:33:46,930 INFO got current price of $26.06 for QID
+2020-03-11 16:33:47,079 INFO got current price of $99.58 for QLD
+2020-03-11 16:33:47,226 INFO got current price of $61.57 for TQQQ
+2020-03-11 16:33:47,357 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-11 16:33:47,357 INFO bumping the strong count to always have a position
+2020-03-11 16:33:47,357 INFO using $5715.3 on QID
+2020-03-11 16:33:47,357 INFO determined we should hold 427 shares of QID at $26.06 per share and using 50.0 of equity
+2020-03-11 16:33:47,357 INFO using $0.0 on QLD
+2020-03-11 16:33:47,357 INFO determined we should hold 0 shares of QLD at $99.58 per share and using 0 of equity
+2020-03-11 16:33:47,357 INFO using $0.0 on TQQQ
+2020-03-11 16:33:47,358 INFO determined we should hold 0 shares of TQQQ at $61.57 per share and using 0 of equity
+2020-03-11 16:33:47,358 INFO currently held and target share counts
+2020-03-11 16:33:47,359 INFO                       QID  QLD  TQQQ
+num_currently_held    422    0     0
+target_num_of_shares  427    0     0
+2020-03-11 16:33:47,365 INFO submitting buy order for 5 shares for QID at $29.97 per share for a total cost of $149.85
+2020-03-11 16:33:47,535 INFO order submitted. got id of ee27b92a-d134-4be0-a988-381c62c1dc09
+2020-03-11 16:33:48,586 INFO order ee27b92a-d134-4be0-a988-381c62c1dc09 filled
+2020-03-11 16:33:48,586 INFO all required trades submitted. automated trader exiting
+2020-03-11 16:33:48,586 INFO =============================================
+2020-03-11 16:33:52,224 INFO started automated trader
+2020-03-11 16:33:52,678 INFO got todays state prediction
+2020-03-11 16:33:53,292 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-11 16:33:53,293 INFO heres the last 10 days of predictions
+2020-03-11 16:33:53,299 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-11 16:33:53,300 INFO getting account info from alpaca
+2020-03-11 16:33:53,672 INFO got account value of 3999.26
+2020-03-11 16:33:53,713 INFO got 146 shares currently held for QID
+2020-03-11 16:33:53,713 INFO starting to make trades
+2020-03-11 16:33:53,960 INFO got current price of $26.06 for QID
+2020-03-11 16:33:54,085 INFO got current price of $99.58 for QLD
+2020-03-11 16:33:54,206 INFO got current price of $61.57 for TQQQ
+2020-03-11 16:33:54,333 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-11 16:33:54,333 INFO bumping the strong count to always have a position
+2020-03-11 16:33:54,333 INFO using $1999.63 on QID
+2020-03-11 16:33:54,333 INFO determined we should hold 149 shares of QID at $26.06 per share and using 50.0 of equity
+2020-03-11 16:33:54,333 INFO using $0.0 on QLD
+2020-03-11 16:33:54,333 INFO determined we should hold 0 shares of QLD at $99.58 per share and using 0 of equity
+2020-03-11 16:33:54,333 INFO using $0.0 on TQQQ
+2020-03-11 16:33:54,333 INFO determined we should hold 0 shares of TQQQ at $61.57 per share and using 0 of equity
+2020-03-11 16:33:54,333 INFO currently held and target share counts
+2020-03-11 16:33:54,334 INFO                       QID  QLD  TQQQ
+num_currently_held    146    0     0
+target_num_of_shares  149    0     0
+2020-03-11 16:33:54,339 INFO submitting buy order for 3 shares for QID at $29.97 per share for a total cost of $89.91
+2020-03-11 16:33:54,465 INFO order submitted. got id of de76f597-c945-47b2-bbc8-815c5b4ad43b
+2020-03-11 16:33:55,515 INFO order de76f597-c945-47b2-bbc8-815c5b4ad43b filled
+2020-03-11 16:33:55,515 INFO all required trades submitted. automated trader exiting
+2020-03-11 16:33:55,515 INFO =============================================
+2020-03-12 13:12:09,007 INFO started automated trader
+2020-03-12 13:12:11,385 INFO got todays state prediction
+2020-03-12 15:25:11,097 INFO started automated trader
+2020-03-12 15:25:13,599 INFO got todays state prediction
+2020-03-12 15:25:15,379 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:25:15,379 INFO heres the last 10 days of predictions
+2020-03-12 15:25:15,385 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:25:15,386 INFO getting account info from alpaca
+2020-03-12 15:25:16,247 INFO got account value of 13629.5
+2020-03-12 15:25:16,296 INFO got 427 shares currently held for QID
+2020-03-12 15:25:16,296 INFO starting to make trades
+2020-03-12 15:25:17,033 INFO got current price of $24.54 for QID
+2020-03-12 15:25:17,200 INFO got current price of $113.27 for QLD
+2020-03-12 15:25:17,357 INFO got current price of $76.34 for TQQQ
+2020-03-12 15:25:17,514 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-12 15:25:17,514 INFO bumping the strong count to always have a position
+2020-03-12 15:25:17,515 INFO using $6814.75 on QID
+2020-03-12 15:25:17,515 INFO determined we should hold 541 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-12 15:25:17,515 INFO using $0.0 on QLD
+2020-03-12 15:25:17,515 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-12 15:25:17,515 INFO using $0.0 on TQQQ
+2020-03-12 15:25:17,515 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-12 15:25:17,515 INFO currently held and target share counts
+2020-03-12 15:25:17,516 INFO                       QID  QLD  TQQQ
+num_currently_held    427    0     0
+target_num_of_shares  541    0     0
+2020-03-12 15:25:17,521 INFO submitting buy order for 114 shares for QID at $28.22 per share for a total cost of $3217.08
+2020-03-12 15:25:17,673 INFO order submitted. got id of c42b3570-f0d1-498b-8460-b8346eb22716
+2020-03-12 15:25:28,218 INFO order c42b3570-f0d1-498b-8460-b8346eb22716 failed to be filled
+2020-03-12 15:25:28,218 INFO all required trades submitted. automated trader exiting
+2020-03-12 15:25:28,218 INFO =============================================
+2020-03-12 15:26:16,213 INFO started automated trader
+2020-03-12 15:26:16,673 INFO got todays state prediction
+2020-03-12 15:26:17,511 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:26:17,511 INFO heres the last 10 days of predictions
+2020-03-12 15:26:17,517 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:26:17,517 INFO getting account info from alpaca
+2020-03-12 15:26:17,918 INFO got account value of 4773.97
+2020-03-12 15:26:17,964 INFO got 149 shares currently held for QID
+2020-03-12 15:26:17,964 INFO starting to make trades
+2020-03-12 15:26:18,245 INFO got current price of $30.91 for QID
+2020-03-12 15:26:18,379 INFO got current price of $81.33 for QLD
+2020-03-12 15:26:18,542 INFO got current price of $44.71 for TQQQ
+2020-03-12 15:26:18,705 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-12 15:26:18,705 INFO bumping the strong count to always have a position
+2020-03-12 15:26:18,705 INFO using $2386.99 on QID
+2020-03-12 15:26:18,705 INFO determined we should hold 150 shares of QID at $30.91 per share and using 50.0 of equity
+2020-03-12 15:26:18,705 INFO using $0.0 on QLD
+2020-03-12 15:26:18,705 INFO determined we should hold 0 shares of QLD at $81.33 per share and using 0 of equity
+2020-03-12 15:26:18,706 INFO using $0.0 on TQQQ
+2020-03-12 15:26:18,706 INFO determined we should hold 0 shares of TQQQ at $44.71 per share and using 0 of equity
+2020-03-12 15:26:18,706 INFO currently held and target share counts
+2020-03-12 15:26:18,707 INFO                       QID  QLD  TQQQ
+num_currently_held    149    0     0
+target_num_of_shares  150    0     0
+2020-03-12 15:26:18,712 INFO submitting buy order for 1 shares for QID at $35.55 per share for a total cost of $35.55
+2020-03-12 15:26:18,978 INFO order submitted. got id of f28fabb7-cb42-456c-ace4-c96f64bbb6b3
+2020-03-12 15:26:20,023 INFO order f28fabb7-cb42-456c-ace4-c96f64bbb6b3 filled
+2020-03-12 15:26:23,409 INFO started automated trader
+2020-03-12 15:26:23,852 INFO got todays state prediction
+2020-03-12 15:26:33,929 INFO started automated trader
+2020-03-12 15:26:34,515 INFO got todays state prediction
+2020-03-12 15:26:53,943 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:26:53,943 INFO heres the last 10 days of predictions
+2020-03-12 15:26:53,949 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-12 15:26:53,950 INFO getting account info from alpaca
+2020-03-12 15:26:54,298 INFO got account value of 13650.85
+2020-03-12 15:26:54,343 INFO got 427 shares currently held for QID
+2020-03-12 15:26:54,343 INFO starting to make trades
+2020-03-12 15:26:54,650 INFO got current price of $30.91 for QID
+2020-03-12 15:26:54,793 INFO got current price of $81.33 for QLD
+2020-03-12 15:26:54,916 INFO got current price of $44.71 for TQQQ
+2020-03-12 15:26:55,061 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-12 15:26:55,061 INFO bumping the strong count to always have a position
+2020-03-12 15:26:55,061 INFO using $6825.43 on QID
+2020-03-12 15:26:55,061 INFO determined we should hold 430 shares of QID at $30.91 per share and using 50.0 of equity
+2020-03-12 15:26:55,061 INFO using $0.0 on QLD
+2020-03-12 15:26:55,061 INFO determined we should hold 0 shares of QLD at $81.33 per share and using 0 of equity
+2020-03-12 15:26:55,061 INFO using $0.0 on TQQQ
+2020-03-12 15:26:55,061 INFO determined we should hold 0 shares of TQQQ at $44.71 per share and using 0 of equity
+2020-03-12 15:26:55,061 INFO currently held and target share counts
+2020-03-12 15:26:55,063 INFO                       QID  QLD  TQQQ
+num_currently_held    427    0     0
+target_num_of_shares  430    0     0
+2020-03-12 15:26:55,071 INFO submitting buy order for 3 shares for QID at $35.55 per share for a total cost of $106.64999999999999
+2020-03-12 15:26:55,216 INFO order submitted. got id of dbf5071b-95e7-42da-9d1d-bd298db06c79
+2020-03-12 15:26:56,269 INFO order dbf5071b-95e7-42da-9d1d-bd298db06c79 filled
+2020-03-12 15:26:56,269 INFO all required trades submitted. automated trader exiting
+2020-03-12 15:26:56,269 INFO =============================================
+2020-03-13 16:31:04,107 INFO started automated trader
+2020-03-13 16:31:06,579 INFO got todays state prediction
+2020-03-13 16:31:09,631 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-13 16:31:09,631 INFO heres the last 10 days of predictions
+2020-03-13 16:31:09,637 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-13 16:31:09,638 INFO getting account info from alpaca
+2020-03-13 16:31:10,397 INFO got account value of 11350.23
+2020-03-13 16:31:10,442 INFO got 430 shares currently held for QID
+2020-03-13 16:31:10,443 INFO starting to make trades
+2020-03-13 16:31:11,068 INFO got current price of $24.54 for QID
+2020-03-13 16:31:11,200 INFO got current price of $113.27 for QLD
+2020-03-13 16:31:11,327 INFO got current price of $76.34 for TQQQ
+2020-03-13 16:31:11,476 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-13 16:31:11,476 INFO bumping the strong count to always have a position
+2020-03-13 16:31:11,476 INFO using $5675.11 on QID
+2020-03-13 16:31:11,476 INFO determined we should hold 450 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-13 16:31:11,476 INFO using $0.0 on QLD
+2020-03-13 16:31:11,476 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-13 16:31:11,477 INFO using $0.0 on TQQQ
+2020-03-13 16:31:11,477 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-13 16:31:11,477 INFO currently held and target share counts
+2020-03-13 16:31:11,478 INFO                       QID  QLD  TQQQ
+num_currently_held    430    0     0
+target_num_of_shares  450    0     0
+2020-03-13 16:31:11,483 INFO submitting buy order for 20 shares for QID at $28.22 per share for a total cost of $564.4
+2020-03-13 16:31:11,635 INFO order submitted. got id of 4451341a-c2fd-4b05-a6e8-64b74e09ea65
+2020-03-13 16:31:12,685 INFO order 4451341a-c2fd-4b05-a6e8-64b74e09ea65 filled
+2020-03-13 16:31:12,685 INFO all required trades submitted. automated trader exiting
+2020-03-13 16:31:12,685 INFO =============================================
+2020-03-13 16:31:17,892 INFO started automated trader
+2020-03-13 16:31:18,361 INFO got todays state prediction
+2020-03-13 16:31:19,512 INFO 
+           date   close  state
+1763 2020-03-06  204.65    0.0
+2020-03-13 16:31:19,513 INFO heres the last 10 days of predictions
+2020-03-13 16:31:19,519 INFO 
+           date   close  state
+1754 2020-02-24  221.39    0.0
+1755 2020-02-25  215.37    0.0
+1756 2020-02-26  216.48    0.0
+1757 2020-02-27  205.64    0.0
+1758 2020-02-28  205.80    0.0
+1759 2020-03-02  216.42    0.0
+1760 2020-03-03  209.48    0.0
+1761 2020-03-04  218.22    0.0
+1762 2020-03-05  211.59    0.0
+1763 2020-03-06  204.65    0.0
+2020-03-13 16:31:19,521 INFO getting account info from alpaca
+2020-03-13 16:31:19,889 INFO got account value of 3971.43
+2020-03-13 16:31:19,932 INFO got 150 shares currently held for QID
+2020-03-13 16:31:19,932 INFO starting to make trades
+2020-03-13 16:31:20,185 INFO got current price of $24.54 for QID
+2020-03-13 16:31:20,300 INFO got current price of $113.27 for QLD
+2020-03-13 16:31:20,428 INFO got current price of $76.34 for TQQQ
+2020-03-13 16:31:20,554 INFO got 0 state counts for regular and 0 state counts for strong
+2020-03-13 16:31:20,554 INFO bumping the strong count to always have a position
+2020-03-13 16:31:20,554 INFO using $1985.71 on QID
+2020-03-13 16:31:20,555 INFO determined we should hold 157 shares of QID at $24.54 per share and using 50.0 of equity
+2020-03-13 16:31:20,555 INFO using $0.0 on QLD
+2020-03-13 16:31:20,555 INFO determined we should hold 0 shares of QLD at $113.27 per share and using 0 of equity
+2020-03-13 16:31:20,555 INFO using $0.0 on TQQQ
+2020-03-13 16:31:20,555 INFO determined we should hold 0 shares of TQQQ at $76.34 per share and using 0 of equity
+2020-03-13 16:31:20,555 INFO currently held and target share counts
+2020-03-13 16:31:20,556 INFO                       QID  QLD  TQQQ
+num_currently_held    150    0     0
+target_num_of_shares  157    0     0
+2020-03-13 16:31:20,560 INFO submitting buy order for 7 shares for QID at $28.22 per share for a total cost of $197.54
+2020-03-13 16:31:20,690 INFO order submitted. got id of 68a21323-52e8-4071-8849-d71ac746d282
+2020-03-13 16:31:21,742 INFO order 68a21323-52e8-4071-8849-d71ac746d282 filled
+2020-03-13 16:31:21,742 INFO all required trades submitted. automated trader exiting
+2020-03-13 16:31:21,742 INFO =============================================
