@@ -17,6 +17,8 @@ from pyalgotrade.stratanalyzer import trades
 from pyalgotrade.bar import Frequency
 from pyalgotrade import plotter
 import matplotlib
+import numpy as np
+import yfinance
 
 class MyStrategy(strategy.BacktestingStrategy):
     def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
@@ -25,8 +27,6 @@ class MyStrategy(strategy.BacktestingStrategy):
         self.__instrument_1 = instrument_1
         self.__instrument_2 = instrument_2
         self.states_instrument = states_instrument
-        self.last_state = None
-        
         
         self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
 
@@ -54,48 +54,23 @@ class MyStrategy(strategy.BacktestingStrategy):
         if state is None:
             return
 
-
-        if state == self.last_state:
-            return
-        
-        #print('===========')
-        #print(state)
-        
-        #for i in [self.__instrument_1, self.__instrument_2]:
-        #    print(i, self.getBroker().getShares(i))
-
         if state == 1:
-            instrument = self.__instrument_1
-            self.usage[self.__instrument_1] = .8
-            self.usage[self.__instrument_2] = .2
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 1
             
 
         elif state == 2:
-            instrument = self.__instrument_2
-            self.usage[self.__instrument_1] = .2
-            self.usage[self.__instrument_2] = .8
+            
+            self.usage[self.__instrument_1] = 1
+            self.usage[self.__instrument_2] = 0
         
-        #elif state == 3:
-        #    self.usage[self.__instrument_1] = .2
-        #    self.usage[self.__instrument_2] = .8
+        elif state == 3:
+            self.usage[self.__instrument_1] = .5
+            self.usage[self.__instrument_2] = 0
         
         elif state == 0:
-            instrument = None
-            
-            
-        if state==0:
-            for instrument in [self.__instrument_1, self.__instrument_2]:
-                bar = bars.getBar(instrument)
-                close = bar.getClose()
-                currentPos = self.getBroker().getShares(instrument) * -1
-                if abs(currentPos)>0:
-                    #print('selling', instrument, close * 0.9, currentPos)
-                    self.limitOrder(instrument, close * 0.9, currentPos)
-            #print(self.getBroker().getPositions())
-            #input()
-            self.last_state = state
-            return
-
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 0
 
         for instrument in [self.__instrument_1, self.__instrument_2]:
             bar = bars.getBar(instrument)
@@ -103,19 +78,16 @@ class MyStrategy(strategy.BacktestingStrategy):
             
             usage = self.usage[instrument]
 
-            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*0.9) )
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*.9) )
 
             currentPos = self.getBroker().getShares(instrument)
 
-            num_shares = num_shares - currentPos
+            num_shares = int(num_shares - currentPos)
 
             if num_shares<0:
                 
-                self.limitOrder(instrument, close * 0.9, num_shares)
-                
-
-                #print('limit sell order', self.getBroker().getEquity(), usage, instrument, close * 0.9, num_shares, close *0.9 * num_shares)
-                #print(self.getBroker().getCash())
+                #self.limitOrder(instrument, close * 0.9, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
         
         for instrument in [self.__instrument_1, self.__instrument_2]:
             bar = bars.getBar(instrument)
@@ -127,52 +99,187 @@ class MyStrategy(strategy.BacktestingStrategy):
             
             currentPos = self.getBroker().getShares(instrument)
             
-            num_shares = num_shares - currentPos
+            num_shares = int(num_shares - currentPos)
             
             if num_shares>0:
-                self.limitOrder(instrument, close * 1.1, num_shares)
+                #self.limitOrder(instrument, close * 1.1, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+
+class MyStrategy_2(strategy.BacktestingStrategy):
+    def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
+        super(MyStrategy_2, self).__init__(feed, 20000)
+        self.__position = None
+        self.__instrument_1 = instrument_1
+        self.__instrument_2 = instrument_2
+        self.states_instrument = states_instrument
+        
+        self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
+
+        self.usage = {}
+        
+    def onEnterOk(self, position):
+        execInfo = position.getEntryOrder().getExecutionInfo()
+        self.info("BUY at $%.2f" % (execInfo.getPrice()))
+
+    def onEnterCanceled(self, position):
+        self.__position = None
+
+    def onExitOk(self, position):
+        execInfo = position.getExitOrder().getExecutionInfo()
+        self.info("SELL at $%.2f" % (execInfo.getPrice()))
+        self.__position = None
+
+    def onExitCanceled(self, position):
+        # If the exit was canceled, re-submit it.
+        self.__position.exitMarket()
+
+    def onBars(self, bars):
+        
+        state = self.__my_indicator[-1]
+        if state is None:
+            return
+
+        if state == 1:
+            self.usage[self.__instrument_1] = .5
+            self.usage[self.__instrument_2] = 0
+            
+
+        elif state == 2:
+            
+            self.usage[self.__instrument_1] = 1
+            self.usage[self.__instrument_2] = 0
+        
+        elif state == 3:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 1
+        
+        elif state == 0:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 0
+
+        for instrument in [self.__instrument_1, self.__instrument_2]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
+
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*.9) )
+
+            currentPos = self.getBroker().getShares(instrument)
+
+            num_shares = int(num_shares - currentPos)
+
+            if num_shares<0:
                 
-                #print('limit buy order', self.getBroker().getEquity(), usage, instrument, close * 1.1, num_shares, close * 1.1 * num_shares)
+                #self.limitOrder(instrument, close * 0.9, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+        
+        for instrument in [self.__instrument_1, self.__instrument_2]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
 
-        #print(self.getBroker().getPositions())
-        #input()
-        """
-
-        bar = bars.getBar(instrument)
-        close = bar.getClose()
-        
-
-        num_shares = floor( self.getBroker().getCash() / (close*1.1) )
-        
-        currentPos = self.getBroker().getShares(instrument)
-        
-        num_shares = num_shares - currentPos
-        
-        if num_shares>0:
-            self.limitOrder(instrument, close * 1.1, num_shares)
-        """
-        #print(state)
-        #for i in [self.__instrument_1, self.__instrument_2]:
-        #    print(i, self.getBroker().getShares(i))
-        
-        
-        
-        
-        
-        self.last_state = state
-        """
-        # If a position was not opened, check if we should enter a long position.
-        if self.__position is None:
-            if bar.getPrice() > self.__sma[-1]:
-                # Enter a buy market order for 10 shares. The order is good till canceled.
-                self.__position = self.enterLong(self.__instrument, 10, True)
-        # Check if we have to exit the position.
-        elif bar.getPrice() < self.__sma[-1] and not self.__position.exitActive():
-            self.__position.exitMarket()
-        """
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*1.1) )
+            
+            currentPos = self.getBroker().getShares(instrument)
+            
+            num_shares = int(num_shares - currentPos)
+            
+            if num_shares>0:
+                #self.limitOrder(instrument, close * 1.1, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
 
 
-def setup_strategy(files, name, smaPeriod=1):
+
+class MyStrategy_3(strategy.BacktestingStrategy):
+    def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
+        super(MyStrategy_3, self).__init__(feed, 20000)
+        self.__position = None
+        self.__instrument_1 = instrument_1
+        self.__instrument_2 = instrument_2
+        self.states_instrument = states_instrument
+        
+        self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
+
+        self.usage = {}
+        
+    def onEnterOk(self, position):
+        execInfo = position.getEntryOrder().getExecutionInfo()
+        self.info("BUY at $%.2f" % (execInfo.getPrice()))
+
+    def onEnterCanceled(self, position):
+        self.__position = None
+
+    def onExitOk(self, position):
+        execInfo = position.getExitOrder().getExecutionInfo()
+        self.info("SELL at $%.2f" % (execInfo.getPrice()))
+        self.__position = None
+
+    def onExitCanceled(self, position):
+        # If the exit was canceled, re-submit it.
+        self.__position.exitMarket()
+
+    def onBars(self, bars):
+        
+        state = self.__my_indicator[-1]
+        if state is None:
+            return
+
+        if state == 1:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = .5
+            
+
+        elif state == 2:
+            
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 1
+        
+        elif state == 3:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 1
+        
+        elif state == 0:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__instrument_2] = 0
+
+        for instrument in [self.__instrument_1, self.__instrument_2]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
+
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*.9) )
+
+            currentPos = self.getBroker().getShares(instrument)
+
+            num_shares = int(num_shares - currentPos)
+
+            if num_shares<0:
+                
+                #self.limitOrder(instrument, close * 0.9, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+        
+        for instrument in [self.__instrument_1, self.__instrument_2]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
+
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*1.1) )
+            
+            currentPos = self.getBroker().getShares(instrument)
+            
+            num_shares = int(num_shares - currentPos)
+            
+            if num_shares>0:
+                #self.limitOrder(instrument, close * 1.1, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+
+
+
+def setup_strategy(files, name, strategy, smaPeriod=1):
     #from pyalgotrade.feed import csvfeed, yahoofeed
 
     # Load the bar feed from the CSV file
@@ -192,7 +299,7 @@ def setup_strategy(files, name, smaPeriod=1):
     
     
     # Evaluate the strategy with the feed.
-    myStrategy = MyStrategy(feed, instrument_1, instrument_2, states_instrument, smaPeriod)
+    myStrategy = strategy(feed, instrument_1, instrument_2, states_instrument, smaPeriod)
     from pyalgotrade.stratanalyzer import returns
     # Attach different analyzers to a strategy before executing it.
     retAnalyzer = returns.Returns()
@@ -220,7 +327,7 @@ def setup_strategy(files, name, smaPeriod=1):
 
     fig = matplotlib.pyplot.gcf()
     fig.set_size_inches(18.5, 10.5, forward=True)
-    plt.savePlot('./plots/%s.png' % ('backtest_'+name))
+    plt.savePlot('./all_models_plots/%s.png' % ('backtest_'+name))
 
     del plt
         
@@ -262,13 +369,31 @@ if __name__ == "__main__":
     feed.addBarsFromCSV("TQQQ", "TQQQ_2.csv")
     feed.addBarsFromCSV("QLD_state", "QLD_2_with_states.csv")
     """
-    feed.addBarsFromCSV("QLD", "QLD.csv")
-    feed.addBarsFromCSV("TQQQ", "TQQQ.csv")
-    feed.addBarsFromCSV("QLD_state", "QLD_with_states.csv")
+    #feed.addBarsFromCSV("QLD", "QLD.csv")
+    #feed.addBarsFromCSV("TQQQ", "TQQQ.csv")
+    #feed.addBarsFromCSV("QLD_state", "QLD_with_states.csv")
 
+    histories = []
+    for ticker in ['QLD', 'TQQQ', 'TQQQ_with_states']:
+        history = yfinance.Ticker(ticker.replace('_with_states', '')).history(period='8y', auto_adjust=False)
+        #print(history)
+        histories.append( [ticker, history] )
+        
+    states = list(np.random.randint(0,2, size=len(histories[2][1])))
+    
+    histories[2][1]['Close'] = states
+    histories[2][1]['Low'] = states
+
+
+    for ticker, history in histories:
+        history.to_csv(ticker+'.csv')
+        print('adding', ticker)
+        feed.addBarsFromCSV(ticker, ticker+'.csv')
+    
+        
     
     # Evaluate the strategy with the feed.
-    myStrategy = MyStrategy(feed, "QLD", 'TQQQ', 'QLD_state')
+    myStrategy = MyStrategy(feed, "QLD", 'TQQQ', 'TQQQ_with_states')
 
     # Attach different analyzers to a strategy before executing it.
     retAnalyzer = returns.Returns()

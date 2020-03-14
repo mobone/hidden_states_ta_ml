@@ -122,7 +122,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 hidden_states.db
-*.png
+#*.png
 demo_cache.sqlite-journal
 demo_cache.sqlite
 
