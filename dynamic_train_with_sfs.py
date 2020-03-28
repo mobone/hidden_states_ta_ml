@@ -41,12 +41,12 @@ warnings.simplefilter("ignore")
 class model_check_error(Exception):
     pass
 
-conn = sqlite3.connect('models_with_sfs_4_states.db')
+conn = sqlite3.connect('models_4_states_with_short.db')
 
 
 class pipeline():
     
-    def __init__(self, name, test_length, trains, test, features, model_type, with_svc, scaler):
+    def __init__(self, name, test_length, trains, test, features, model_type, with_svc, scaler, svc_cutoff):
         self.name = name +'_'+test_length+'_'+model_type
         self.model_type = model_type
         
@@ -54,6 +54,7 @@ class pipeline():
         self.test = test
         self.with_svc = with_svc
         self.scaler = scaler
+        self.svc_cutoff = svc_cutoff
 
 
         
@@ -114,7 +115,7 @@ class pipeline():
                             )
         
 
-        train['next_classification'] = np.where( train['next_return']>0, 1, 0)
+        train['next_classification'] = np.where( train['next_return']>self.svc_cutoff, 1, 0)
 
         
         svc_pipeline.fit(train[ self.features ], train['next_classification'])
@@ -197,7 +198,7 @@ class pipeline():
         self.results = self.results.sort_values(by='test_mean')
         self.results['num_models_used'] = self.num_models_used
         self.results['models_used'] = self.models_used
-        if len( self.results[self.results['count']<30] )>1:
+        if len( self.results[self.results['count']<30] )>0:
             raise model_check_error('state not used enough')
         if len(self.results[self.results['test_mean']<0])>1:
             raise model_check_error('too many negative states')
@@ -294,7 +295,7 @@ def get_data(symbol, get_train_test=True):
             return history
 
 
-def get_backtest(name, symbol_1, symbol_2, df, strat, short=False):
+def get_backtest(name, symbol_1, symbol_2, short_symbol, df, strat, with_short):
     df = df[ ['date', 'open', 'high', 'low', 'close', 'volume', 'state' ] ]
     df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'State']
     df['Date'] = pd.to_datetime(df['Date'])
@@ -302,7 +303,7 @@ def get_backtest(name, symbol_1, symbol_2, df, strat, short=False):
     #print('starting')
     histories = {}
     filenames = []
-    for symbol in [symbol_1, symbol_2]:
+    for symbol in [symbol_1, symbol_2, short_symbol]:
         history = get_data(symbol, get_train_test=False)
         history = history[ ['date', 'open', 'high', 'low', 'close', 'volume'] ]
         history.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
@@ -341,7 +342,7 @@ def get_backtest(name, symbol_1, symbol_2, df, strat, short=False):
     
     
     #input()
-    backtest_results = setup_strategy(filenames, name, strat)    
+    backtest_results = setup_strategy(filenames, name, strat, with_short)    
     #bt = basic_strat( histories, symbol_1, symbol_2 )
     #bt = Backtest(history, MyStrat, margin=1/2, cash=10000, commission=.0004, trade_on_close=1)
 
@@ -352,7 +353,7 @@ def get_backtest(name, symbol_1, symbol_2, df, strat, short=False):
     
     for symbol, filename in filenames:
         try:
-            if float(backtest_results.T['sharpe_ratio']) > .7 and 'states' in filename:
+            if float(backtest_results.T['sharpe_ratio']) > .8 and 'states' in filename:
                 continue
             else:
                 os.remove(filename)
@@ -369,100 +370,113 @@ def get_backtest(name, symbol_1, symbol_2, df, strat, short=False):
 
 def pipeline_runner(input_queue):
     model_type = 'dynamic'
-    conn = sqlite3.connect('models_with_sfs_4_states.db')
+    conn = sqlite3.connect('models_4_states_with_short.db')
     
     while input_queue.qsize():
-        params, starting_features, trains = input_queue.get()
-        
-        features, with_svc, scaler_option, test_periods, strat_option = params
-        features = [features]
-        scaler_name, scaler = scaler_option
-        test_length, test = test_periods
-        strat_name, strat = strat_option
-
-        print('got params')
-        print(params)
-        while len(features)<13:
-                    
-            #k_features = randint(2,5) * 3
-            runs_results = []
-            for new_feature in starting_features:
-                if new_feature in features:
-                    continue
-                
-                test_features = features + [new_feature]
-
-                print(test_features)
-                #features = test_features
+        try:
+            params, starting_features, trains = input_queue.get()
             
+            features, scaler_option, test_periods, strat_option, with_short, svc_cutoff = params
+            features = [features]
+            scaler_name, scaler = scaler_option
+            test_length, test = test_periods
+            strat_name, strat = strat_option
 
-                
-                name = namegenerator.gen()
-                
-                try:
-                    start_time = time.time()
-                    print('\ttesting', test_length, with_svc, scaler_name, test_features)
-                    x = pipeline(name, test_length, trains, test, test_features, model_type, with_svc, scaler)
+            if svc_cutoff is None:
+                with_svc = False
+            else:
+                with_svc = True
+            print('got params')
+            print(params)
+            while len(features)<13:
+                        
+                #k_features = randint(2,5) * 3
+                runs_results = []
+                for new_feature in starting_features:
+                    if new_feature in features:
+                        continue
                     
-                    backtest_results = get_backtest(name, 'QLD', 'TQQQ', x.test, strat).T
+                    test_features = features + [new_feature]
 
-                    end_time = time.time()
-                    this_run_result = [test_features, float(backtest_results['sharpe_ratio']), end_time-start_time]
-                    runs_results.append(this_run_result)
-
-                    result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
-                    print(result_df)
-                    
-                    if float(backtest_results['sharpe_ratio'])<.7:
-                        raise model_check_error('sharpe ratio not great enough: %s' % float(backtest_results['sharpe_ratio']))
-                        #print('sharp ratio not great enough')
-                        #continue
-                    
-
-                    backtest_results['name'] = name
-                    backtest_results['features'] = str(test_features)
-                    backtest_results['k_features'] = len(test_features)
-                    backtest_results['model_type'] = model_type
-                    backtest_results['test_length'] = test_length
-                    backtest_results['num_models_used'] = x.num_models_used
-                    backtest_results['models_used'] = x.models_used
-                    backtest_results['with_svc'] = with_svc
-                    backtest_results['scaler_name'] = scaler_name
-                    backtest_results['strat_name'] = strat_name
-                    backtest_results.to_sql('backtests', conn, if_exists='append')
-
-                    model_results = x.model_summary
-                    #print(model_results)
-                    model_results.loc[:, 'name'] = name
-                    model_results.loc[:, 'features'] = str(test_features)
-                    model_results.loc[:, 'k_features'] = len(test_features)
-                    model_results.loc[:, 'model_type'] = model_type
-                    model_results.loc[:, 'test_length'] = test_length
-                    model_results.loc[:, 'num_models_used'] = x.num_models_used
-                    model_results.loc[:, 'models_used'] = x.models_used
-                    model_results.loc[:, 'with_svc'] = with_svc
-                    model_results.loc[:, 'scaler_name'] = scaler_name
-                    model_results.loc[:, 'strat_name'] = strat_name
-                    model_results.to_sql('models', conn, if_exists='append')
-                    print('')
                     print(test_features)
-                    print(backtest_results)
-                    print(model_results)
-                    print('')
+                    #features = test_features
+                
 
-                    x.plot(x.test, show=False)
+                    
+                    name = namegenerator.gen()
+                    
+                    try:
+                        start_time = time.time()
+                        print('\ttesting', test_length, with_svc, scaler_name, test_features)
+                        x = pipeline(name, test_length, trains, test, test_features, model_type, with_svc, scaler, svc_cutoff)
+                        
+                        backtest_results = get_backtest(name, 'QLD', 'TQQQ', 'QID', x.test, strat, with_short).T
+
+                        end_time = time.time()
+                        this_run_result = [test_features, float(backtest_results['sharpe_ratio']), end_time-start_time]
+                        runs_results.append(this_run_result)
+
+                        result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
+                        print(result_df)
+                        
+                        if float(backtest_results['sharpe_ratio'])<.8:
+                            raise model_check_error('sharpe ratio not great enough: %s' % float(backtest_results['sharpe_ratio']))
+                            #print('sharp ratio not great enough')
+                            #continue
+                        
+
+                        backtest_results['name'] = name
+                        backtest_results['features'] = str(test_features)
+                        backtest_results['k_features'] = len(test_features)
+                        backtest_results['model_type'] = model_type
+                        backtest_results['test_length'] = test_length
+                        backtest_results['num_models_used'] = x.num_models_used
+                        backtest_results['models_used'] = x.models_used
+                        backtest_results['with_svc'] = with_svc
+                        backtest_results['scaler_name'] = scaler_name
+                        backtest_results['strat_name'] = strat_name
+                        backtest_results['with_short'] = with_short
+                        backtest_results['svc_cutoff'] = svc_cutoff
+                        backtest_results.to_sql('backtests', conn, if_exists='append')
+
+                        model_results = x.model_summary
+                        #print(model_results)
+                        model_results.loc[:, 'name'] = name
+                        model_results.loc[:, 'features'] = str(test_features)
+                        model_results.loc[:, 'k_features'] = len(test_features)
+                        model_results.loc[:, 'model_type'] = model_type
+                        model_results.loc[:, 'test_length'] = test_length
+                        model_results.loc[:, 'num_models_used'] = x.num_models_used
+                        model_results.loc[:, 'models_used'] = x.models_used
+                        model_results.loc[:, 'with_svc'] = with_svc
+                        model_results.loc[:, 'scaler_name'] = scaler_name
+                        model_results.loc[:, 'strat_name'] = strat_name
+                        model_results.loc[:, 'with_short'] = with_short
+                        model_results.loc[:, 'svc_cutoff'] = svc_cutoff
+                        model_results.to_sql('models', conn, if_exists='append')
+                        print('')
+                        print(test_features)
+                        print(backtest_results)
+                        print(model_results)
+                        print('')
+
+                        x.plot(x.test, show=False)
+                    except Exception as e:
+                        print('\t\texception\t',e, test_length, with_svc, scaler_name, test_features)
+                        sleep(5)
+                try:
+                    result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
+                    result_df = result_df.sort_values(by='score').tail(1)
+                    print(result_df)
+                    features = result_df['features'].values[0]
+                    print('now using', features)
                 except Exception as e:
-                    print('\t\texception\t',e, test_length, with_svc, scaler_name, test_features)
-                    #sleep(10)
-            try:
-                result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
-                result_df = result_df.sort_values(by='score').tail(1)
-                print(result_df)
-                features = result_df['features'].values[0]
-                print('now using', features)
-            except Exception as e:
-                print("NO BEST FEATURE FOUND", features)
-                break
+                    print("NO BEST FEATURE FOUND", features)
+                    print(e)
+                    break
+        except Exception as e:
+            print('\t\tMajor exception\t', e)
+            pass
 
 
 
@@ -481,7 +495,7 @@ def run_decision_tree(train, test_cols):
     print(df)
     
     starting_features = list(df['feature'].values)
-    top_starting_features = list(df.sort_values(by='importances').tail(8)['feature'].values)
+    top_starting_features = list(df.sort_values(by='importances').tail(16)['feature'].values)
     return starting_features, top_starting_features
 
 if __name__ == '__main__':
@@ -495,15 +509,20 @@ if __name__ == '__main__':
     #print(starting_features)
 
     
-    with_svc = [True, False]
+    
     scalers = [ ['standard', StandardScaler()], ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
+    scalers = [ ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
     test_lengths = [ ['short', short_test], ['long', long_test] ]
-    test_lengths = [ ['short', short_test] ]
+    #test_lengths = [ ['short', short_test] ]
     strats = [ ['strat_1', MyStrategy], ['strat_2', MyStrategy_2], ['strat_3', MyStrategy_3] ]
+    
+    with_short = [True, False]
+    
+    svc_cutoff = [.01,.005,.0025, None]
     #strats = [ ['strat_2', MyStrategy_2] ]
     
     
-    params_list = list(product( top_starting_features, with_svc, scalers, test_lengths, strats ))
+    params_list = list(product( top_starting_features, scalers, test_lengths, strats, with_short, svc_cutoff ))
     shuffle(params_list)
     #print(params_list)
     
@@ -512,10 +531,12 @@ if __name__ == '__main__':
         input_queue.put( (i, starting_features, trains) )
 
 
-    for i in range(16):
+    for i in range( int(16*.70) ):
+    #for i in range( 4 ):
         p = Process(target=pipeline_runner, args=(input_queue,))
         p.start()
         
 
     while True:
         sleep(10)
+

@@ -21,11 +21,15 @@ import numpy as np
 import yfinance
 
 class MyStrategy(strategy.BacktestingStrategy):
-    def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
+    def __init__(self, feed, instrument_1, instrument_2, short_instrument, states_instrument, with_short=False, smaPeriod=1):
         super(MyStrategy, self).__init__(feed, 20000)
         self.__position = None
         self.__instrument_1 = instrument_1
         self.__instrument_2 = instrument_2
+        self.__short_instrument = short_instrument
+
+        self.with_short = with_short
+
         self.states_instrument = states_instrument
         
         self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
@@ -57,22 +61,29 @@ class MyStrategy(strategy.BacktestingStrategy):
         if state == 1:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 1
+            self.usage[self.__short_instrument] = 0 
             
 
         elif state == 2:
             
             self.usage[self.__instrument_1] = 1
             self.usage[self.__instrument_2] = 0
+            self.usage[self.__short_instrument] = 0 
         
         elif state == 3:
             self.usage[self.__instrument_1] = .5
             self.usage[self.__instrument_2] = 0
+            self.usage[self.__short_instrument] = 0 
         
         elif state == 0:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 0
+            if self.with_short:
+                self.usage[self.__short_instrument] = .5
+            else:
+                self.usage[self.__short_instrument] = 0
 
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -89,7 +100,7 @@ class MyStrategy(strategy.BacktestingStrategy):
                 #self.limitOrder(instrument, close * 0.9, num_shares)
                 self.marketOrder(instrument, num_shares, onClose=True)
         
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -106,11 +117,15 @@ class MyStrategy(strategy.BacktestingStrategy):
                 self.marketOrder(instrument, num_shares, onClose=True)
 
 class MyStrategy_2(strategy.BacktestingStrategy):
-    def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
+    def __init__(self, feed, instrument_1, instrument_2, short_instrument, states_instrument, with_short=False, smaPeriod=1):
         super(MyStrategy_2, self).__init__(feed, 20000)
         self.__position = None
         self.__instrument_1 = instrument_1
         self.__instrument_2 = instrument_2
+        self.__short_instrument = short_instrument
+
+        self.with_short = with_short
+
         self.states_instrument = states_instrument
         
         self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
@@ -142,22 +157,29 @@ class MyStrategy_2(strategy.BacktestingStrategy):
         if state == 1:
             self.usage[self.__instrument_1] = .5
             self.usage[self.__instrument_2] = 0
+            self.usage[self.__short_instrument] = 0
             
 
         elif state == 2:
             
             self.usage[self.__instrument_1] = 1
             self.usage[self.__instrument_2] = 0
+            self.usage[self.__short_instrument] = 0 
         
         elif state == 3:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 1
+            self.usage[self.__short_instrument] = 0
         
         elif state == 0:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 0
+            if self.with_short:
+                self.usage[self.__short_instrument] = .5
+            else:
+                self.usage[self.__short_instrument] = 0
 
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -174,7 +196,7 @@ class MyStrategy_2(strategy.BacktestingStrategy):
                 #self.limitOrder(instrument, close * 0.9, num_shares)
                 self.marketOrder(instrument, num_shares, onClose=True)
         
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -193,11 +215,15 @@ class MyStrategy_2(strategy.BacktestingStrategy):
 
 
 class MyStrategy_3(strategy.BacktestingStrategy):
-    def __init__(self, feed, instrument_1, instrument_2, states_instrument, smaPeriod=1):
+    def __init__(self, feed, instrument_1, instrument_2, short_instrument, states_instrument, with_short=False, smaPeriod=1):
         super(MyStrategy_3, self).__init__(feed, 20000)
         self.__position = None
         self.__instrument_1 = instrument_1
         self.__instrument_2 = instrument_2
+        self.__short_instrument = short_instrument
+
+        self.with_short = with_short
+
         self.states_instrument = states_instrument
         
         self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
@@ -229,22 +255,29 @@ class MyStrategy_3(strategy.BacktestingStrategy):
         if state == 1:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = .5
+            self.usage[self.__short_instrument] = 0
             
 
         elif state == 2:
             
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 1
+            self.usage[self.__short_instrument] = 0 
         
         elif state == 3:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 1
+            self.usage[self.__short_instrument] = 0 
         
         elif state == 0:
             self.usage[self.__instrument_1] = 0
             self.usage[self.__instrument_2] = 0
+            if self.with_short:
+                self.usage[self.__short_instrument] = .5
+            else:
+                self.usage[self.__short_instrument] = 0
 
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -261,7 +294,7 @@ class MyStrategy_3(strategy.BacktestingStrategy):
                 #self.limitOrder(instrument, close * 0.9, num_shares)
                 self.marketOrder(instrument, num_shares, onClose=True)
         
-        for instrument in [self.__instrument_1, self.__instrument_2]:
+        for instrument in [self.__instrument_1, self.__instrument_2, self.__short_instrument]:
             bar = bars.getBar(instrument)
             close = bar.getClose()
             
@@ -279,7 +312,7 @@ class MyStrategy_3(strategy.BacktestingStrategy):
 
 
 
-def setup_strategy(files, name, strategy, smaPeriod=1):
+def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
     #from pyalgotrade.feed import csvfeed, yahoofeed
 
     # Load the bar feed from the CSV file
@@ -295,11 +328,13 @@ def setup_strategy(files, name, strategy, smaPeriod=1):
     
     instrument_1 = files[0][0]
     instrument_2 = files[1][0]
-    states_instrument = files[2][0]
+    short_instrument = files[2][0]
+    states_instrument = files[3][0]
     
-    
+    print('got these instruments', instrument_1, instrument_2, short_instrument, states_instrument)
+    print(files)
     # Evaluate the strategy with the feed.
-    myStrategy = strategy(feed, instrument_1, instrument_2, states_instrument, smaPeriod)
+    myStrategy = strategy(feed, instrument_1, instrument_2, short_instrument, states_instrument, with_short = with_short, smaPeriod = smaPeriod)
     from pyalgotrade.stratanalyzer import returns
     # Attach different analyzers to a strategy before executing it.
     retAnalyzer = returns.Returns()
