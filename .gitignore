@@ -128,7 +128,7 @@ demo_cache.sqlite
 
 
 plots/.DS_Store
-*.csv
+
 *.joblib
 *.sqlite
 *.html
