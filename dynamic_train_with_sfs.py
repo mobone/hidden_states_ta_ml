@@ -36,12 +36,12 @@ from datetime import timedelta
 import os
 from sklearn.svm import SVC
 import time
-from strategy import MyStrategy, MyStrategy_2, MyStrategy_3
+from strategy import MyStrategy, MyStrategy_2, MyStrategy_3, AccuracyStrat
 warnings.simplefilter("ignore")
 class model_check_error(Exception):
     pass
 
-conn = sqlite3.connect('models_4_states_with_short.db')
+conn = sqlite3.connect('accuracy_2.db')
 
 
 class pipeline():
@@ -58,7 +58,7 @@ class pipeline():
 
 
         
-        self.n_components = 4
+        self.n_components = 3
         
         self.look_back = int(126)
         
@@ -115,22 +115,26 @@ class pipeline():
                             )
         
 
-        train['next_classification'] = np.where( train['next_return']>self.svc_cutoff, 1, 0)
+        #train['next_classification'] = np.where( train['next_return']>self.svc_cutoff, 1, 0)
+        #train['next_classification'] = np.where( train['next_return']< (self.svc_cutoff*-1), 1, 0)
 
-        
+        train['next_classification'] = 0
+        train.loc[train['next_return']>self.svc_cutoff, 'next_classification'] = 1
+
+        train.loc[train['next_return']< (-1*self.svc_cutoff), 'next_classification'] = -1
+        #print('meow meow')
+        #print(train)
+        #sleep(10)
         svc_pipeline.fit(train[ self.features ], train['next_classification'])
 
         #print(svc_pipeline.score( train[ self.features ], train['next_classification'] ))
 
         state = svc_pipeline.predict(test[ self.features ])[0]
 
-        #print(state)
+        #print('meow', state)
         #sleep(10)
 
         return state
-
-
-        
 
 
     def run_pipeline(self):
@@ -159,21 +163,18 @@ class pipeline():
                             
                             state = int(train_results[train_results['index']==state]['new_state'])
                             
-                            if self.with_svc == True:
-                                svc_state = self.get_svc(train, today)
-                                #print(svc_state, state)
-                                #sleep(1)
-                                if svc_state != 1:
-                                    state = 0
-                                
+                            
+                            svc_state = self.get_svc(train, today)
+                            #print(state, svc_state)
 
                             #self.test.loc[today.index, 'svc_state'] = svc_state
                             self.test.loc[today.index, 'state'] = state
+                            self.test.loc[today.index, 'svc_state'] = svc_state
                             self.test.loc[today.index, 'model_used'] = train_results['name'].values[0]
 
                             max_score = test_score
                     except Exception as e:
-                        #print(e)
+                        #print('this exception', e)
                         #sleep(10)
                         continue
 
@@ -198,6 +199,11 @@ class pipeline():
         self.results = self.results.sort_values(by='test_mean')
         self.results['num_models_used'] = self.num_models_used
         self.results['models_used'] = self.models_used
+        
+        print('presummary results')
+
+        print(self.results)
+
         if len( self.results[self.results['count']<30] )>0:
             raise model_check_error('state not used enough')
         if len(self.results[self.results['test_mean']<0])>1:
@@ -206,6 +212,7 @@ class pipeline():
             raise model_check_error('not all states used')
         if float(self.results['test_mean'].head(1))>0 or float(self.results['next_test_mean'].head(1))>0:
             raise model_check_error('negative state does not exist')
+        
         self.model_summary = self.results
         print('summary results')
 
@@ -295,15 +302,15 @@ def get_data(symbol, get_train_test=True):
             return history
 
 
-def get_backtest(name, symbol_1, symbol_2, short_symbol, df, strat, with_short):
-    df = df[ ['date', 'open', 'high', 'low', 'close', 'volume', 'state' ] ]
-    df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'State']
+def get_backtest(name, long_symbol, short_symbol, df, strat, with_short):
+    df = df[ ['date', 'open', 'high', 'low', 'close', 'volume', 'state', 'svc_state' ] ]
+    df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'State', 'SVC State']
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.set_index('Date')
     #print('starting')
     histories = {}
     filenames = []
-    for symbol in [symbol_1, symbol_2, short_symbol]:
+    for symbol in [long_symbol, short_symbol]:
         history = get_data(symbol, get_train_test=False)
         history = history[ ['date', 'open', 'high', 'low', 'close', 'volume'] ]
         history.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
@@ -322,20 +329,30 @@ def get_backtest(name, symbol_1, symbol_2, short_symbol, df, strat, with_short):
         filename = "./trades/%s_%s.csv" % (name, symbol)
         history.to_csv(filename)
         filenames.append( [symbol, filename] )
-        histories[symbol_1] = history
+        histories[long_symbol] = history
     
     
     df['Close'] = df['State']
-    df['Low'] = 0.0
+    df['Low'] = -5
     df['Adj Close'] = df['Close']
-    df = df[ ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
+    markov_states = df[ ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
     
     
     
     #print(df)
-    filename = "./trades/%s_%s.csv" % (name, symbol_1+'_with_states')
-    df.to_csv(filename)
-    filenames.append( [symbol_1+'_with_states', filename] )
+    filename = "./trades/%s_%s.csv" % (name, long_symbol+'_with_states')
+    markov_states.to_csv(filename)
+    filenames.append( [long_symbol+'_with_states', filename] )
+
+    df['Close'] = df['SVC State']
+    df['Adj Close'] = df['Close']
+    
+    svc_states = df[ ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
+
+    filename = "./trades/%s_%s.csv" % (name, long_symbol+'_with_svc_states')
+    svc_states.to_csv(filename)
+    filenames.append( [long_symbol+'_with_svc_states', filename] )
+
     #print('files saved')
     
 
@@ -353,7 +370,7 @@ def get_backtest(name, symbol_1, symbol_2, short_symbol, df, strat, with_short):
     
     for symbol, filename in filenames:
         try:
-            if float(backtest_results.T['sharpe_ratio']) > .8 and 'states' in filename:
+            if float(backtest_results.T['sharpe_ratio']) > .5 and 'states' in filename:
                 continue
             else:
                 os.remove(filename)
@@ -370,7 +387,7 @@ def get_backtest(name, symbol_1, symbol_2, short_symbol, df, strat, with_short):
 
 def pipeline_runner(input_queue):
     model_type = 'dynamic'
-    conn = sqlite3.connect('models_4_states_with_short.db')
+    conn = sqlite3.connect('accuracy_2.db')
     
     while input_queue.qsize():
         try:
@@ -409,8 +426,10 @@ def pipeline_runner(input_queue):
                         start_time = time.time()
                         print('\ttesting', test_length, with_svc, scaler_name, test_features)
                         x = pipeline(name, test_length, trains, test, test_features, model_type, with_svc, scaler, svc_cutoff)
+                        print('meow')
+                        print(x.test)
                         
-                        backtest_results = get_backtest(name, 'QLD', 'TQQQ', 'QID', x.test, strat, with_short).T
+                        backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', x.test, strat, with_short).T
 
                         end_time = time.time()
                         this_run_result = [test_features, float(backtest_results['sharpe_ratio']), end_time-start_time]
@@ -419,7 +438,7 @@ def pipeline_runner(input_queue):
                         result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
                         print(result_df)
                         
-                        if float(backtest_results['sharpe_ratio'])<.8:
+                        if float(backtest_results['sharpe_ratio'])<.5:
                             raise model_check_error('sharpe ratio not great enough: %s' % float(backtest_results['sharpe_ratio']))
                             #print('sharp ratio not great enough')
                             #continue
@@ -463,7 +482,7 @@ def pipeline_runner(input_queue):
                         x.plot(x.test, show=False)
                     except Exception as e:
                         print('\t\texception\t',e, test_length, with_svc, scaler_name, test_features)
-                        sleep(5)
+                        #sleep(5)
                 try:
                     result_df = pd.DataFrame(runs_results, columns = ['features', 'score', 'time'])
                     result_df = result_df.sort_values(by='score').tail(1)
@@ -514,11 +533,13 @@ if __name__ == '__main__':
     scalers = [ ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
     test_lengths = [ ['short', short_test], ['long', long_test] ]
     #test_lengths = [ ['short', short_test] ]
-    strats = [ ['strat_1', MyStrategy], ['strat_2', MyStrategy_2], ['strat_3', MyStrategy_3] ]
+    #strats = [ ['strat_1', MyStrategy], ['strat_2', MyStrategy_2], ['strat_3', MyStrategy_3] ]
+    strats = [ ['accuracy_strat', AccuracyStrat] ]
     
-    with_short = [True, False]
+    #with_short = [True, False]
+    with_short = [True]
     
-    svc_cutoff = [.01,.005,.0025, None]
+    svc_cutoff = [.01,.005,.0025]
     #strats = [ ['strat_2', MyStrategy_2] ]
     
     

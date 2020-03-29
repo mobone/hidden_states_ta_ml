@@ -312,6 +312,100 @@ class MyStrategy_3(strategy.BacktestingStrategy):
 
 
 
+
+class AccuracyStrat(strategy.BacktestingStrategy):
+    def __init__(self, feed, instrument_1, short_instrument, states_instrument, svc_states_instrument, with_short=False, smaPeriod=1):
+        super(AccuracyStrat, self).__init__(feed, 20000)
+        self.__position = None
+        self.__instrument_1 = instrument_1
+        
+        self.__short_instrument = short_instrument
+        
+
+        self.with_short = with_short
+
+        self.states_instrument = states_instrument
+        self.svc_states_instrument = svc_states_instrument
+        
+        self.__my_indicator = ma.SMA(feed[states_instrument].getCloseDataSeries(), smaPeriod)
+        self.__my_svc_indicator = ma.SMA(feed[svc_states_instrument].getCloseDataSeries(), smaPeriod)
+
+        self.usage = {}
+        
+    def onEnterOk(self, position):
+        execInfo = position.getEntryOrder().getExecutionInfo()
+        self.info("BUY at $%.2f" % (execInfo.getPrice()))
+
+    def onEnterCanceled(self, position):
+        self.__position = None
+
+    def onExitOk(self, position):
+        execInfo = position.getExitOrder().getExecutionInfo()
+        self.info("SELL at $%.2f" % (execInfo.getPrice()))
+        self.__position = None
+
+    def onExitCanceled(self, position):
+        # If the exit was canceled, re-submit it.
+        self.__position.exitMarket()
+
+    def onBars(self, bars):
+        
+        state = self.__my_indicator[-1]
+        svc_state = self.__my_svc_indicator[-1]
+        if state is None:
+            return
+
+        self.usage[self.__instrument_1] = 0
+        self.usage[self.__short_instrument] = 0
+
+        if svc_state == 1 and state >= 1:
+            self.usage[self.__instrument_1] = 1
+            self.usage[self.__short_instrument] = 0
+            
+
+        elif svc_state == 0:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__short_instrument] = 0
+
+        elif svc_state == -1 and state == 0:
+            self.usage[self.__instrument_1] = 0
+            self.usage[self.__short_instrument] = 1
+
+
+        for instrument in [self.__instrument_1, self.__short_instrument]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
+
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*.9) )
+
+            currentPos = self.getBroker().getShares(instrument)
+
+            num_shares = int(num_shares - currentPos)
+
+            if num_shares<0:
+                
+                #self.limitOrder(instrument, close * 0.9, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+        
+        for instrument in [self.__instrument_1, self.__short_instrument]:
+            bar = bars.getBar(instrument)
+            close = bar.getClose()
+            
+            usage = self.usage[instrument]
+
+            num_shares = floor( (self.getBroker().getEquity() * usage)  / (close*1.1) )
+            
+            currentPos = self.getBroker().getShares(instrument)
+            
+            num_shares = int(num_shares - currentPos)
+            
+            if num_shares>0:
+                #self.limitOrder(instrument, close * 1.1, num_shares)
+                self.marketOrder(instrument, num_shares, onClose=True)
+
+
 def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
     #from pyalgotrade.feed import csvfeed, yahoofeed
 
@@ -327,14 +421,14 @@ def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
     
     
     instrument_1 = files[0][0]
-    instrument_2 = files[1][0]
-    short_instrument = files[2][0]
-    states_instrument = files[3][0]
+    short_instrument = files[1][0]
+    states_instrument = files[2][0]
+    svc_states_instrument = files[3][0]
     
-    print('got these instruments', instrument_1, instrument_2, short_instrument, states_instrument)
+    print('got these instruments', instrument_1, short_instrument, states_instrument, svc_states_instrument)
     print(files)
     # Evaluate the strategy with the feed.
-    myStrategy = strategy(feed, instrument_1, instrument_2, short_instrument, states_instrument, with_short = with_short, smaPeriod = smaPeriod)
+    myStrategy = strategy(feed, instrument_1, short_instrument, states_instrument, svc_states_instrument, with_short = with_short, smaPeriod = smaPeriod)
     from pyalgotrade.stratanalyzer import returns
     # Attach different analyzers to a strategy before executing it.
     retAnalyzer = returns.Returns()
