@@ -171,6 +171,19 @@ def model_generator(name, trains, test, features, svc_cutoff):
         return hmm_results, svc_results
 
         
+    def get_data(symbol, get_train_test=True):
+            
+            history = yfinance.Ticker(symbol).history(period='7y', auto_adjust=False).reset_index()
+            history.columns = map(str.lower, history.columns)
+            
+            history['date'] = pd.to_datetime(history['date'])
+            history['return'] = history['close'].pct_change() * 100
+            history = history.dropna()
+            
+            history.loc[history['high']<history['open'], 'high'] = history['open']+.01
+            
+            return history
+
 
     def get_backtest(name, long_symbol, short_symbol, df, strat, with_short):
         df = df[ ['date', 'open', 'high', 'low', 'close', 'volume', 'state', 'svc_state' ] ]

@@ -126,6 +126,7 @@ def queue_creator(params):
         job_id = name + '__' + str(this_features)
         job = q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id, timeout=0 )
         jobs.append( (job, job_id) )
+        input()
 
     
     for job, job_id in jobs:
