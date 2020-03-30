@@ -19,6 +19,9 @@ import os
 from rq import Queue
 from redis import Redis
 
+def model_generator_2(name):
+    print(name)
+
 def model_generator(name, trains, test, features, svc_cutoff):
     
     pipelines = []

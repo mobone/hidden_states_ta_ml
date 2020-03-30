@@ -212,7 +212,7 @@ def queue_creator(params):
         #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)        
         job_id = name + '_' + str(this_features)
         #q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id )
-        q.enqueue(model_generator, args=(name, ))
+        q.enqueue(model_generator_2, args=(name, ))
 
     
 
