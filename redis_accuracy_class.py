@@ -269,5 +269,5 @@ def model_generator(name, trains, test, features, svc_cutoff):
 
     backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, strat, with_short).T
 
-    return test, hmm_results, svc_results
+    return test, hmm_results, svc_results, backtest_results
         
