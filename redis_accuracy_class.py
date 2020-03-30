@@ -19,9 +19,6 @@ import os
 from rq import Queue
 from redis import Redis
 
-def model_generator_2(name):
-    print(name)
-
 def model_generator(name, trains, test, features, svc_cutoff):
     
     pipelines = []
@@ -172,11 +169,105 @@ def model_generator(name, trains, test, features, svc_cutoff):
         
         return hmm_results, svc_results
 
+        
+
+    def get_backtest(name, long_symbol, short_symbol, df, strat, with_short):
+        df = df[ ['date', 'open', 'high', 'low', 'close', 'volume', 'state', 'svc_state' ] ]
+        df = df.dropna()
+        df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'State', 'SVC State']
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.set_index('Date')
+        #print('starting')
+
+        print('here')
+        print(df)
+        histories = {}
+        filenames = []
+        for symbol in [long_symbol, short_symbol]:
+            history = get_data(symbol, get_train_test=False)
+            history = history[ ['date', 'open', 'high', 'low', 'close', 'volume'] ]
+            history.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
+            history['Adj Close'] = history['Close']
+            history = history[ ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
+            history['Date'] = history['Date'].dt.strftime('%Y-%m-%d')
+            history['Date'] = pd.to_datetime(history['Date'])
+            history = history.set_index('Date')
+            
+            history['state'] = df['State']
+            
+            
+            history = history.dropna()
+            
+            
+            filename = "./trades/%s_%s.csv" % (name, symbol)
+            history.to_csv(filename)
+            filenames.append( [symbol, filename] )
+            histories[long_symbol] = history
+        
+        
+        df['Close'] = df['State']
+        df['Low'] = -5
+        df['Adj Close'] = df['Close']
+        markov_states = df[ ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
+
+        #print(markov_states)
+        
+        
+        
+        #print(df)
+        filename = "./trades/%s_%s.csv" % (name, long_symbol+'_with_states')
+        markov_states.to_csv(filename)
+        filenames.append( [long_symbol+'_with_states', filename] )
+
+        df['Close'] = df['SVC State']
+        df['Adj Close'] = df['Close']
+        
+        svc_states = df[ ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
+        #print(svc_states)
+
+        filename = "./trades/%s_%s.csv" % (name, long_symbol+'_with_svc_states')
+        svc_states.to_csv(filename)
+        filenames.append( [long_symbol+'_with_svc_states', filename] )
+
+        #print('files saved')
+        
+
+        
+        
+        #input()
+        backtest_results = setup_strategy(filenames, name, strat, with_short)    
+        #bt = basic_strat( histories, symbol_1, symbol_2 )
+        #bt = Backtest(history, MyStrat, margin=1/2, cash=10000, commission=.0004, trade_on_close=1)
+
+        #output = bt.run()
+        #print(output)
+        #bt.plot(plot_drawdown=True)
+        
+        
+        for symbol, filename in filenames:
+            try:
+                if float(backtest_results.T['sharpe_ratio']) > .5 and 'states' in filename:
+                    continue
+                else:
+                    os.remove(filename)
+            except Exception as e:
+                print('file exception', e)
+        
+        #print(backtest_results)
+
+
+
+        
+
+        return backtest_results
+
     
     get_trained_pipelines()
     
     run_pipeline(test)
     hmm_results, svc_results = get_state_summaries()
+
+    backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, strat, with_short).T
 
     return test, hmm_results, svc_results
         

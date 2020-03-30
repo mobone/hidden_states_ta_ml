@@ -18,8 +18,7 @@ from strategy import setup_strategy
 import os
 from rq import Queue
 from redis import Redis
-#from redis_accuracy_class import model_generator, 
-from redis_accuracy_class_test import model_generator_2
+from redis_accuracy_class import model_generator
 from time import sleep
 
 def get_data(symbol, get_train_test=True):
@@ -188,10 +187,10 @@ def get_backtest(name, long_symbol, short_symbol, df, strat, with_short):
 
 def queue_creator(params):
 
-    start_feature, test_length_name, svc_cutoff, name, features_available  = params
+    start_feature, test_lengths, svc_cutoff, name, features_available, trains  = params
     start_feature = [start_feature]
     #scaler_name, scaler = scalers
-    
+    test_length_name, test_data = test_lengths
 
     strat = AccuracyStrat
     with_short = True
@@ -212,8 +211,8 @@ def queue_creator(params):
 
         #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)        
         job_id = name + '_' + str(this_features)
-        #q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id )
-        q.enqueue(model_generator_2, name)
+        q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id )
+        #q.enqueue(model_generator_2, args=(name, ))
 
     
 
@@ -242,12 +241,6 @@ def queue_parser():
 
 trains, long_test, short_test = get_data('SPY')
 
-for name, df in trains:
-    df.to_csv('./datasets/%s.csv' % name)
-
-long_test.to_csv('./datasets/long_test.csv')
-short_test.to_csv('./datasets/short_test.csv')
-
 test_cols = list(long_test.columns.drop(['date','return', 'next_return']))
 starting_features, top_starting_features = run_decision_tree(trains[0][1], test_cols)
 
@@ -258,15 +251,15 @@ starting_features =  list(set( ['aroon_up', 'aroon_down', 'aroonosc','correl', '
 
 
 #scalers = [ ['standard', StandardScaler()], ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
-#test_lengths = [ ['short', short_test], ['long', long_test] ]
-test_lengths = [ 'short' ]
+test_lengths = [ ['short', short_test], ['long', long_test] ]
+test_lengths = [ ['short', short_test] ]
 svc_cutoff = [.5,.25,.1]
 
 
 params_list = list(product( top_starting_features, test_lengths, svc_cutoff ))
 params_list_with_names = []
 for i in params_list:
-    params_list_with_names.append( list(i) + [namegenerator.gen(), starting_features] )
+    params_list_with_names.append( list(i) + [namegenerator.gen(), starting_features, trains] )
 
 
 
