@@ -469,22 +469,24 @@ def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
 
     results['total_trades'] = tradesAnalyzer.getCount()
     results['profitable_trades'] = tradesAnalyzer.getProfitableCount()
+
     try:
         results['win_rate'] = tradesAnalyzer.getProfitableCount() / tradesAnalyzer.getCount()
-    except:
-        results['win_rate'] = None
-
-    profits = tradesAnalyzer.getAll()
-    results['avg_profit_$'] = profits.mean()
-    results['std_profit_$'] = profits.std()
-    results['max_profit_$'] = profits.max()
-    results['min_profit_$'] = profits.min()
     
-    returns = tradesAnalyzer.getAllReturns()
-    results['avg_profit_%'] = returns.mean() * 100
-    results['std_profit_%'] = returns.std() * 100
-    results['max_profit_%'] = returns.max() * 100
-    results['min_profit_%'] = returns.min() * 100
+
+        profits = tradesAnalyzer.getAll()
+        results['avg_profit_$'] = profits.mean()
+        results['std_profit_$'] = profits.std()
+        results['max_profit_$'] = profits.max()
+        results['min_profit_$'] = profits.min()
+        
+        returns = tradesAnalyzer.getAllReturns()
+        results['avg_profit_%'] = returns.mean() * 100
+        results['std_profit_%'] = returns.std() * 100
+        results['max_profit_%'] = returns.max() * 100
+        results['min_profit_%'] = returns.min() * 100
+    except Exception as e:
+        print('backtest exception', e)
     results = pd.DataFrame.from_dict(results, orient='index')
     #print(results)
 
