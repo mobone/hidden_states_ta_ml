@@ -129,11 +129,40 @@ def queue_creator(params):
         
 
     
-    for job, job_id in jobs:
-        print(job_id, job.result)
-        if job.result is None:
-            print('job %s not complete. sleeping', job_id)
-            sleep(10)
+
+    while True:
+        results_df = []
+        for job, job_id in jobs:
+            features = job_id.split('__')[1]
+            if job.result is None:
+                sharpe_ratio = None
+                
+            else:
+            
+                sharpe_ratio = job.result[4]
+            results_df.append( [features, sharpe_ratio] )
+        
+        results_df = pd.DataFrame(results_df, columns = ['features', 'sharpe_ratio'])
+
+        print(results_df)
+        
+        if len(results_df[results_df['sharpe_ratio'].isnull()]):
+            print('not complete. sleeping')
+
+            sleep(2)
+        else:
+            break
+
+    best_features = results_df.sort_values(by=['sharpe_ratio']).tail(1)['features']
+    best_features = eval(best_features)
+    print('found best features', best_features)
+
+    start_feature = best_features
+
+
+    
+
+    
 
         
     
