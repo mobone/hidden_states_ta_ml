@@ -18,7 +18,7 @@ from strategy import setup_strategy
 import os
 from rq import Queue
 from redis import Redis
-from redis_accuracy_class import model_generator
+from redis_accuracy_class import model_generator, model_generator_2
 from time import sleep
 
 def get_data(symbol, get_train_test=True):
