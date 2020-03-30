@@ -19,15 +19,18 @@ import os
 from rq import Queue
 from redis import Redis
 
-def model_generator(name, trains, test, features, scaler, svc_cutoff):
+def model_generator(name, trains, test, features, svc_cutoff):
     
     pipelines = []
     #trains = 
     #test
     #features
+    scaler = MinMaxScaler(feature_range = (0, 1))
     n_components = 3
     
     look_back = int(126)
+
+    print('starting!')
     
     def get_svc(train, test):
         svc_pipeline = make_pipeline( scaler ,

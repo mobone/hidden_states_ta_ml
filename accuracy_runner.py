@@ -187,32 +187,37 @@ def get_backtest(name, long_symbol, short_symbol, df, strat, with_short):
 
 def queue_creator(params):
 
-    start_feature, scalers, test_lengths, svc_cutoff, name, features_available, trains  = params
+    start_feature, test_lengths, svc_cutoff, name, features_available, trains  = params
     start_feature = [start_feature]
-    scaler_name, scaler = scalers
+    #scaler_name, scaler = scalers
     test_length_name, test_data = test_lengths
 
     strat = AccuracyStrat
     with_short = True
-
+    """
     print(start_feature)
     print(scalers)
     print(test_lengths)
     print(svc_cutoff)
     print(name)
     print(features_available)
-    q = Queue(name, connection=Redis())
+    """
+    q = Queue(connection=Redis( host='192.168.1.127' ))
 
     for new_feature in features_available:
         this_features = start_feature + [new_feature]
         print('testing', this_features)
         
 
-        #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)
-        
-        result = q.enqueue(model_generator, args=(name, trains, test_data, this_features, scaler, svc_cutoff,) )
+        #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)        
+        job_id = name + '_' + str(this_features)
+        #q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id )
+        q.enqueue(model_generator, args=(name, ))
 
-    print(result)
+    
+
+def queue_parser():
+    q = Queue(connection=Redis( host='192.168.1.127' ))
 
     while True:
 
@@ -245,13 +250,13 @@ starting_features =  list(set( ['aroon_up', 'aroon_down', 'aroonosc','correl', '
                                 'bbands_upper_p', 'bbands_middle_p', 'bbands_lower_p', 'stochf_fastk', 'stochf_fastd', 'stochrsi_fastk', 'stochrsi_fastd' ] + starting_features ))
 
 
-scalers = [ ['standard', StandardScaler()], ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
+#scalers = [ ['standard', StandardScaler()], ['minmax', MinMaxScaler(feature_range = (0, 1))] ]
 test_lengths = [ ['short', short_test], ['long', long_test] ]
 test_lengths = [ ['short', short_test] ]
 svc_cutoff = [.5,.25,.1]
 
 
-params_list = list(product( top_starting_features, scalers, test_lengths, svc_cutoff ))
+params_list = list(product( top_starting_features, test_lengths, svc_cutoff ))
 params_list_with_names = []
 for i in params_list:
     params_list_with_names.append( list(i) + [namegenerator.gen(), starting_features, trains] )
@@ -259,7 +264,10 @@ for i in params_list:
 
 
 
-for params in params_list_with_names:
-    queue_creator(params)
+#for params in params_list_with_names:
+    #queue_creator(params)
+queue_creator(params_list_with_names[0])
+
+queue_parser()
 
     
