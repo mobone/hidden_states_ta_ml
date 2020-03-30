@@ -469,7 +469,10 @@ def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
 
     results['total_trades'] = tradesAnalyzer.getCount()
     results['profitable_trades'] = tradesAnalyzer.getProfitableCount()
-    results['win_rate'] = tradesAnalyzer.getProfitableCount() / tradesAnalyzer.getCount()
+    try:
+        results['win_rate'] = tradesAnalyzer.getProfitableCount() / tradesAnalyzer.getCount()
+    except:
+        results['win_rate'] = None
 
     profits = tradesAnalyzer.getAll()
     results['avg_profit_$'] = profits.mean()
