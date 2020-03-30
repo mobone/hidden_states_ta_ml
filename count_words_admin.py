@@ -1,10 +1,10 @@
 from rq import Queue
 from redis import Redis
-from somewhere import count_words_at_url
+from count_urls import count_words_at_url
 import time
 
 # Tell RQ what Redis connection to use
-redis_conn = Redis()
+redis_conn = Redis(host='192.168.1.127')
 q = Queue(connection=redis_conn)  # no args implies the default queue
 
 # Delay execution of count_words_at_url('http://nvie.com')
