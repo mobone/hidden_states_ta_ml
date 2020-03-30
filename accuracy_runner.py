@@ -42,7 +42,7 @@ def get_data(symbol, get_train_test=True):
 
             
             test = history.tail( 252*5 )
-            short_test = history.tail( int(252 * 3) )
+            short_test = history.tail( int(252 * 1) )
 
             
             trains = []
@@ -121,7 +121,7 @@ def queue_creator(params):
 
         #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)        
         job_id = name + '__' + str(this_features)
-        q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id )
+        q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id, timeout=0 )
         #q.enqueue(model_generator_2, args=(name, ))
         input()
 

@@ -267,7 +267,7 @@ def model_generator(name, trains, test, features, svc_cutoff):
     run_pipeline(test)
     hmm_results, svc_results = get_state_summaries()
 
-    backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, strat, with_short).T
+    backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, AccuracyStrat, with_short).T
 
     return test, hmm_results, svc_results, backtest_results
         
