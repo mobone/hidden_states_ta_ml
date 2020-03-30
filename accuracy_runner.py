@@ -114,17 +114,27 @@ def queue_creator(params):
     """
     q = Queue(connection=Redis( host='192.168.1.127' ))
 
+    jobs = []
     for new_feature in features_available:
+        if new_feature in start_feature:
+            continue
         this_features = start_feature + [new_feature]
         print('testing', this_features)
         
 
         #test, hmm_results, svc_results = model_generator(name, trains, test_data, this_features, scaler, svc_cutoff)        
         job_id = name + '__' + str(this_features)
-        q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id, timeout=0 )
-        #q.enqueue(model_generator_2, args=(name, ))
-        input()
+        job = q.enqueue(model_generator, args=(name, trains, test_data, this_features, svc_cutoff, ), job_id = job_id, timeout=0 )
+        jobs.append( (job, job_id) )
 
+    
+    for job, job_id in jobs:
+
+        if job.result is None:
+            print('job %s not complete. sleeping', job_id)
+            sleep(10)
+
+        
     
 
 def queue_parser():

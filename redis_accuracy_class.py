@@ -27,6 +27,7 @@ def model_generator(name, trains, test, features, svc_cutoff):
     #features
     scaler = MinMaxScaler(feature_range = (0, 1))
     n_components = 3
+    with_short = True
     
     look_back = int(126)
 
