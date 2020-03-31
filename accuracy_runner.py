@@ -59,7 +59,7 @@ def get_data(symbol, get_train_test=True):
 
             
             test = history.tail( 252*6 )
-            short_test = history.tail( int(252 * 4) )
+            short_test = history.tail( int(252 * 3) )
 
             
             trains = []
@@ -180,9 +180,15 @@ def queue_creator(params):
         print('found best features', best_features)
         
         backtest_results = best_job_results[2]
+        if test_length_name == 'long':
+            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'] / 3.0
+        elif test_length_name == 'short':
+            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'] / 6.0
+
         backtest_results['features'] = str(best_features)
         backtest_results['svc_cutoff'] = svc_cutoff
         backtest_results['test_length'] = test_length_name
+        backtest_results['scaler'] = scaler_name
         backtest_results['name'] = name
         print(best_job_results[2])
         best_job_results[0].to_sql('hmm_results', conn, if_exists='append')
