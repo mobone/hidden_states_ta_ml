@@ -19,17 +19,31 @@ import os
 from rq import Queue
 from redis import Redis
 
-def model_generator(name, trains, test, features, svc_cutoff):
+def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
     
     pipelines = []
-    #trains = 
-    #test
-    #features
-    scaler = MinMaxScaler(feature_range = (0, 1))
+    
+    if scaler_name == 'minmax':
+        scaler = MinMaxScaler(feature_range = (0, 1))
+    elif scaler_name == 'standard':
+        scaler = StandardScaler()
     n_components = 3
     with_short = True
     
     look_back = int(126)
+
+    files = glob.glob('./datasets/*.csv')
+    trains = []
+    for filename in files:
+        if 'test' in filename or 'starting' in filename:
+            continue
+        trains.append( [filename, pd.read_csv(filename)] )
+
+    if test_length_name == 'short':
+        test = pd.read_csv('./datasets/short_test.csv')
+    elif test_length_name == 'long':
+        test = pd.read_csv('./datasets/long_test.csv')
+
 
     print('starting!')
     
