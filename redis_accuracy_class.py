@@ -19,7 +19,7 @@ import os
 from rq import Queue
 from redis import Redis
 import glob
-
+from time import sleep
 def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
     
     pipelines = []
@@ -36,7 +36,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
     files = glob.glob('./datasets/*.csv')
     trains = []
     for filename in files:
-        if 'test' in filename or 'starting' in filename or 'long' in filename or 'short' in filename:
+        if 'test' in filename or 'starting' in filename:
             continue
         trains.append( [filename, pd.read_csv(filename)] )
 
@@ -93,7 +93,9 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                 
                 pipelines.append( [pipe_pca, results, train] )
             except Exception as e:
+                #print(train)
                 print('make trained pipelines exception', e)
+                #sleep(10)
                 pass
 
     
@@ -112,7 +114,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             today = this_test[-1:]
             
 
-            
+            print(today)
             max_score = -np.inf
             for pipeline, train_results, train in pipelines:
                 try:
@@ -197,7 +199,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             
             history.loc[history['high']<history['open'], 'high'] = history['open']+.01
             """
-            history = pd.read_csv('./datasets/%s.csv' % symbol)
+            history = pd.read_csv('./datasets/%s_test.csv' % symbol)
             
             return history
 

@@ -35,7 +35,7 @@ def get_backtest_dataset(symbol):
     
     history.loc[history['high']<history['open'], 'high'] = history['open']+.01
 
-    history.to_csv('./datasets/%s.csv' % symbol)
+    history.to_csv('./datasets/%s_test.csv' % symbol)
 
 
 def get_data(symbol, get_train_test=True):
@@ -123,8 +123,8 @@ def queue_creator(params):
     features_available = list(pd.read_csv('./datasets/starting_features.csv')['feature'].values)
     
     conn =  sqlite3.connect('redis_results.db')
-    #q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
-    q = Queue(connection=Redis( host='192.168.1.127' ))
+    q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
+    #q = Queue(connection=Redis( host='192.168.1.127' ))
 
     while len(start_feature)<16:
         jobs = []
