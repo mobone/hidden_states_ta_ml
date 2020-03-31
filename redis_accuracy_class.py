@@ -276,6 +276,7 @@ def model_generator(name, trains, test, features, svc_cutoff):
         return backtest_results
 
     hmm_results, svc_results, backtest_results = None, None, None
+    sharpe_ratio = 0
     try:
         get_trained_pipelines()
         
@@ -284,8 +285,9 @@ def model_generator(name, trains, test, features, svc_cutoff):
 
         backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, AccuracyStrat, with_short).T
         sharpe_ratio = backtest_results['sharpe_ratio'].values[0]
-    except:
-        sharpe_ratio = 0
+    except Exception as e:
+        print('\texception', e)
+        pass
     
     
 
