@@ -222,7 +222,8 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             history.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
             history['Adj Close'] = history['Close']
             history = history[ ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'] ]
-            history['Date'] = history['Date'].dt.strftime('%Y-%m-%d')
+            
+            #history['Date'] = history['Date'].dt.strftime('%Y-%m-%d')
             history['Date'] = pd.to_datetime(history['Date'])
             history = history.set_index('Date')
             

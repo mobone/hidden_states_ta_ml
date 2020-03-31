@@ -22,7 +22,7 @@ from redis_accuracy_class import model_generator
 from time import sleep
 import sqlite3
 from multiprocessing import Pool, cpu_count, Process
-from random import shuffle
+from random import shuffle, randint
 import time
 
 def get_backtest_dataset(symbol):
@@ -114,6 +114,9 @@ def run_decision_tree(train, test_cols):
 
 
 def queue_creator(params):
+    sleep_duration = randint(0,30)
+    print("sleeping for", sleep_duration)
+    sleep(sleep_duration)
 
     start_feature, test_length_name, svc_cutoff, scaler_name, name  = params
     start_feature = [start_feature]
@@ -123,8 +126,8 @@ def queue_creator(params):
     features_available = list(pd.read_csv('./datasets/starting_features.csv')['feature'].values)
     
     conn =  sqlite3.connect('redis_results.db')
-    q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
-    #q = Queue(connection=Redis( host='192.168.1.127' ))
+    #q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
+    q = Queue(connection=Redis( host='192.168.1.127' ))
 
     while len(start_feature)<16:
         jobs = []
@@ -173,7 +176,8 @@ def queue_creator(params):
             else:
                 break
 
-            if (time.time() - start_time) > 600:
+            if (time.time() - start_time) > (60 * 60 * 30):
+                print('results not found in enough time. breaking')
                 break
 
         #best_features = results_df.sort_values(by=['sharpe_ratio']).tail(1)['features'].values[0]
@@ -247,7 +251,7 @@ if __name__ == '__main__':
     #for params in params_list_with_names:
         #queue_creator(params)
     #queue_creator(params_list_with_names[0])
-    p = Pool(4)
+    p = Pool(1)
     p.map(queue_creator, params_list_with_names)
 
     while True:
