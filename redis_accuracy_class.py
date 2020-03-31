@@ -69,7 +69,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         
         for train_name, train in trains:
             
-            try:
+            #try:
                 pipe_pca = make_pipeline(scaler,
                                 PrincipalComponentAnalysis(n_components=n_components),
                                 GMMHMM(n_components=n_components, covariance_type='full', n_iter=150, random_state=7),
@@ -92,9 +92,9 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                 results['name'] = train_name
                 
                 pipelines.append( [pipe_pca, results, train] )
-            except Exception as e:
-                print('make trained pipelines exception', e)
-                pass
+            #except Exception as e:
+                #print('make trained pipelines exception', e)
+                #pass
 
     
 
@@ -215,7 +215,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         histories = {}
         filenames = []
         for symbol in [long_symbol, short_symbol]:
-            history = get_data(symbol, get_train_test=False)
+            history = get_data(symbol)
             history = history[ ['date', 'open', 'high', 'low', 'close', 'volume'] ]
             history.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
             history['Adj Close'] = history['Close']
