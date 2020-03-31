@@ -182,9 +182,9 @@ def queue_creator(params):
         
         backtest_results = best_job_results[2]
         if test_length_name == 'long':
-            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'] / 3.0
+            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 3.0
         elif test_length_name == 'short':
-            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'] / 6.0
+            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 6.0
 
         backtest_results['features'] = str(best_features)
         backtest_results['svc_cutoff'] = svc_cutoff
