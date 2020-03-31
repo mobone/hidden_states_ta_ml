@@ -123,7 +123,8 @@ def queue_creator(params):
     features_available = list(pd.read_csv('./datasets/starting_features.csv')['feature'].values)
     
     conn =  sqlite3.connect('redis_results.db')
-    q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
+    #q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
+    q = Queue(connection=Redis( host='192.168.1.127' ))
 
     while len(start_feature)<16:
         jobs = []
