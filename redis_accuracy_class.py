@@ -114,7 +114,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             today = this_test[-1:]
             
 
-            print(today)
+            #print(today)
             max_score = -np.inf
             for pipeline, train_results, train in pipelines:
                 try:
