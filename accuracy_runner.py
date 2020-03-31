@@ -162,9 +162,9 @@ def queue_creator(params):
                         best_sharpe_ratio = sharpe_ratio
                         best_features = features
                         best_job_results = [job.result[1], job.result[2], job.result[3]]
-                results_df.append( [features, sharpe_ratio] )
+                results_df.append( [name, features, sharpe_ratio] )
             
-            results_df = pd.DataFrame(results_df, columns = ['features', 'sharpe_ratio'])
+            results_df = pd.DataFrame(results_df, columns = ['name', 'features', 'sharpe_ratio'])
 
             print(results_df)
             print(  len(results_df.dropna()) / float(len(results_df)) )
@@ -172,36 +172,39 @@ def queue_creator(params):
             
             if len(results_df[results_df['sharpe_ratio'].isnull()]):
                 print('not complete. sleeping')
-                sleep(5)
+                sleep(30)
             else:
                 break
 
-            if (time.time() - start_time) > (60 * 60 * 30):
+            if (time.time() - start_time) > 1800: # break after thirty minutes
                 print('results not found in enough time. breaking')
                 break
+        try:
+            #best_features = results_df.sort_values(by=['sharpe_ratio']).tail(1)['features'].values[0]
+            best_features = eval(best_features)
+            print('found best features', best_features)
+            
+            backtest_results = best_job_results[2]
+            if test_length_name == 'long':
+                backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 3.0
+            elif test_length_name == 'short':
+                backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 6.0
 
-        #best_features = results_df.sort_values(by=['sharpe_ratio']).tail(1)['features'].values[0]
-        best_features = eval(best_features)
-        print('found best features', best_features)
-        
-        backtest_results = best_job_results[2]
-        if test_length_name == 'long':
-            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 3.0
-        elif test_length_name == 'short':
-            backtest_results['yearly_cum_returns'] = backtest_results['cum_returns'].values[0] / 6.0
-
-        backtest_results['features'] = str(best_features)
-        backtest_results['svc_cutoff'] = svc_cutoff
-        backtest_results['test_length'] = test_length_name
-        backtest_results['scaler'] = scaler_name
-        backtest_results['name'] = name
-        print(best_job_results[2])
-        best_job_results[0].to_sql('hmm_results', conn, if_exists='append')
-        best_job_results[1].to_sql('svc_results', conn, if_exists='append')
-        best_job_results[2].to_sql('backtest_results', conn, if_exists='append')
+            backtest_results['features'] = str(best_features)
+            backtest_results['svc_cutoff'] = svc_cutoff
+            backtest_results['test_length'] = test_length_name
+            backtest_results['scaler'] = scaler_name
+            backtest_results['name'] = name
+            print(best_job_results[2])
+            best_job_results[0].to_sql('hmm_results', conn, if_exists='append')
+            best_job_results[1].to_sql('svc_results', conn, if_exists='append')
+            best_job_results[2].to_sql('backtest_results', conn, if_exists='append')
 
 
-        start_feature = best_features
+            start_feature = best_features
+        except Exception as e:
+            print('meow exception', e)
+
 
     
 if __name__ == '__main__':
@@ -251,7 +254,7 @@ if __name__ == '__main__':
     #for params in params_list_with_names:
         #queue_creator(params)
     #queue_creator(params_list_with_names[0])
-    p = Pool(2)
+    p = Pool(1)
     p.map(queue_creator, params_list_with_names)
 
     while True:

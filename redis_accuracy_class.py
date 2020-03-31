@@ -296,7 +296,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         return backtest_results
 
     hmm_results, svc_results, backtest_results = None, None, None
-    sharpe_ratio = None
+    sharpe_ratio = -42
     try:
         get_trained_pipelines()
         
