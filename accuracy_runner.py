@@ -251,7 +251,7 @@ if __name__ == '__main__':
     #for params in params_list_with_names:
         #queue_creator(params)
     #queue_creator(params_list_with_names[0])
-    p = Pool(1)
+    p = Pool(2)
     p.map(queue_creator, params_list_with_names)
 
     while True:
