@@ -75,7 +75,7 @@ def get_data(symbol, get_train_test=True):
                     start_train = start_train + 252
                     i = i + 1
 
-
+            """
             best_model_ranges = pd.read_csv('best_models.csv')
             i = 0 
             for _, row in best_model_ranges.iterrows():
@@ -84,6 +84,7 @@ def get_data(symbol, get_train_test=True):
                 set_name = 'found_%s_%s_%s' % (int(row['start']), int(row['length']), i)
                 trains.append( [set_name, history.iloc[start:end]] )
                 i = i + 1
+            """
 
             
             
