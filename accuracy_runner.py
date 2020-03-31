@@ -24,6 +24,20 @@ import sqlite3
 from multiprocessing import Pool, cpu_count, Process
 from random import shuffle
 import time
+
+def get_backtest_dataset(symbol):
+    history = yfinance.Ticker(symbol).history(period='7y', auto_adjust=False).reset_index()
+    history.columns = map(str.lower, history.columns)
+        
+    history['date'] = pd.to_datetime(history['date'])
+    history['return'] = history['close'].pct_change() * 100
+    history = history.dropna()
+    
+    history.loc[history['high']<history['open'], 'high'] = history['open']+.01
+
+    history.to_csv('./datasets/%s.csv' % symbol)
+
+
 def get_data(symbol, get_train_test=True):
         
         if get_train_test == True:
@@ -97,7 +111,7 @@ def run_decision_tree(train, test_cols):
 
 
 
-params_list = list(product( top_starting_features, test_lengths, svc_cutoff, scalers ))
+
 def queue_creator(params):
 
     start_feature, test_length_name, svc_cutoff, scaler_name, name  = params
@@ -180,7 +194,8 @@ def queue_creator(params):
     
 if __name__ == '__main__':
 
-
+    get_backtest_dataset('TQQQ')
+    get_backtest_dataset('SQQQ')
 
     trains, long_test, short_test = get_data('SPY')
 
@@ -195,6 +210,9 @@ if __name__ == '__main__':
     starting_features, top_starting_features = run_decision_tree(trains[0][1], test_cols)
 
     starting_features.to_csv('./datasets/starting_features.csv')
+    
+
+    starting_features = list( starting_features.values )
 
     starting_features =  list(set( ['aroon_up', 'aroon_down', 'aroonosc','correl', 'mom', 'beta', 'rsi', 'bop', 
                                     'ultimate_oscillator', 'bbands_upper', 'bbands_middle', 'bbands_lower', 

@@ -185,8 +185,8 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         return hmm_results, svc_results
 
         
-    def get_data(symbol, get_train_test=True):
-            
+    def get_data(symbol):
+            """
             history = yfinance.Ticker(symbol).history(period='7y', auto_adjust=False).reset_index()
             history.columns = map(str.lower, history.columns)
             
@@ -195,6 +195,8 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             history = history.dropna()
             
             history.loc[history['high']<history['open'], 'high'] = history['open']+.01
+            """
+            history = pd.read_csv('./datasets/%s.csv' % symbol)
             
             return history
 
