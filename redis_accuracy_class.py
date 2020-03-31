@@ -36,7 +36,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
     files = glob.glob('./datasets/*.csv')
     trains = []
     for filename in files:
-        if 'test' in filename or 'starting' in filename:
+        if 'test' in filename or 'starting' in filename or 'long' in filename or 'short' in filename:
             continue
         trains.append( [filename, pd.read_csv(filename)] )
 
@@ -69,12 +69,12 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         
         for train_name, train in trains:
             
-            #try:
+            try:
                 pipe_pca = make_pipeline(scaler,
                                 PrincipalComponentAnalysis(n_components=n_components),
                                 GMMHMM(n_components=n_components, covariance_type='full', n_iter=150, random_state=7),
                                 )
-
+                #print(train)
                 pipe_pca.fit(train[ features ])
                 train['state'] = pipe_pca.predict(train[ features ])
 
@@ -92,9 +92,9 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                 results['name'] = train_name
                 
                 pipelines.append( [pipe_pca, results, train] )
-            #except Exception as e:
-                #print('make trained pipelines exception', e)
-                #pass
+            except Exception as e:
+                print('make trained pipelines exception', e)
+                pass
 
     
 
@@ -115,7 +115,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
             
             max_score = -np.inf
             for pipeline, train_results, train in pipelines:
-                #try:
+                try:
                     
                     test_score = np.exp( pipeline.score( this_test[ features ]) / len(this_test) ) * 100
                     
@@ -135,10 +135,10 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                         test.loc[today.index, 'model_used'] = train_results['name'].values[0]
 
                         max_score = test_score
-                #except Exception as e:
+                except Exception as e:
                     #print('this exception', e)
                     #sleep(10)
-                    #continue
+                    continue
 
         test = test.dropna(subset=['state'])
         models_used = str(test['model_used'].unique())
