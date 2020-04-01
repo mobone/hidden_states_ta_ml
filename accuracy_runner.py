@@ -141,9 +141,10 @@ def queue_creator(params):
     
     conn =  sqlite3.connect('redis_results.db')
     
-    q = get_redis_connection()
+    
 
     while len(start_feature)<16:
+        q = get_redis_connection()
         jobs = []
         for new_feature in features_available:
             if new_feature in start_feature:
