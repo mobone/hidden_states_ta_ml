@@ -111,6 +111,20 @@ def run_decision_tree(train, test_cols):
     return starting_features, top_starting_features
 
 
+def get_redis_connection():
+    
+    while True:
+        try:
+            #q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
+            q = Queue(connection=Redis( host='192.168.1.127' ))
+            break
+        except Exception as e:
+            print('redis connection issue', e)
+            sleep(60)
+
+            
+    return q
+
 
 
 def queue_creator(params):
@@ -126,8 +140,8 @@ def queue_creator(params):
     features_available = list(pd.read_csv('./datasets/starting_features.csv')['feature'].values)
     
     conn =  sqlite3.connect('redis_results.db')
-    #q = Queue(is_async=False, connection=Redis( host='192.168.1.127' ))
-    q = Queue(connection=Redis( host='192.168.1.127' ))
+    
+    q = get_redis_connection()
 
     while len(start_feature)<16:
         jobs = []
@@ -254,7 +268,7 @@ if __name__ == '__main__':
     #for params in params_list_with_names:
         #queue_creator(params)
     #queue_creator(params_list_with_names[0])
-    p = Pool(1)
+    p = Pool(4)
     p.map(queue_creator, params_list_with_names)
 
     while True:
