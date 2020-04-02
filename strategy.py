@@ -425,8 +425,8 @@ def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
     states_instrument = files[2][0]
     svc_states_instrument = files[3][0]
     
-    print('got these instruments', instrument_1, short_instrument, states_instrument, svc_states_instrument)
-    print(files)
+    #print('got these instruments', instrument_1, short_instrument, states_instrument, svc_states_instrument)
+    #print(files)
     # Evaluate the strategy with the feed.
     myStrategy = strategy(feed, instrument_1, short_instrument, states_instrument, svc_states_instrument, with_short = with_short, smaPeriod = smaPeriod)
     from pyalgotrade.stratanalyzer import returns
@@ -486,7 +486,8 @@ def setup_strategy(files, name, strategy, with_short = False, smaPeriod=1):
         results['max_profit_%'] = returns.max() * 100
         results['min_profit_%'] = returns.min() * 100
     except Exception as e:
-        print('backtest exception', e)
+        #print('backtest exception', e)
+        pass
     results = pd.DataFrame.from_dict(results, orient='index')
     #print(results)
 
@@ -521,7 +522,7 @@ if __name__ == "__main__":
 
     for ticker, history in histories:
         history.to_csv(ticker+'.csv')
-        print('adding', ticker)
+        #print('adding', ticker)
         feed.addBarsFromCSV(ticker, ticker+'.csv')
     
         

@@ -46,7 +46,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         test = pd.read_csv('./datasets/long_test.csv')
 
 
-    print('starting!')
+    #print('starting!')
     
     def get_svc(train, test):
         svc_pipeline = make_pipeline( scaler ,
@@ -94,7 +94,7 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                 pipelines.append( [pipe_pca, results, train] )
             except Exception as e:
                 #print(train)
-                print('make trained pipelines exception', e)
+                #print('make trained pipelines exception', e)
                 #sleep(10)
                 pass
 
@@ -182,8 +182,11 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
 
         hmm_results = hmm_results.sort_values(by='hmm_next_test_mean')
         svc_results = svc_results.sort_values(by='svc_next_test_mean')
-        print(hmm_results)
-        print(svc_results)
+        try:
+            print(hmm_results)
+            print(svc_results)
+        except:
+            pass
         
         return hmm_results, svc_results
 
@@ -212,8 +215,8 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         df = df.set_index('Date')
         #print('starting')
 
-        print('here')
-        print(df)
+        #print('here')
+        #print(df)
         histories = {}
         filenames = []
         for symbol in [long_symbol, short_symbol]:
@@ -285,7 +288,8 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
                 else:
                     os.remove(filename)
             except Exception as e:
-                print('file exception', e)
+                #print('file exception', e)
+                pass
         
         #print(backtest_results)
 
@@ -304,9 +308,13 @@ def model_generator(name, test_length_name, features, svc_cutoff, scaler_name):
         hmm_results, svc_results = get_state_summaries()
 
         backtest_results = get_backtest(name, 'TQQQ', 'SQQQ', test, AccuracyStrat, with_short).T
+        try:
+            print(backtest_results)
+        except:
+            pass
         sharpe_ratio = backtest_results['sharpe_ratio'].values[0]
     except Exception as e:
-        print('\texception', e)
+        #print('\texception', e)
         pass
     
     
